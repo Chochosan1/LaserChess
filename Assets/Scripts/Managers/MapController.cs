@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MapController : MonoBehaviour
 {
-    public enum Directions { None, Top, Bot, Right, Left, TopRight, TopLeft, BotRight, BotLeft}
+    public enum Directions { None, Top, Bot, Right, Left, TopRight, TopLeft, BotRight, BotLeft, KnightTopRight1, KnightTopRight2, KnightTopLeft1, KnightTopLeft2, KnightBotRight1, KnightBotRight2, KnightBotLeft1, KnightBotLeft2}
 
     private static MapController instance;
     public static MapController Instance => instance;
@@ -151,6 +151,14 @@ public class MapController : MonoBehaviour
                         currentPossibleRoute.Add(currentTile.botLeftNeighbour);
                         currentTile = currentTile.botLeftNeighbour;
                     }
+                    break;
+                case Directions.KnightTopRight1:
+                    if(map.ContainsKey(new Vector2Int(startTile.grid2DLocation.x + 1, startTile.grid2DLocation.y + 2)))
+                        currentPossibleRoute.Add(map[new Vector2Int(startTile.grid2DLocation.x + 1, startTile.grid2DLocation.y + 2)]);
+                    break;
+                case Directions.KnightTopRight2:
+                    if (map.ContainsKey(new Vector2Int(startTile.grid2DLocation.x + 2, startTile.grid2DLocation.y + 1)))
+                        currentPossibleRoute.Add(map[new Vector2Int(startTile.grid2DLocation.x + 2, startTile.grid2DLocation.y + 1)]);
                     break;
             }
         }
