@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Grunt : Piece
 {
+    //list all possible paths here
     private List<GridTile> currentTopTileRoute;
     private List<GridTile> currentBotTileRoute;
     private List<GridTile> currentRightTileRoute;
@@ -23,9 +24,11 @@ public class Grunt : Piece
         step = movementSpeed * Time.deltaTime;
         transform.position = Vector3.MoveTowards(transform.position, new Vector3(currentGridTileToMoveTo.transform.position.x, transform.position.y, currentGridTileToMoveTo.transform.position.z), step);
 
+        //when the targeted tile has been reached
         if (Vector3.Distance(transform.position, new Vector3(currentGridTileToMoveTo.transform.position.x, transform.position.y, currentGridTileToMoveTo.transform.position.z)) < 0.01f)
         {
             standingOnTile = currentGridTileToMoveTo;
+            standingOnTile.isBlocked = true;
             isMoving = false;
         }
     }
@@ -33,6 +36,8 @@ public class Grunt : Piece
     public override void OnMoveCommand(GridTile selectedGridTileToMoveTo)
     {
         base.OnMoveCommand(selectedGridTileToMoveTo);
+
+        standingOnTile.isBlocked = false;
 
         currentGridTileToMoveTo = selectedGridTileToMoveTo;
         isMoving = true;

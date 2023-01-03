@@ -26,7 +26,6 @@ public class MapController : MonoBehaviour
             instance = this;
         }
 
-
         foreach(GridTile gridTile in allGridTiles)
         {
             map.Add(gridTile.grid2DLocation, gridTile);
@@ -34,6 +33,7 @@ public class MapController : MonoBehaviour
         }
     }
 
+    /// <summary>Returns the path/route in a certain direction starting from an initial tile. Encountering a taken/blocked tile will cut the path up to that point. Path length accepted as an argument.</summary>
     public List<GridTile> GetPossibleRouteFromTile(GridTile startTile, int routeLength, Directions direction)
     {
         List<GridTile> currentPossibleRoute = new List<GridTile>();
@@ -157,40 +157,4 @@ public class MapController : MonoBehaviour
 
         return currentPossibleRoute;
     }
-
-    //public List<GridTile> GetSurroundingTiles(Vector2Int originTile)
-    //{
-    //    var surroundingTiles = new List<GridTile>();
-
-
-    //    Vector2Int TileToCheck = new Vector2Int(originTile.x + 1, originTile.y);
-    //    if (map.ContainsKey(TileToCheck))
-    //    {
-    //        if (Mathf.Abs(map[TileToCheck].transform.position.z - map[originTile].transform.position.z) <= 1)
-    //            surroundingTiles.Add(map[TileToCheck]);
-    //    }
-
-    //    TileToCheck = new Vector2Int(originTile.x - 1, originTile.y);
-    //    if (map.ContainsKey(TileToCheck))
-    //    {
-    //        if (Mathf.Abs(map[TileToCheck].transform.position.z - map[originTile].transform.position.z) <= 1)
-    //            surroundingTiles.Add(map[TileToCheck]);
-    //    }
-
-    //    TileToCheck = new Vector2Int(originTile.x, originTile.y + 1);
-    //    if (map.ContainsKey(TileToCheck))
-    //    {
-    //        if (Mathf.Abs(map[TileToCheck].transform.position.z - map[originTile].transform.position.z) <= 1)
-    //            surroundingTiles.Add(map[TileToCheck]);
-    //    }
-
-    //    TileToCheck = new Vector2Int(originTile.x, originTile.y - 1);
-    //    if (map.ContainsKey(TileToCheck))
-    //    {
-    //        if (Mathf.Abs(map[TileToCheck].transform.position.z - map[originTile].transform.position.z) <= 1)
-    //            surroundingTiles.Add(map[TileToCheck]);
-    //    }
-
-    //    return surroundingTiles;
-    //}
 }

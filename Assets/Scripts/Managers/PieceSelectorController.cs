@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class PieceSelectorController : MonoBehaviour
 {
+    [Header("Masks")]
     [SerializeField] private LayerMask pieceMask;
     [SerializeField] private LayerMask gridTileMask;
 
-    [SerializeField] private Piece currentlySelectedPiece;
+    private Piece currentlySelectedPiece;
 
     //cache
     RaycastHit hit;
@@ -15,6 +16,7 @@ public class PieceSelectorController : MonoBehaviour
 
     private void Update()
     {
+        //on click select a piece or a tile
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             if (currentlySelectedPiece == null)
@@ -23,13 +25,15 @@ public class PieceSelectorController : MonoBehaviour
                 SelectTileAndMovePiece();
         }
 
+        //deselect the selected piece
         if (Input.GetKeyDown(KeyCode.Mouse1))
         {
             DeselectCurrentPiece();
         }
     }
 
-    public void SelectTileAndMovePiece()
+    //select an active tile and command the piece to move there
+    private void SelectTileAndMovePiece()
     {
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
@@ -40,19 +44,20 @@ public class PieceSelectorController : MonoBehaviour
         }
     }
 
-
+    //select a piece
     public void SelectPiece()
     {
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, pieceMask))
         {
-            DeselectCurrentPiece();
+            DeselectCurrentPiece(); //deselect the already selected piece if there's one
             currentlySelectedPiece = hit.collider.gameObject.GetComponent<Piece>();
             currentlySelectedPiece.OnSelectedPiece();
         }
     }
 
+    //deselects the current piece (if there's one) and clears everything associated with it
     public void DeselectCurrentPiece()
     {
         if (currentlySelectedPiece == null)

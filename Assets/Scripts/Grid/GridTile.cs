@@ -30,8 +30,6 @@ public class GridTile : MonoBehaviour
     public Vector3Int gridLocation => new Vector3Int((int)transform.position.x, (int)transform.position.y, (int)transform.position.z);
     public Vector2Int grid2DLocation => new Vector2Int((int)transform.position.x, (int)transform.position.z);
 
-    public MapController.Directions currentSelectionDirection = MapController.Directions.None;
-
     private MeshRenderer meshRend;
     private bool isTileActive = false;
     public bool IsTileActive => isTileActive;
@@ -44,79 +42,67 @@ public class GridTile : MonoBehaviour
         DeactivateTile();
     }
 
-    public void FillNeighbourTiles()
+    //find all neighbour tiles adjacent to this tile (includes orthogonal and diagonal direcitons)
+    private void FillNeighbourTiles()
     {
         Vector2Int TileToCheck = new Vector2Int(grid2DLocation.x + 1, grid2DLocation.y);
         if (MapController.Instance.map.ContainsKey(TileToCheck))
         {
             rightNeighbour = MapController.Instance.map[TileToCheck];
-            //if (Mathf.Abs(MapController.Instance.map[TileToCheck].transform.position.z - MapController.Instance.map[originTile].transform.position.z) <= 1)
-            //    surroundingTiles.Add(MapController.Instance.map[TileToCheck]);
         }
 
         TileToCheck = new Vector2Int(grid2DLocation.x - 1, grid2DLocation.y);
         if (MapController.Instance.map.ContainsKey(TileToCheck))
         {
             leftNeighbour = MapController.Instance.map[TileToCheck];
-            //if (Mathf.Abs(MapController.Instance.map[TileToCheck].transform.position.z - MapController.Instance.map[originTile].transform.position.z) <= 1)
-            //    surroundingTiles.Add(MapController.Instance.map[TileToCheck]);
         }
 
         TileToCheck = new Vector2Int(grid2DLocation.x, grid2DLocation.y + 1);
         if (MapController.Instance.map.ContainsKey(TileToCheck))
         {
             topNeighbour = MapController.Instance.map[TileToCheck];
-            //if (Mathf.Abs(MapController.Instance.map[TileToCheck].transform.position.z - MapController.Instance.map[originTile].transform.position.z) <= 1)
-            //    surroundingTiles.Add(MapController.Instance.map[TileToCheck]);
         }
 
         TileToCheck = new Vector2Int(grid2DLocation.x, grid2DLocation.y - 1);
         if (MapController.Instance.map.ContainsKey(TileToCheck))
         {
             botNeighbour = MapController.Instance.map[TileToCheck];
-            //if (Mathf.Abs(MapController.Instance.map[TileToCheck].transform.position.z - MapController.Instance.map[originTile].transform.position.z) <= 1)
-            //    surroundingTiles.Add(MapController.Instance.map[TileToCheck]);
         }
 
         TileToCheck = new Vector2Int(grid2DLocation.x + 1, grid2DLocation.y + 1);
         if (MapController.Instance.map.ContainsKey(TileToCheck))
         {
             topRightNeighbour = MapController.Instance.map[TileToCheck];
-            //if (Mathf.Abs(MapController.Instance.map[TileToCheck].transform.position.z - MapController.Instance.map[originTile].transform.position.z) <= 1)
-            //    surroundingTiles.Add(MapController.Instance.map[TileToCheck]);
         }
 
         TileToCheck = new Vector2Int(grid2DLocation.x - 1, grid2DLocation.y - 1);
         if (MapController.Instance.map.ContainsKey(TileToCheck))
         {
             botLeftNeighbour = MapController.Instance.map[TileToCheck];
-            //if (Mathf.Abs(MapController.Instance.map[TileToCheck].transform.position.z - MapController.Instance.map[originTile].transform.position.z) <= 1)
-            //    surroundingTiles.Add(MapController.Instance.map[TileToCheck]);
         }
 
         TileToCheck = new Vector2Int(grid2DLocation.x + 1, grid2DLocation.y - 1);
         if (MapController.Instance.map.ContainsKey(TileToCheck))
         {
             botRightNeighbour = MapController.Instance.map[TileToCheck];
-            //if (Mathf.Abs(MapController.Instance.map[TileToCheck].transform.position.z - MapController.Instance.map[originTile].transform.position.z) <= 1)
-            //    surroundingTiles.Add(MapController.Instance.map[TileToCheck]);
         }
 
         TileToCheck = new Vector2Int(grid2DLocation.x - 1, grid2DLocation.y + 1);
         if (MapController.Instance.map.ContainsKey(TileToCheck))
         {
             topLeftNeighbour = MapController.Instance.map[TileToCheck];
-            //if (Mathf.Abs(MapController.Instance.map[TileToCheck].transform.position.z - MapController.Instance.map[originTile].transform.position.z) <= 1)
-            //    surroundingTiles.Add(MapController.Instance.map[TileToCheck]);
         }
     }
 
+    /// <summary>Marks the tile as inactive and changes its color to the inactive one (e.g grey).</summary> 
     public void DeactivateTile()
     {
         meshRend.material = normalMaterial;
         isTileActive = false;
     }
 
+
+    /// <summary>Marks the tile as active and changes its color to the active one (e.g green).</summary> 
     public void ActivateTile()
     {
         meshRend.material = possibleRouteMaterial;
