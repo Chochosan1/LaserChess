@@ -9,20 +9,18 @@ public class Grunt : Piece
     private List<GridTile> currentRightTileRoute;
     private List<GridTile> currentLeftTileRoute;
 
-
     private List<GridTile> currentTopRightTileRoute;
 
-    //  private List<GridTile> currentPathToMoveThrough;
     private GridTile currentGridTileToMoveTo;
     private bool isMoving;
+    private float step;
 
     private void Update()
     {
         if (!isMoving)
             return;
 
-        var step = movementSpeed * Time.deltaTime;
-     //   transform.position = Vector3.MoveTowards(transform.position, new Vector3(currentPathToMoveThrough[currentPathToMoveThrough.Count - 1].transform.position.x, transform.position.y, currentPathToMoveThrough[currentPathToMoveThrough.Count - 1].transform.position.z), step);
+        step = movementSpeed * Time.deltaTime;
         transform.position = Vector3.MoveTowards(transform.position, new Vector3(currentGridTileToMoveTo.transform.position.x, transform.position.y, currentGridTileToMoveTo.transform.position.z), step);
 
         if (Vector3.Distance(transform.position, new Vector3(currentGridTileToMoveTo.transform.position.x, transform.position.y, currentGridTileToMoveTo.transform.position.z)) < 0.01f)
@@ -35,9 +33,6 @@ public class Grunt : Piece
     public override void OnMoveCommand(GridTile selectedGridTileToMoveTo)
     {
         base.OnMoveCommand(selectedGridTileToMoveTo);
-
-        //if (directionToMoveAt == MapController.Directions.Top)
-        //    currentPathToMoveThrough = new List<GridTile>(currentTopTileRoute);
 
         currentGridTileToMoveTo = selectedGridTileToMoveTo;
         isMoving = true;
