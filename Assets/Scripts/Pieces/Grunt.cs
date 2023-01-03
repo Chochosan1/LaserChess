@@ -54,8 +54,8 @@ public class Grunt : Piece
         currentRightTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 3, MapController.Directions.Right);
         currentLeftTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 3, MapController.Directions.Left);
         currentTopRightTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 5, MapController.Directions.TopRight);
-        currentKnightTopRight1Route = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 1, MapController.Directions.KnightTopRight1);
-        currentKnightTopRight2Route = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 1, MapController.Directions.KnightTopRight2);
+        currentKnightTopRight1Route = MapController.Instance.GetPossibleKnightRouteFromTile(standingOnTile, MapController.KnightPattern.KnightTopRight1);
+        currentKnightTopRight2Route = MapController.Instance.GetPossibleKnightRouteFromTile(standingOnTile, MapController.KnightPattern.KnightTopRight2);
 
         //foreach (GridTile gridTile in currentTopTileRoute)
         //{

@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class MapController : MonoBehaviour
 {
-    public enum Directions { None, Top, Bot, Right, Left, TopRight, TopLeft, BotRight, BotLeft, KnightTopRight1, KnightTopRight2, KnightTopLeft1, KnightTopLeft2, KnightBotRight1, KnightBotRight2, KnightBotLeft1, KnightBotLeft2}
+    public enum Directions { None, Top, Bot, Right, Left, TopRight, TopLeft, BotRight, BotLeft, KnightTopRight1, KnightTopRight2, KnightTopLeft1, KnightTopLeft2, KnightBotRight1, KnightBotRight2, KnightBotLeft1, KnightBotLeft2 }
+    public enum KnightPattern { KnightTopRight1, KnightTopRight2, KnightTopLeft1, KnightTopLeft2, KnightBotRight1, KnightBotRight2, KnightBotLeft1, KnightBotLeft2 }
+
 
     private static MapController instance;
     public static MapController Instance => instance;
@@ -26,22 +28,23 @@ public class MapController : MonoBehaviour
             instance = this;
         }
 
-        foreach(GridTile gridTile in allGridTiles)
+        foreach (GridTile gridTile in allGridTiles)
         {
             map.Add(gridTile.grid2DLocation, gridTile);
-       //     Debug.Log($"ADDED TILE: {gridTile.name} with coords: {gridTile.grid2DLocation}");
+            //     Debug.Log($"ADDED TILE: {gridTile.name} with coords: {gridTile.grid2DLocation}");
         }
     }
 
+    
     /// <summary>Returns the path/route in a certain direction starting from an initial tile. Encountering a taken/blocked tile will cut the path up to that point. Path length accepted as an argument.</summary>
     public List<GridTile> GetPossibleRouteFromTile(GridTile startTile, int routeLength, Directions direction)
     {
         List<GridTile> currentPossibleRoute = new List<GridTile>();
 
-        bool routeBlocked = false;
-        GridTile currentTile = startTile;
+        GridTile currentTile = startTile; //use it as the current tile (node) to traverse; adding that current tile (node) to the path should reassign this var in order to traverse the next tile (node)
+        bool routeBlocked = false; //use to stop traversing in the current direction if the path is blocked
 
-        for(int i = 0; i < routeLength; i++)
+        for (int i = 0; i < routeLength; i++)
         {
             if (routeBlocked)
                 break;
@@ -49,6 +52,7 @@ public class MapController : MonoBehaviour
             switch (direction)
             {
                 case Directions.Top:
+                    //add the first top neighbour tile to the path, then traverse its top neighbour and so on and on depending on path/route length (they act as separate nodes)
                     if (currentTile.topNeighbour != null)
                     {
                         if (currentTile.topNeighbour.isBlocked)
@@ -57,8 +61,8 @@ public class MapController : MonoBehaviour
                             break;
                         }
 
-                        currentPossibleRoute.Add(currentTile.topNeighbour);
-                        currentTile = currentTile.topNeighbour;
+                        currentPossibleRoute.Add(currentTile.topNeighbour); //add the current tile (node)
+                        currentTile = currentTile.topNeighbour; //reassign the tile (node) to traverse from
                     }
                     break;
                 case Directions.Bot:
@@ -152,15 +156,45 @@ public class MapController : MonoBehaviour
                         currentTile = currentTile.botLeftNeighbour;
                     }
                     break;
-                case Directions.KnightTopRight1:
-                    if(map.ContainsKey(new Vector2Int(startTile.grid2DLocation.x + 1, startTile.grid2DLocation.y + 2)))
-                        currentPossibleRoute.Add(map[new Vector2Int(startTile.grid2DLocation.x + 1, startTile.grid2DLocation.y + 2)]);
-                    break;
-                case Directions.KnightTopRight2:
-                    if (map.ContainsKey(new Vector2Int(startTile.grid2DLocation.x + 2, startTile.grid2DLocation.y + 1)))
-                        currentPossibleRoute.Add(map[new Vector2Int(startTile.grid2DLocation.x + 2, startTile.grid2DLocation.y + 1)]);
-                    break;
             }
+        }
+
+        return currentPossibleRoute;
+    }
+
+    /// <summary>Returns the path/route in a certain knight pattern starting from an initial tile. Blocked paths and length do not matter.</summary>
+    public List<GridTile> GetPossibleKnightRouteFromTile(GridTile startTile, KnightPattern knightPattern)
+    {
+        List<GridTile> currentPossibleRoute = new List<GridTile>();
+        Vector2Int tilePositionToCheck = new Vector2Int();
+
+        switch (knightPattern)
+        {
+            case KnightPattern.KnightTopRight1:
+                tilePositionToCheck = new Vector2Int(startTile.grid2DLocation.x + 1, startTile.grid2DLocation.y + 2);
+
+                //if the position where the knight pattern ends (the targeted tile) exists AND it is not blocked/taken then add it to the route
+                if (map.ContainsKey(tilePositionToCheck) && !map[tilePositionToCheck].isBlocked)
+                    currentPossibleRoute.Add(map[tilePositionToCheck]);
+                break;
+            case KnightPattern.KnightTopRight2:
+                tilePositionToCheck = new Vector2Int(startTile.grid2DLocation.x + 2, startTile.grid2DLocation.y + 1);
+
+                if (map.ContainsKey(tilePositionToCheck) && !map[tilePositionToCheck].isBlocked)
+                    currentPossibleRoute.Add(map[tilePositionToCheck]);
+                break;
+            case KnightPattern.KnightTopLeft1:
+                break;
+            case KnightPattern.KnightTopLeft2:
+                break;
+            case KnightPattern.KnightBotRight1:
+                break;
+            case KnightPattern.KnightBotRight2:
+                break;
+            case KnightPattern.KnightBotLeft1:
+                break;
+            case KnightPattern.KnightBotLeft2:
+                break;
         }
 
         return currentPossibleRoute;
