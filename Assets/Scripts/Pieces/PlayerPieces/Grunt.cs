@@ -2,22 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public sealed class Tank : Piece
+public sealed class Grunt : Piece
 {
     [SerializeField] private ProjectileController projectilePrefab;
-    [SerializeField] private Vector3 projectileSpawnOffset = new Vector3(0f, 75f, 0f);
+    [SerializeField] private Vector3 projectileSpawnOffset = new Vector3(0f, 1f, 0f);
 
     //orthogonal paths
     private List<GridTile> currentTopTileRoute;
     private List<GridTile> currentBotTileRoute;
     private List<GridTile> currentRightTileRoute;
     private List<GridTile> currentLeftTileRoute;
-
-    //diagonal paths
-    private List<GridTile> currentTopRightTileRoute;
-    private List<GridTile> currentTopLeftTileRoute;
-    private List<GridTile> currentBotRightTileRoute;
-    private List<GridTile> currentBotLeftTileRoute;
 
     //attack
     private List<GridTile> currentAttackPath; //reuse the same list to probe for different attack paths (e.g the 4 diagonals until an enemy is found)
@@ -61,14 +55,10 @@ public sealed class Tank : Piece
 
     public override void OnSelectedPiece()
     {
-        currentTopTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 3, MapController.Directions.Top);
-        currentBotTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 3, MapController.Directions.Bot);
-        currentRightTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 3, MapController.Directions.Right);
-        currentLeftTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 3, MapController.Directions.Left);
-        currentTopRightTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 3, MapController.Directions.TopRight);
-        currentTopLeftTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 3, MapController.Directions.TopLeft);
-        currentBotLeftTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 3, MapController.Directions.BotLeft);
-        currentBotRightTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 3, MapController.Directions.BotRight);
+        currentTopTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 1, MapController.Directions.Top);
+        currentBotTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 1, MapController.Directions.Bot);
+        currentRightTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 1, MapController.Directions.Right);
+        currentLeftTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 1, MapController.Directions.Left);
 
         foreach (GridTile gridTile in currentTopTileRoute)
         {
@@ -86,26 +76,6 @@ public sealed class Tank : Piece
         }
 
         foreach (GridTile gridTile in currentLeftTileRoute)
-        {
-            gridTile.ActivateTile();
-        }
-
-        foreach (GridTile gridTile in currentTopRightTileRoute)
-        {
-            gridTile.ActivateTile();
-        }
-
-        foreach (GridTile gridTile in currentTopLeftTileRoute)
-        {
-            gridTile.ActivateTile();
-        }
-
-        foreach (GridTile gridTile in currentBotRightTileRoute)
-        {
-            gridTile.ActivateTile();
-        }
-
-        foreach (GridTile gridTile in currentBotLeftTileRoute)
         {
             gridTile.ActivateTile();
         }
@@ -132,44 +102,25 @@ public sealed class Tank : Piece
         {
             gridTile.DeactivateTile();
         }
-
-        foreach (GridTile gridTile in currentTopRightTileRoute)
-        {
-            gridTile.DeactivateTile();
-        }
-
-        foreach (GridTile gridTile in currentTopLeftTileRoute)
-        {
-            gridTile.DeactivateTile();
-        }
-
-        foreach (GridTile gridTile in currentBotRightTileRoute)
-        {
-            gridTile.DeactivateTile();
-        }
-
-        foreach (GridTile gridTile in currentBotLeftTileRoute)
-        {
-            gridTile.DeactivateTile();
-        }
     }
 
+    //grunts attack diagonally in any range; probes all diagonal directions until it finds an enemy in one of them (will actually damage only in one diagonal)
     protected override void Attack()
     {
         isEnemyFoundDuringProbing = false;
-        currentAttackPath = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 10, MapController.Directions.Top, true);
+        currentAttackPath = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 10, MapController.Directions.TopRight, true);
 
-        if (!isEnemyFoundDuringProbing)
+        if(!isEnemyFoundDuringProbing)
         {
             foreach (GridTile tile in currentAttackPath)
             {
                 //find an occupied tile and check if the piece on top of it is in the must-damage layer
-                if (tile.IsBlocked && LaserChess.Utilities.LayerUtilities.IsObjectInLayer(tile.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
+                if (tile.BlockingTilePiece != null && tile.IsBlocked && LaserChess.Utilities.LayerUtilities.IsObjectInLayer(tile.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
                 {
                     isEnemyFoundDuringProbing = true;
                     ProjectileController projectileCopy = Instantiate(projectilePrefab, transform.position + projectileSpawnOffset, Quaternion.identity);
                     projectileCopy.SetupProjectile(this, tile.BlockingTilePiece);
-                    Debug.Log($"WILL SHOOT ON THE TOP TO DAMAGE PIECE {tile.BlockingTilePiece.gameObject}");
+                    Debug.Log($"WILL SHOOT ON THE TOP RIGHT DIAGONAL TO DAMAGE PIECE {tile.BlockingTilePiece.gameObject}");
                     break;
                 }
             }
@@ -178,14 +129,14 @@ public sealed class Tank : Piece
         //don't continue enemy probing if an enemy has already been found
         if (!isEnemyFoundDuringProbing)
         {
-            currentAttackPath = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 10, MapController.Directions.Right, true);
+            currentAttackPath = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 10, MapController.Directions.TopLeft, true);
 
             foreach (GridTile tile in currentAttackPath)
             {
-                if (tile.IsBlocked && LaserChess.Utilities.LayerUtilities.IsObjectInLayer(tile.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
+                if (tile.BlockingTilePiece != null && tile.IsBlocked && LaserChess.Utilities.LayerUtilities.IsObjectInLayer(tile.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
                 {
                     isEnemyFoundDuringProbing = true;
-                    Debug.Log($"WILL SHOOT ON THE RIGHT TO DAMAGE PIECE {tile.BlockingTilePiece.gameObject}");
+                    Debug.Log($"WILL SHOOT ON THE TOP LEFT DIAGONAL TO DAMAGE PIECE {tile.BlockingTilePiece.gameObject}");
                     ProjectileController projectileCopy = Instantiate(projectilePrefab, transform.position + projectileSpawnOffset, Quaternion.identity);
                     projectileCopy.SetupProjectile(this, tile.BlockingTilePiece);
                     break;
@@ -196,14 +147,14 @@ public sealed class Tank : Piece
 
         if (!isEnemyFoundDuringProbing)
         {
-            currentAttackPath = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 10, MapController.Directions.Left, true);
+            currentAttackPath = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 10, MapController.Directions.BotLeft, true);
 
             foreach (GridTile tile in currentAttackPath)
             {
-                if (tile.IsBlocked && LaserChess.Utilities.LayerUtilities.IsObjectInLayer(tile.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
+                if (tile.BlockingTilePiece != null && tile.IsBlocked && LaserChess.Utilities.LayerUtilities.IsObjectInLayer(tile.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
                 {
                     isEnemyFoundDuringProbing = true;
-                    Debug.Log($"WILL SHOOT ON THE LEFT TO DAMAGE PIECE {tile.BlockingTilePiece.gameObject}");
+                    Debug.Log($"WILL SHOOT ON THE BOT LEFT DIAGONAL TO DAMAGE PIECE {tile.BlockingTilePiece.gameObject}");
                     ProjectileController projectileCopy = Instantiate(projectilePrefab, transform.position + projectileSpawnOffset, Quaternion.identity);
                     projectileCopy.SetupProjectile(this, tile.BlockingTilePiece);
                     break;
@@ -213,14 +164,14 @@ public sealed class Tank : Piece
 
         if (!isEnemyFoundDuringProbing)
         {
-            currentAttackPath = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 10, MapController.Directions.Bot, true);
+            currentAttackPath = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 10, MapController.Directions.BotRight, true);
 
             foreach (GridTile tile in currentAttackPath)
             {
-                if (tile.IsBlocked && LaserChess.Utilities.LayerUtilities.IsObjectInLayer(tile.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
+                if (tile.BlockingTilePiece != null && tile.IsBlocked && LaserChess.Utilities.LayerUtilities.IsObjectInLayer(tile.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
                 {
                     isEnemyFoundDuringProbing = true;
-                    Debug.Log($"WILL SHOOT ON THE BOT TO DAMAGE PIECE {tile.BlockingTilePiece.gameObject}");
+                    Debug.Log($"WILL SHOOT ON THE BOT RIGHT DIAGONAL TO DAMAGE PIECE {tile.BlockingTilePiece.gameObject}");
                     ProjectileController projectileCopy = Instantiate(projectilePrefab, transform.position + projectileSpawnOffset, Quaternion.identity);
                     projectileCopy.SetupProjectile(this, tile.BlockingTilePiece);
                     break;

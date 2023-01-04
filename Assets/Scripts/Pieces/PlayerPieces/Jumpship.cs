@@ -144,8 +144,27 @@ public sealed class Jumpship : Piece
         }
     }
 
+    //jumpships should damage all enemy pieces in the 4 orthogonally adjacent spaces simultaneously
     protected override void Attack()
     {
-        throw new System.NotImplementedException();
+        if(standingOnTile.topNeighbour != null && standingOnTile.topNeighbour.BlockingTilePiece != null)
+        {
+            standingOnTile.topNeighbour.BlockingTilePiece.TakeDamage(stats.AttackPower);
+        }
+
+        if (standingOnTile.rightNeighbour != null && standingOnTile.rightNeighbour.BlockingTilePiece != null)
+        {
+            standingOnTile.rightNeighbour.BlockingTilePiece.TakeDamage(stats.AttackPower);
+        }
+
+        if (standingOnTile.leftNeighbour != null && standingOnTile.leftNeighbour.BlockingTilePiece != null)
+        {
+            standingOnTile.leftNeighbour.BlockingTilePiece.TakeDamage(stats.AttackPower);
+        }
+
+        if (standingOnTile.botNeighbour != null && standingOnTile.botNeighbour.BlockingTilePiece != null)
+        {
+            standingOnTile.botNeighbour.BlockingTilePiece.TakeDamage(stats.AttackPower);
+        }
     }
 }

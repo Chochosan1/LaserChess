@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8704506434925126765}
   - component: {fileID: 8704506434925126766}
   - component: {fileID: 8704506434925126767}
+  - component: {fileID: 7222341430525145480}
   m_Layer: 6
   m_Name: PieceJumpShip
   m_TagString: Untagged
@@ -94,9 +95,9 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.5
-  m_Height: 2
+  m_Height: 6.70391
   m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: -2.3519535, z: 0}
 --- !u!114 &8704506434925126767
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -109,8 +110,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d76ff02bab25da4eba8a895086800c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stats: {fileID: 11400000, guid: a950ae85373375845a212dc1a19300fe, type: 2}
   standingOnTile: {fileID: 0}
   movementSpeed: 1
   damagePiecesOnThisLayer:
     serializedVersion: 2
     m_Bits: 256
+--- !u!54 &7222341430525145480
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8704506434925126752}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
