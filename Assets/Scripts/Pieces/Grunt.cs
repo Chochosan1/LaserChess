@@ -49,48 +49,48 @@ public class Grunt : Piece
     {
         base.OnSelectedPiece();
 
-        currentTopTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 3, MapController.Directions.Top);
-        currentBotTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 3, MapController.Directions.Bot);
-        currentRightTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 3, MapController.Directions.Right);
-        currentLeftTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 3, MapController.Directions.Left);
-        currentTopRightTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 5, MapController.Directions.TopRight);
-        currentKnightTopRight1Route = MapController.Instance.GetPossibleKnightRouteFromTile(standingOnTile, MapController.KnightPattern.KnightTopRight1);
-        currentKnightTopRight2Route = MapController.Instance.GetPossibleKnightRouteFromTile(standingOnTile, MapController.KnightPattern.KnightTopRight2);
+        currentTopTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 1, MapController.Directions.Top);
+        currentBotTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 1, MapController.Directions.Bot);
+        currentRightTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 1, MapController.Directions.Right);
+        currentLeftTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 1, MapController.Directions.Left);
+        //currentTopRightTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 5, MapController.Directions.TopRight);
+        //currentKnightTopRight1Route = MapController.Instance.GetPossibleKnightRouteFromTile(standingOnTile, MapController.KnightPattern.KnightTopRight1);
+        //currentKnightTopRight2Route = MapController.Instance.GetPossibleKnightRouteFromTile(standingOnTile, MapController.KnightPattern.KnightTopRight2);
 
-        //foreach (GridTile gridTile in currentTopTileRoute)
-        //{
-        //    gridTile.ActivateTile();
-        //}
+        foreach (GridTile gridTile in currentTopTileRoute)
+        {
+            gridTile.ActivateTile();
+        }
 
-        //foreach (GridTile gridTile in currentBotTileRoute)
-        //{
-        //    gridTile.ActivateTile();
-        //}
+        foreach (GridTile gridTile in currentBotTileRoute)
+        {
+            gridTile.ActivateTile();
+        }
 
-        //foreach (GridTile gridTile in currentRightTileRoute)
-        //{
-        //    gridTile.ActivateTile();
-        //}
+        foreach (GridTile gridTile in currentRightTileRoute)
+        {
+            gridTile.ActivateTile();
+        }
 
-        //foreach (GridTile gridTile in currentLeftTileRoute)
-        //{
-        //    gridTile.ActivateTile();
-        //}
+        foreach (GridTile gridTile in currentLeftTileRoute)
+        {
+            gridTile.ActivateTile();
+        }
 
         //foreach (GridTile gridTile in currentTopRightTileRoute)
         //{
         //    gridTile.ActivateTile();
         //}
 
-        foreach (GridTile gridTile in currentKnightTopRight1Route)
-        {
-            gridTile.ActivateTile();
-        }
+        //foreach (GridTile gridTile in currentKnightTopRight1Route)
+        //{
+        //    gridTile.ActivateTile();
+        //}
 
-        foreach (GridTile gridTile in currentKnightTopRight2Route)
-        {
-            gridTile.ActivateTile();
-        }
+        //foreach (GridTile gridTile in currentKnightTopRight2Route)
+        //{
+        //    gridTile.ActivateTile();
+        //}
     }
 
     public override void OnDeselectedPiece()
@@ -117,19 +117,19 @@ public class Grunt : Piece
             gridTile.DeactivateTile();
         }
 
-        foreach (GridTile gridTile in currentTopRightTileRoute)
-        {
-            gridTile.DeactivateTile();
-        }
+        //foreach (GridTile gridTile in currentTopRightTileRoute)
+        //{
+        //    gridTile.DeactivateTile();
+        //}
 
-        foreach (GridTile gridTile in currentKnightTopRight1Route)
-        {
-            gridTile.DeactivateTile();
-        }
+        //foreach (GridTile gridTile in currentKnightTopRight1Route)
+        //{
+        //    gridTile.DeactivateTile();
+        //}
 
-        foreach (GridTile gridTile in currentKnightTopRight2Route)
-        {
-            gridTile.DeactivateTile();
-        }
+        //foreach (GridTile gridTile in currentKnightTopRight2Route)
+        //{
+        //    gridTile.DeactivateTile();
+        //}
     }
 }

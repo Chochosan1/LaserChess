@@ -184,16 +184,40 @@ public class MapController : MonoBehaviour
                     currentPossibleRoute.Add(map[tilePositionToCheck]);
                 break;
             case KnightPattern.KnightTopLeft1:
+                tilePositionToCheck = new Vector2Int(startTile.grid2DLocation.x - 1, startTile.grid2DLocation.y + 2);
+
+                if (map.ContainsKey(tilePositionToCheck) && !map[tilePositionToCheck].isBlocked)
+                    currentPossibleRoute.Add(map[tilePositionToCheck]);
                 break;
             case KnightPattern.KnightTopLeft2:
+                tilePositionToCheck = new Vector2Int(startTile.grid2DLocation.x - 2, startTile.grid2DLocation.y + 1);
+
+                if (map.ContainsKey(tilePositionToCheck) && !map[tilePositionToCheck].isBlocked)
+                    currentPossibleRoute.Add(map[tilePositionToCheck]);
                 break;
             case KnightPattern.KnightBotRight1:
+                tilePositionToCheck = new Vector2Int(startTile.grid2DLocation.x + 2, startTile.grid2DLocation.y - 1);
+
+                if (map.ContainsKey(tilePositionToCheck) && !map[tilePositionToCheck].isBlocked)
+                    currentPossibleRoute.Add(map[tilePositionToCheck]);
                 break;
             case KnightPattern.KnightBotRight2:
+                tilePositionToCheck = new Vector2Int(startTile.grid2DLocation.x + 1, startTile.grid2DLocation.y - 2);
+
+                if (map.ContainsKey(tilePositionToCheck) && !map[tilePositionToCheck].isBlocked)
+                    currentPossibleRoute.Add(map[tilePositionToCheck]);
                 break;
             case KnightPattern.KnightBotLeft1:
+                tilePositionToCheck = new Vector2Int(startTile.grid2DLocation.x - 2, startTile.grid2DLocation.y - 1);
+
+                if (map.ContainsKey(tilePositionToCheck) && !map[tilePositionToCheck].isBlocked)
+                    currentPossibleRoute.Add(map[tilePositionToCheck]);
                 break;
             case KnightPattern.KnightBotLeft2:
+                tilePositionToCheck = new Vector2Int(startTile.grid2DLocation.x - 1, startTile.grid2DLocation.y - 2);
+
+                if (map.ContainsKey(tilePositionToCheck) && !map[tilePositionToCheck].isBlocked)
+                    currentPossibleRoute.Add(map[tilePositionToCheck]);
                 break;
         }
 
