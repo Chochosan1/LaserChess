@@ -19,6 +19,8 @@ public class GameStateManager : MonoBehaviour
     [SerializeField] private List<Piece> commandUnits;
     private List<IAutoRunnableAI> priorityThreeAIList = new List<IAutoRunnableAI>();
 
+    private bool isStateCoroutineRunning = false;
+
     void Start()
     {
         SetCurrentState(States.PlayerTurn);
@@ -34,22 +36,34 @@ public class GameStateManager : MonoBehaviour
     }
 
 
-    private IEnumerator StartTurn()
+    private IEnumerator StartAutomaticTurnAI()
     {
+        isStateCoroutineRunning = true;
+        Debug.Log($"Enter start turn {currentState}");
+
         if (currentState == States.AITurn)
         {
             foreach (IAutoRunnableAI pieceAI in priorityOneAIList)
             {
+                Debug.Log($"Drone executed behaviour!");
                 pieceAI.AutoRunBehaviour();
                 yield return new WaitUntil(() => pieceAI.IsAutoRunDone());
             }
-
-            SetCurrentState(States.PlayerTurn);
         }
+
+        Debug.Log($"Exit start turn {currentState}");
+        isStateCoroutineRunning = false;
+
+        SetCurrentState(States.PlayerTurn);
     }
 
     private void SetCurrentState(States stateToChangeTo)
     {
+        //don't allow a new state to start if the previous hasn't finished
+        if (isStateCoroutineRunning)
+            return;
+
+        Debug.Log($"Set current state {currentState}");
         currentState = stateToChangeTo;
 
         if (stateToChangeTo == States.PlayerTurn)
@@ -59,10 +73,8 @@ public class GameStateManager : MonoBehaviour
         else
         {
             GetComponent<UIManager>().SetActiveEndPlayerTurnButton(false);
-        }
-
-        Debug.Log($"Starting turn {currentState}");
-        StartCoroutine(StartTurn());
+            StartCoroutine(StartAutomaticTurnAI());
+        }   
     }
 
     //for the UI button that ends the player's turn

@@ -47,6 +47,8 @@ public class Drone : Piece, IAutoRunnableAI
 
                 isActivatedAndMustPlay = false;
                 hasPlayedItsTurn = true;
+
+                Debug.Log("DRONE move and attacked");
             }
         }
         else
@@ -55,6 +57,8 @@ public class Drone : Piece, IAutoRunnableAI
 
             isActivatedAndMustPlay = false;
             hasPlayedItsTurn = true;
+
+            Debug.Log("DRONE couldn't move but attacked");
         }
     }
 
@@ -134,7 +138,7 @@ public class Drone : Piece, IAutoRunnableAI
                     isEnemyFoundDuringProbing = true;
                     ProjectileController projectileCopy = Instantiate(projectilePrefab, transform.position + projectileSpawnOffset, Quaternion.identity);
                     projectileCopy.SetupProjectile(this, tile.BlockingTilePiece);
-                    Debug.Log($"WILL SHOOT ON THE TOP RIGHT DIAGONAL TO DAMAGE PIECE {tile.BlockingTilePiece.gameObject}");
+                //    Debug.Log($"WILL SHOOT ON THE TOP RIGHT DIAGONAL TO DAMAGE PIECE {tile.BlockingTilePiece.gameObject}");
                     break;
                 }
             }
@@ -150,7 +154,7 @@ public class Drone : Piece, IAutoRunnableAI
                 if (tile.BlockingTilePiece != null && tile.IsBlocked && LaserChess.Utilities.LayerUtilities.IsObjectInLayer(tile.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
                 {
                     isEnemyFoundDuringProbing = true;
-                    Debug.Log($"WILL SHOOT ON THE TOP LEFT DIAGONAL TO DAMAGE PIECE {tile.BlockingTilePiece.gameObject}");
+                //    Debug.Log($"WILL SHOOT ON THE TOP LEFT DIAGONAL TO DAMAGE PIECE {tile.BlockingTilePiece.gameObject}");
                     ProjectileController projectileCopy = Instantiate(projectilePrefab, transform.position + projectileSpawnOffset, Quaternion.identity);
                     projectileCopy.SetupProjectile(this, tile.BlockingTilePiece);
                     break;
@@ -168,7 +172,7 @@ public class Drone : Piece, IAutoRunnableAI
                 if (tile.BlockingTilePiece != null && tile.IsBlocked && LaserChess.Utilities.LayerUtilities.IsObjectInLayer(tile.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
                 {
                     isEnemyFoundDuringProbing = true;
-                    Debug.Log($"WILL SHOOT ON THE BOT LEFT DIAGONAL TO DAMAGE PIECE {tile.BlockingTilePiece.gameObject}");
+                //    Debug.Log($"WILL SHOOT ON THE BOT LEFT DIAGONAL TO DAMAGE PIECE {tile.BlockingTilePiece.gameObject}");
                     ProjectileController projectileCopy = Instantiate(projectilePrefab, transform.position + projectileSpawnOffset, Quaternion.identity);
                     projectileCopy.SetupProjectile(this, tile.BlockingTilePiece);
                     break;
@@ -185,7 +189,7 @@ public class Drone : Piece, IAutoRunnableAI
                 if (tile.BlockingTilePiece != null && tile.IsBlocked && LaserChess.Utilities.LayerUtilities.IsObjectInLayer(tile.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
                 {
                     isEnemyFoundDuringProbing = true;
-                    Debug.Log($"WILL SHOOT ON THE BOT RIGHT DIAGONAL TO DAMAGE PIECE {tile.BlockingTilePiece.gameObject}");
+                //    Debug.Log($"WILL SHOOT ON THE BOT RIGHT DIAGONAL TO DAMAGE PIECE {tile.BlockingTilePiece.gameObject}");
                     ProjectileController projectileCopy = Instantiate(projectilePrefab, transform.position + projectileSpawnOffset, Quaternion.identity);
                     projectileCopy.SetupProjectile(this, tile.BlockingTilePiece);
                     break;

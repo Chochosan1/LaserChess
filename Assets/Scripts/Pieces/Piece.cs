@@ -17,6 +17,16 @@ public abstract class Piece : MonoBehaviour
 
     protected virtual void Start()
     {
+        //autofind the initial tile the piece is standing on (avoids manually finding and assigning it for all units)
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, -Vector3.up, out hit))
+        {
+            if (hit.collider.TryGetComponent(out GridTile gridTileHitBelow))
+            {
+                standingOnTile = gridTileHitBelow;
+            }
+        }
+
         standingOnTile.MarkTileAsBlocked(this);
 
         maxHitPoints = currentHitPoints = stats.HitPoints;
@@ -35,9 +45,13 @@ public abstract class Piece : MonoBehaviour
     public virtual void TakeDamage(int damageToTake)
     {
         currentHitPoints -= damageToTake;
-        Debug.Log($"I just received {damageToTake} damage.");
+   //     Debug.Log($"I just received {damageToTake} damage.");
 
         if (currentHitPoints <= 0)
+        {
+            standingOnTile.MarkTileAsFree();
             Destroy(this.gameObject);
+        }
+           
     }
 }
