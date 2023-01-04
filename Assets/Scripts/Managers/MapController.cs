@@ -55,7 +55,7 @@ public class MapController : MonoBehaviour
                     //add the first top neighbour tile to the path, then traverse its top neighbour and so on and on depending on path/route length (they act as separate nodes)
                     if (currentTile.topNeighbour != null)
                     {
-                        if (currentTile.topNeighbour.isBlocked)
+                        if (currentTile.topNeighbour.IsBlocked)
                         {
                             routeBlocked = true;
                             break;
@@ -68,7 +68,7 @@ public class MapController : MonoBehaviour
                 case Directions.Bot:
                     if (currentTile.botNeighbour != null)
                     {
-                        if (currentTile.botNeighbour.isBlocked)
+                        if (currentTile.botNeighbour.IsBlocked)
                         {
                             routeBlocked = true;
                             break;
@@ -81,7 +81,7 @@ public class MapController : MonoBehaviour
                 case Directions.Right:
                     if (currentTile.rightNeighbour != null)
                     {
-                        if (currentTile.rightNeighbour.isBlocked)
+                        if (currentTile.rightNeighbour.IsBlocked)
                         {
                             routeBlocked = true;
                             break;
@@ -94,7 +94,7 @@ public class MapController : MonoBehaviour
                 case Directions.Left:
                     if (currentTile.leftNeighbour != null)
                     {
-                        if (currentTile.leftNeighbour.isBlocked)
+                        if (currentTile.leftNeighbour.IsBlocked)
                         {
                             routeBlocked = true;
                             break;
@@ -107,7 +107,7 @@ public class MapController : MonoBehaviour
                 case Directions.TopRight:
                     if (currentTile.topRightNeighbour != null)
                     {
-                        if (currentTile.topRightNeighbour.isBlocked)
+                        if (currentTile.topRightNeighbour.IsBlocked)
                         {
                             routeBlocked = true;
                             break;
@@ -120,7 +120,7 @@ public class MapController : MonoBehaviour
                 case Directions.TopLeft:
                     if (currentTile.topLeftNeighbour != null)
                     {
-                        if (currentTile.topLeftNeighbour.isBlocked)
+                        if (currentTile.topLeftNeighbour.IsBlocked)
                         {
                             routeBlocked = true;
                             break;
@@ -133,7 +133,7 @@ public class MapController : MonoBehaviour
                 case Directions.BotRight:
                     if (currentTile.botRightNeighbour != null)
                     {
-                        if (currentTile.botRightNeighbour.isBlocked)
+                        if (currentTile.botRightNeighbour.IsBlocked)
                         {
                             routeBlocked = true;
                             break;
@@ -146,7 +146,7 @@ public class MapController : MonoBehaviour
                 case Directions.BotLeft:
                     if (currentTile.botLeftNeighbour != null)
                     {
-                        if (currentTile.botLeftNeighbour.isBlocked)
+                        if (currentTile.botLeftNeighbour.IsBlocked)
                         {
                             routeBlocked = true;
                             break;
@@ -174,49 +174,49 @@ public class MapController : MonoBehaviour
                 tilePositionToCheck = new Vector2Int(startTile.grid2DLocation.x + 1, startTile.grid2DLocation.y + 2);
 
                 //if the position where the knight pattern ends (the targeted tile) exists AND it is not blocked/taken then add it to the route
-                if (map.ContainsKey(tilePositionToCheck) && !map[tilePositionToCheck].isBlocked)
+                if (map.ContainsKey(tilePositionToCheck) && !map[tilePositionToCheck].IsBlocked)
                     currentPossibleRoute.Add(map[tilePositionToCheck]);
                 break;
             case KnightPattern.KnightTopRight2:
                 tilePositionToCheck = new Vector2Int(startTile.grid2DLocation.x + 2, startTile.grid2DLocation.y + 1);
 
-                if (map.ContainsKey(tilePositionToCheck) && !map[tilePositionToCheck].isBlocked)
+                if (map.ContainsKey(tilePositionToCheck) && !map[tilePositionToCheck].IsBlocked)
                     currentPossibleRoute.Add(map[tilePositionToCheck]);
                 break;
             case KnightPattern.KnightTopLeft1:
                 tilePositionToCheck = new Vector2Int(startTile.grid2DLocation.x - 1, startTile.grid2DLocation.y + 2);
 
-                if (map.ContainsKey(tilePositionToCheck) && !map[tilePositionToCheck].isBlocked)
+                if (map.ContainsKey(tilePositionToCheck) && !map[tilePositionToCheck].IsBlocked)
                     currentPossibleRoute.Add(map[tilePositionToCheck]);
                 break;
             case KnightPattern.KnightTopLeft2:
                 tilePositionToCheck = new Vector2Int(startTile.grid2DLocation.x - 2, startTile.grid2DLocation.y + 1);
 
-                if (map.ContainsKey(tilePositionToCheck) && !map[tilePositionToCheck].isBlocked)
+                if (map.ContainsKey(tilePositionToCheck) && !map[tilePositionToCheck].IsBlocked)
                     currentPossibleRoute.Add(map[tilePositionToCheck]);
                 break;
             case KnightPattern.KnightBotRight1:
                 tilePositionToCheck = new Vector2Int(startTile.grid2DLocation.x + 2, startTile.grid2DLocation.y - 1);
 
-                if (map.ContainsKey(tilePositionToCheck) && !map[tilePositionToCheck].isBlocked)
+                if (map.ContainsKey(tilePositionToCheck) && !map[tilePositionToCheck].IsBlocked)
                     currentPossibleRoute.Add(map[tilePositionToCheck]);
                 break;
             case KnightPattern.KnightBotRight2:
                 tilePositionToCheck = new Vector2Int(startTile.grid2DLocation.x + 1, startTile.grid2DLocation.y - 2);
 
-                if (map.ContainsKey(tilePositionToCheck) && !map[tilePositionToCheck].isBlocked)
+                if (map.ContainsKey(tilePositionToCheck) && !map[tilePositionToCheck].IsBlocked)
                     currentPossibleRoute.Add(map[tilePositionToCheck]);
                 break;
             case KnightPattern.KnightBotLeft1:
                 tilePositionToCheck = new Vector2Int(startTile.grid2DLocation.x - 2, startTile.grid2DLocation.y - 1);
 
-                if (map.ContainsKey(tilePositionToCheck) && !map[tilePositionToCheck].isBlocked)
+                if (map.ContainsKey(tilePositionToCheck) && !map[tilePositionToCheck].IsBlocked)
                     currentPossibleRoute.Add(map[tilePositionToCheck]);
                 break;
             case KnightPattern.KnightBotLeft2:
                 tilePositionToCheck = new Vector2Int(startTile.grid2DLocation.x - 1, startTile.grid2DLocation.y - 2);
 
-                if (map.ContainsKey(tilePositionToCheck) && !map[tilePositionToCheck].isBlocked)
+                if (map.ContainsKey(tilePositionToCheck) && !map[tilePositionToCheck].IsBlocked)
                     currentPossibleRoute.Add(map[tilePositionToCheck]);
                 break;
         }

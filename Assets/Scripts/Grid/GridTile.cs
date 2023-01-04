@@ -12,7 +12,7 @@ public class GridTile : MonoBehaviour
     public int H;
     public int F { get { return G + H; } }
 
-    public bool isBlocked = false;
+
 
     //neighbours orthogonal
     public GridTile topNeighbour;
@@ -30,9 +30,13 @@ public class GridTile : MonoBehaviour
     public Vector3Int gridLocation => new Vector3Int((int)transform.position.x, (int)transform.position.y, (int)transform.position.z);
     public Vector2Int grid2DLocation => new Vector2Int((int)transform.position.x, (int)transform.position.z);
 
+    private Piece blockingTilePiece;
     private MeshRenderer meshRend;
     private bool isTileActive = false;
+    private bool isBlocked = false;
     public bool IsTileActive => isTileActive;
+    public bool IsBlocked => isBlocked;
+    public Piece BlockingTilePiece => blockingTilePiece;
 
     private void Start()
     {
@@ -107,5 +111,17 @@ public class GridTile : MonoBehaviour
     {
         meshRend.material = possibleRouteMaterial;
         isTileActive = true;
+    }
+
+    public void MarkTileAsBlocked(Piece pieceThatIsOnTheTile)
+    {
+        blockingTilePiece = pieceThatIsOnTheTile;
+        isBlocked = true;
+    }
+
+    public void MarkTileAsFree()
+    {
+        blockingTilePiece = null;
+        isBlocked = false;
     }
 }

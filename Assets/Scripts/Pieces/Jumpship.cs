@@ -36,10 +36,10 @@ public class Jumpship : Piece
 
     public override void OnMoveCommand(GridTile selectedGridTileToMoveTo)
     {
-        standingOnTile.isBlocked = false;
+        standingOnTile.MarkTileAsFree();
 
         currentGridTileToMoveTo = selectedGridTileToMoveTo;
-        currentGridTileToMoveTo.isBlocked = true; //mark it as blocked immediately so that clicking on another unit won't show that tile as free while another unit is traveling to it
+        currentGridTileToMoveTo.MarkTileAsBlocked(this); //mark it as blocked immediately so that clicking on another unit won't show that tile as free while another unit is traveling to it
         isMoving = true;
     }
 

@@ -43,7 +43,7 @@ public class PathFinder : MonoBehaviour
 
             foreach (var tile in GetNeightbourGridTiles(currentGridTile))
             {
-                if (tile.isBlocked || closedList.Contains(tile) /*|| Mathf.Abs(currentGridTile.transform.position.z - tile.transform.position.z) > 1*/)
+                if (tile.IsBlocked || closedList.Contains(tile) /*|| Mathf.Abs(currentGridTile.transform.position.z - tile.transform.position.z) > 1*/)
                 {
                     continue;
                 }
