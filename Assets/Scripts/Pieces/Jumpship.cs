@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Jumpship : Piece
+public sealed class Jumpship : Piece
 {
+    //knight paths
     private List<GridTile> currentKnightTopRight1Route;
     private List<GridTile> currentKnightTopRight2Route;
     private List<GridTile> currentKnightBotRight1Route;
@@ -16,6 +17,11 @@ public class Jumpship : Piece
     private GridTile currentGridTileToMoveTo;
     private bool isMoving;
     private float step;
+
+    protected override void Start()
+    {
+        base.Start();
+    }
 
     private void Update()
     {
@@ -137,5 +143,10 @@ public class Jumpship : Piece
         {
             gridTile.DeactivateTile();
         }
+    }
+
+    protected override void Attack()
+    {
+        throw new System.NotImplementedException();
     }
 }

@@ -36,8 +36,8 @@ public class MapController : MonoBehaviour
     }
 
     
-    /// <summary>Returns the path/route in a certain direction starting from an initial tile. Encountering a taken/blocked tile will cut the path up to that point. Path length accepted as an argument.</summary>
-    public List<GridTile> GetPossibleRouteFromTile(GridTile startTile, int routeLength, Directions direction)
+    /// <summary>Returns the path/route in a certain direction starting from an initial tile. Encountering a taken/blocked tile will cut the path up to that point UNLESS ignoreBlockedTiles is true. Path length accepted as an argument.</summary>
+    public List<GridTile> GetPossibleRouteFromTile(GridTile startTile, int routeLength, Directions direction, bool ignoreBlockedTiles = false)
     {
         List<GridTile> currentPossibleRoute = new List<GridTile>();
 
@@ -55,7 +55,7 @@ public class MapController : MonoBehaviour
                     //add the first top neighbour tile to the path, then traverse its top neighbour and so on and on depending on path/route length (they act as separate nodes)
                     if (currentTile.topNeighbour != null)
                     {
-                        if (currentTile.topNeighbour.IsBlocked)
+                        if (currentTile.topNeighbour.IsBlocked && !ignoreBlockedTiles) //ignoreBlockedTiles = false will exclude all blocked tiles from the path (useful for movement paths). Attack paths on the other hand should return even blocked ones as enemies stand on blocked tiles 
                         {
                             routeBlocked = true;
                             break;
@@ -68,7 +68,7 @@ public class MapController : MonoBehaviour
                 case Directions.Bot:
                     if (currentTile.botNeighbour != null)
                     {
-                        if (currentTile.botNeighbour.IsBlocked)
+                        if (currentTile.botNeighbour.IsBlocked && !ignoreBlockedTiles)
                         {
                             routeBlocked = true;
                             break;
@@ -81,7 +81,7 @@ public class MapController : MonoBehaviour
                 case Directions.Right:
                     if (currentTile.rightNeighbour != null)
                     {
-                        if (currentTile.rightNeighbour.IsBlocked)
+                        if (currentTile.rightNeighbour.IsBlocked && !ignoreBlockedTiles)
                         {
                             routeBlocked = true;
                             break;
@@ -94,7 +94,7 @@ public class MapController : MonoBehaviour
                 case Directions.Left:
                     if (currentTile.leftNeighbour != null)
                     {
-                        if (currentTile.leftNeighbour.IsBlocked)
+                        if (currentTile.leftNeighbour.IsBlocked && !ignoreBlockedTiles)
                         {
                             routeBlocked = true;
                             break;
@@ -107,7 +107,7 @@ public class MapController : MonoBehaviour
                 case Directions.TopRight:
                     if (currentTile.topRightNeighbour != null)
                     {
-                        if (currentTile.topRightNeighbour.IsBlocked)
+                        if (currentTile.topRightNeighbour.IsBlocked && !ignoreBlockedTiles)
                         {
                             routeBlocked = true;
                             break;
@@ -120,7 +120,7 @@ public class MapController : MonoBehaviour
                 case Directions.TopLeft:
                     if (currentTile.topLeftNeighbour != null)
                     {
-                        if (currentTile.topLeftNeighbour.IsBlocked)
+                        if (currentTile.topLeftNeighbour.IsBlocked && !ignoreBlockedTiles)
                         {
                             routeBlocked = true;
                             break;
@@ -133,7 +133,7 @@ public class MapController : MonoBehaviour
                 case Directions.BotRight:
                     if (currentTile.botRightNeighbour != null)
                     {
-                        if (currentTile.botRightNeighbour.IsBlocked)
+                        if (currentTile.botRightNeighbour.IsBlocked && !ignoreBlockedTiles)
                         {
                             routeBlocked = true;
                             break;
@@ -146,7 +146,7 @@ public class MapController : MonoBehaviour
                 case Directions.BotLeft:
                     if (currentTile.botLeftNeighbour != null)
                     {
-                        if (currentTile.botLeftNeighbour.IsBlocked)
+                        if (currentTile.botLeftNeighbour.IsBlocked && !ignoreBlockedTiles)
                         {
                             routeBlocked = true;
                             break;

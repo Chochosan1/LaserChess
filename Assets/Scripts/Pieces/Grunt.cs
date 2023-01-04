@@ -2,21 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Grunt : Piece
+public sealed class Grunt : Piece
 {
-    //list all possible paths here
+    //orthogonal paths
     private List<GridTile> currentTopTileRoute;
     private List<GridTile> currentBotTileRoute;
     private List<GridTile> currentRightTileRoute;
     private List<GridTile> currentLeftTileRoute;
 
-    private List<GridTile> currentTopRightTileRoute;
-    private List<GridTile> currentKnightTopRight1Route;
-    private List<GridTile> currentKnightTopRight2Route;
+    //attack
+    private List<GridTile> currentAttackPath; //reuse the same list to probe for different attack paths (e.g the 4 diagonals until an enemy is found)
+    private bool isEnemyFoundDuringProbing = false;
 
     private GridTile currentGridTileToMoveTo;
     private bool isMoving;
     private float step;
+
+    protected override void Start()
+    {
+        base.Start();
+    }
 
     private void Update()
     {
@@ -32,6 +37,8 @@ public class Grunt : Piece
             standingOnTile = currentGridTileToMoveTo;
       //      standingOnTile.isBlocked = true;
             isMoving = false;
+
+            Attack();
         }
     }
 
@@ -50,9 +57,6 @@ public class Grunt : Piece
         currentBotTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 1, MapController.Directions.Bot);
         currentRightTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 1, MapController.Directions.Right);
         currentLeftTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 1, MapController.Directions.Left);
-        //currentTopRightTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 5, MapController.Directions.TopRight);
-        //currentKnightTopRight1Route = MapController.Instance.GetPossibleKnightRouteFromTile(standingOnTile, MapController.KnightPattern.KnightTopRight1);
-        //currentKnightTopRight2Route = MapController.Instance.GetPossibleKnightRouteFromTile(standingOnTile, MapController.KnightPattern.KnightTopRight2);
 
         foreach (GridTile gridTile in currentTopTileRoute)
         {
@@ -73,21 +77,6 @@ public class Grunt : Piece
         {
             gridTile.ActivateTile();
         }
-
-        //foreach (GridTile gridTile in currentTopRightTileRoute)
-        //{
-        //    gridTile.ActivateTile();
-        //}
-
-        //foreach (GridTile gridTile in currentKnightTopRight1Route)
-        //{
-        //    gridTile.ActivateTile();
-        //}
-
-        //foreach (GridTile gridTile in currentKnightTopRight2Route)
-        //{
-        //    gridTile.ActivateTile();
-        //}
     }
 
     public override void OnDeselectedPiece()
@@ -111,20 +100,26 @@ public class Grunt : Piece
         {
             gridTile.DeactivateTile();
         }
+    }
 
-        //foreach (GridTile gridTile in currentTopRightTileRoute)
-        //{
-        //    gridTile.DeactivateTile();
-        //}
+    protected override void Attack()
+    {
+        isEnemyFoundDuringProbing = false;
+        currentAttackPath = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 10, MapController.Directions.TopRight, true);
 
-        //foreach (GridTile gridTile in currentKnightTopRight1Route)
-        //{
-        //    gridTile.DeactivateTile();
-        //}
-
-        //foreach (GridTile gridTile in currentKnightTopRight2Route)
-        //{
-        //    gridTile.DeactivateTile();
-        //}
+        if(!isEnemyFoundDuringProbing)
+        {
+            foreach (GridTile tile in currentAttackPath)
+            {
+             //   Debug.Log(tile.name);
+                if (tile.IsBlocked && LaserChess.Utilities.LayerUtilities.IsObjectInLayer(tile.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
+                {
+                    isEnemyFoundDuringProbing = true;
+                    Debug.Log($"WILL SHOOT ON THE TOP RIGHT DIAGONAL TO DAMAGE PIECE {tile.BlockingTilePiece.gameObject}");
+                    tile.BlockingTilePiece.TakeDamage(stats.AttackPower);
+                    break;
+                }
+            }
+        }
     }
 }

@@ -2,14 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tank : Piece
+public sealed class Tank : Piece
 {
-    //list all possible paths here
+    //orthogonal paths
     private List<GridTile> currentTopTileRoute;
     private List<GridTile> currentBotTileRoute;
     private List<GridTile> currentRightTileRoute;
     private List<GridTile> currentLeftTileRoute;
 
+    //diagonal paths
     private List<GridTile> currentTopRightTileRoute;
     private List<GridTile> currentTopLeftTileRoute;
     private List<GridTile> currentBotRightTileRoute;
@@ -19,6 +20,11 @@ public class Tank : Piece
     private GridTile currentGridTileToMoveTo;
     private bool isMoving;
     private float step;
+
+    protected override void Start()
+    {
+        base.Start();
+    }
 
     private void Update()
     {
@@ -139,5 +145,10 @@ public class Tank : Piece
         {
             gridTile.DeactivateTile();
         }
+    }
+
+    protected override void Attack()
+    {
+        throw new System.NotImplementedException();
     }
 }
