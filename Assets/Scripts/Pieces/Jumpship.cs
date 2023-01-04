@@ -29,25 +29,22 @@ public class Jumpship : Piece
         if (Vector3.Distance(transform.position, new Vector3(currentGridTileToMoveTo.transform.position.x, transform.position.y, currentGridTileToMoveTo.transform.position.z)) < 0.01f)
         {
             standingOnTile = currentGridTileToMoveTo;
-            standingOnTile.isBlocked = true;
+        //    standingOnTile.isBlocked = true;
             isMoving = false;
         }
     }
 
     public override void OnMoveCommand(GridTile selectedGridTileToMoveTo)
     {
-        base.OnMoveCommand(selectedGridTileToMoveTo);
-
         standingOnTile.isBlocked = false;
 
         currentGridTileToMoveTo = selectedGridTileToMoveTo;
+        currentGridTileToMoveTo.isBlocked = true; //mark it as blocked immediately so that clicking on another unit won't show that tile as free while another unit is traveling to it
         isMoving = true;
     }
 
     public override void OnSelectedPiece()
     {
-        base.OnSelectedPiece();
-
         currentKnightTopRight1Route = MapController.Instance.GetPossibleKnightRouteFromTile(standingOnTile, MapController.KnightPattern.KnightTopRight1);
         currentKnightTopRight2Route = MapController.Instance.GetPossibleKnightRouteFromTile(standingOnTile, MapController.KnightPattern.KnightTopRight2);
         currentKnightTopLeft1Route = MapController.Instance.GetPossibleKnightRouteFromTile(standingOnTile, MapController.KnightPattern.KnightTopLeft1);
@@ -101,9 +98,6 @@ public class Jumpship : Piece
 
     public override void OnDeselectedPiece()
     {
-        base.OnDeselectedPiece();
-
-
         foreach (GridTile gridTile in currentKnightTopRight1Route)
         {
             gridTile.DeactivateTile();

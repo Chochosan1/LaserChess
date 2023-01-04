@@ -2,23 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Piece : MonoBehaviour
+public abstract class Piece : MonoBehaviour
 {
     public GridTile standingOnTile;
     public float movementSpeed = 1f;
 
-    public virtual void OnSelectedPiece()
-    {
+    public abstract void OnSelectedPiece();
 
-    }
 
-    public virtual void OnDeselectedPiece()
-    {
+    public abstract void OnDeselectedPiece();
 
-    }
 
-    public virtual void OnMoveCommand(GridTile selectedGridTileToMoveTo)
-    {
-
-    }
+    public abstract void OnMoveCommand(GridTile selectedGridTileToMoveTo);
 }
