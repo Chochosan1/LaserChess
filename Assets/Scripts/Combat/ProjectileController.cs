@@ -4,15 +4,32 @@ using UnityEngine;
 
 public class ProjectileController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private float movementSpeed = 2f;
+
+    private Piece owner;
+    private Piece targetToFlyAt;
+
+    private Vector3 directionToFlyAt;
 
     // Update is called once per frame
     void Update()
     {
-        
+        transform.position += directionToFlyAt * movementSpeed * Time.deltaTime;
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if(LaserChess.Utilities.LayerUtilities.IsObjectInLayer(other.gameObject, owner.damagePiecesOnThisLayer))
+        {
+            other.gameObject.GetComponent<Piece>().TakeDamage(owner.AttackPower);
+            Destroy(this.gameObject);
+        }
+    }
+
+    public void SetupProjectile(Piece ownerOfProjectile, Piece target)
+    {
+        owner = ownerOfProjectile;
+        targetToFlyAt = target;
+
+        directionToFlyAt = target.transform.position - this.transform.position;
     }
 }

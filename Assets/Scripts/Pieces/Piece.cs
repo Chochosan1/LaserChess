@@ -13,6 +13,8 @@ public abstract class Piece : MonoBehaviour
     public float movementSpeed = 1f;
     public LayerMask damagePiecesOnThisLayer;
 
+    public int AttackPower => stats.AttackPower;
+
     protected virtual void Start()
     {
         standingOnTile.MarkTileAsBlocked(this);
