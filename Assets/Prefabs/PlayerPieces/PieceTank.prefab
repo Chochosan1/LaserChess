@@ -108,8 +108,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5082a1645909aa468f8a81e1c315618, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stats: {fileID: 11400000, guid: a950ae85373375845a212dc1a19300fe, type: 2}
   standingOnTile: {fileID: 0}
   movementSpeed: 1
   damagePiecesOnThisLayer:
     serializedVersion: 2
     m_Bits: 256
+  projectilePrefab: {fileID: 639640645305608040, guid: 8f84bf7720bde52469c8509b63c93941, type: 3}

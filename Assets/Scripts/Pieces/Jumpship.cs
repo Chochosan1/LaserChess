@@ -35,7 +35,6 @@ public sealed class Jumpship : Piece
         if (Vector3.Distance(transform.position, new Vector3(currentGridTileToMoveTo.transform.position.x, transform.position.y, currentGridTileToMoveTo.transform.position.z)) < 0.01f)
         {
             standingOnTile = currentGridTileToMoveTo;
-        //    standingOnTile.isBlocked = true;
             isMoving = false;
         }
     }

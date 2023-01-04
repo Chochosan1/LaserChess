@@ -5,6 +5,7 @@ using UnityEngine;
 public sealed class Grunt : Piece
 {
     [SerializeField] private ProjectileController projectilePrefab;
+    [SerializeField] private Vector3 projectileSpawnOffset = new Vector3(0f, 1f, 0f);
 
     //orthogonal paths
     private List<GridTile> currentTopTileRoute;
@@ -37,7 +38,6 @@ public sealed class Grunt : Piece
         if (Vector3.Distance(transform.position, new Vector3(currentGridTileToMoveTo.transform.position.x, transform.position.y, currentGridTileToMoveTo.transform.position.z)) < 0.01f)
         {
             standingOnTile = currentGridTileToMoveTo;
-      //      standingOnTile.isBlocked = true;
             isMoving = false;
 
             Attack();
@@ -118,7 +118,7 @@ public sealed class Grunt : Piece
                 if (tile.IsBlocked && LaserChess.Utilities.LayerUtilities.IsObjectInLayer(tile.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
                 {
                     isEnemyFoundDuringProbing = true;
-                    ProjectileController projectileCopy = Instantiate(projectilePrefab, transform.position + new Vector3(0f, 1f, 0f), Quaternion.identity);
+                    ProjectileController projectileCopy = Instantiate(projectilePrefab, transform.position + projectileSpawnOffset, Quaternion.identity);
                     projectileCopy.SetupProjectile(this, tile.BlockingTilePiece);
                     Debug.Log($"WILL SHOOT ON THE TOP RIGHT DIAGONAL TO DAMAGE PIECE {tile.BlockingTilePiece.gameObject}");
                     break;
@@ -137,7 +137,8 @@ public sealed class Grunt : Piece
                 {
                     isEnemyFoundDuringProbing = true;
                     Debug.Log($"WILL SHOOT ON THE TOP LEFT DIAGONAL TO DAMAGE PIECE {tile.BlockingTilePiece.gameObject}");
-                    tile.BlockingTilePiece.TakeDamage(stats.AttackPower);
+                    ProjectileController projectileCopy = Instantiate(projectilePrefab, transform.position + projectileSpawnOffset, Quaternion.identity);
+                    projectileCopy.SetupProjectile(this, tile.BlockingTilePiece);
                     break;
                 }
             }
@@ -154,7 +155,8 @@ public sealed class Grunt : Piece
                 {
                     isEnemyFoundDuringProbing = true;
                     Debug.Log($"WILL SHOOT ON THE BOT LEFT DIAGONAL TO DAMAGE PIECE {tile.BlockingTilePiece.gameObject}");
-                    tile.BlockingTilePiece.TakeDamage(stats.AttackPower);
+                    ProjectileController projectileCopy = Instantiate(projectilePrefab, transform.position + projectileSpawnOffset, Quaternion.identity);
+                    projectileCopy.SetupProjectile(this, tile.BlockingTilePiece);
                     break;
                 }
             }
@@ -170,7 +172,8 @@ public sealed class Grunt : Piece
                 {
                     isEnemyFoundDuringProbing = true;
                     Debug.Log($"WILL SHOOT ON THE BOT RIGHT DIAGONAL TO DAMAGE PIECE {tile.BlockingTilePiece.gameObject}");
-                    tile.BlockingTilePiece.TakeDamage(stats.AttackPower);
+                    ProjectileController projectileCopy = Instantiate(projectilePrefab, transform.position + projectileSpawnOffset, Quaternion.identity);
+                    projectileCopy.SetupProjectile(this, tile.BlockingTilePiece);
                     break;
                 }
             }

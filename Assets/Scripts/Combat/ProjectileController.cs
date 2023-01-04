@@ -7,11 +7,8 @@ public class ProjectileController : MonoBehaviour
     [SerializeField] private float movementSpeed = 2f;
 
     private Piece owner;
-    private Piece targetToFlyAt;
-
     private Vector3 directionToFlyAt;
 
-    // Update is called once per frame
     void Update()
     {
         transform.position += directionToFlyAt * movementSpeed * Time.deltaTime;
@@ -28,7 +25,6 @@ public class ProjectileController : MonoBehaviour
     public void SetupProjectile(Piece ownerOfProjectile, Piece target)
     {
         owner = ownerOfProjectile;
-        targetToFlyAt = target;
 
         directionToFlyAt = target.transform.position - this.transform.position;
     }

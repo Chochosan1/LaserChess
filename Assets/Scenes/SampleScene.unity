@@ -2345,6 +2345,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   projectilePrefab: {fileID: 0}
+  projectileSpawnOffset: {x: 0, y: 1, z: 0}
 --- !u!136 &1016709266
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -5487,10 +5488,6 @@ PrefabInstance:
       propertyPath: standingOnTile
       value: 
       objectReference: {fileID: 1946360994}
-    - target: {fileID: 1766082472817270660, guid: 074836c7b72d81e4480339404995eaad, type: 3}
-      propertyPath: projectilePrefab
-      value: 
-      objectReference: {fileID: 639640645305608040, guid: 8f84bf7720bde52469c8509b63c93941, type: 3}
     - target: {fileID: 1766082472817270661, guid: 074836c7b72d81e4480339404995eaad, type: 3}
       propertyPath: m_Name
       value: PieceGrunt
@@ -5549,13 +5546,13 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 6805568314105153777, guid: fe6b1f0cbb687c440945f066f8ea0484, type: 3}
-      propertyPath: stats
-      value: 
-      objectReference: {fileID: 11400000, guid: a950ae85373375845a212dc1a19300fe, type: 2}
-    - target: {fileID: 6805568314105153777, guid: fe6b1f0cbb687c440945f066f8ea0484, type: 3}
       propertyPath: standingOnTile
       value: 
       objectReference: {fileID: 1003844239978392843}
+    - target: {fileID: 6805568314105153777, guid: fe6b1f0cbb687c440945f066f8ea0484, type: 3}
+      propertyPath: projectileSpawnOffset.y
+      value: 0.75
+      objectReference: {fileID: 0}
     - target: {fileID: 6805568314105153781, guid: fe6b1f0cbb687c440945f066f8ea0484, type: 3}
       propertyPath: m_RootOrder
       value: 7
