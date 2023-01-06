@@ -69,79 +69,33 @@ public class Drone : Piece, IAutoRunnableAI
     public override void OnDeselectedPiece() { }
 
 
-    //grunts attack diagonally in any range; probes all diagonal directions until it finds an enemy in one of them (will actually damage only in one diagonal)
+    //drones attack diagonally in any range; probes all diagonal directions until it finds an enemy in one of them (will actually damage only in one diagonal)
     protected override void Attack()
     {
         isEnemyFoundDuringProbing = false;
-        currentAttackPath = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 10, MapController.Directions.TopRight, true);
 
-        if (!isEnemyFoundDuringProbing)
+        //the last 4 elements in the enum are the diagonal directions in which the drone shoots
+        for (int currentEnumIndex = 4; currentEnumIndex < 8; currentEnumIndex++)
         {
-            foreach (GridTile tile in currentAttackPath)
-            {
-                //find an occupied tile and check if the piece on top of it is in the must-damage layer
-                if (tile.BlockingTilePiece != null && tile.IsBlocked && LaserChess.Utilities.LayerUtilities.IsObjectInLayer(tile.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
-                {
-                    isEnemyFoundDuringProbing = true;
-                    ProjectileController projectileCopy = Instantiate(projectilePrefab, transform.position + projectileSpawnOffset, Quaternion.identity);
-                    projectileCopy.SetupProjectile(this, tile.BlockingTilePiece);
-                //    Debug.Log($"WILL SHOOT ON THE TOP RIGHT DIAGONAL TO DAMAGE PIECE {tile.BlockingTilePiece.gameObject}");
-                    break;
-                }
-            }
-        }
+            //get the current attack path (based on the current enum direction)
+            currentAttackPath = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 10, (MapController.Directions)currentEnumIndex, true);
 
-        //don't continue enemy probing if an enemy has already been found
-        if (!isEnemyFoundDuringProbing)
-        {
-            currentAttackPath = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 10, MapController.Directions.TopLeft, true);
-
+            //probe the attack path to find if an enemy is there to attack it
             foreach (GridTile tile in currentAttackPath)
             {
                 if (tile.BlockingTilePiece != null && tile.IsBlocked && LaserChess.Utilities.LayerUtilities.IsObjectInLayer(tile.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
                 {
                     isEnemyFoundDuringProbing = true;
-                //    Debug.Log($"WILL SHOOT ON THE TOP LEFT DIAGONAL TO DAMAGE PIECE {tile.BlockingTilePiece.gameObject}");
+
                     ProjectileController projectileCopy = Instantiate(projectilePrefab, transform.position + projectileSpawnOffset, Quaternion.identity);
                     projectileCopy.SetupProjectile(this, tile.BlockingTilePiece);
+
                     break;
                 }
             }
-        }
 
-
-        if (!isEnemyFoundDuringProbing)
-        {
-            currentAttackPath = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 10, MapController.Directions.BotLeft, true);
-
-            foreach (GridTile tile in currentAttackPath)
-            {
-                if (tile.BlockingTilePiece != null && tile.IsBlocked && LaserChess.Utilities.LayerUtilities.IsObjectInLayer(tile.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
-                {
-                    isEnemyFoundDuringProbing = true;
-                //    Debug.Log($"WILL SHOOT ON THE BOT LEFT DIAGONAL TO DAMAGE PIECE {tile.BlockingTilePiece.gameObject}");
-                    ProjectileController projectileCopy = Instantiate(projectilePrefab, transform.position + projectileSpawnOffset, Quaternion.identity);
-                    projectileCopy.SetupProjectile(this, tile.BlockingTilePiece);
-                    break;
-                }
-            }
-        }
-
-        if (!isEnemyFoundDuringProbing)
-        {
-            currentAttackPath = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 10, MapController.Directions.BotRight, true);
-
-            foreach (GridTile tile in currentAttackPath)
-            {
-                if (tile.BlockingTilePiece != null && tile.IsBlocked && LaserChess.Utilities.LayerUtilities.IsObjectInLayer(tile.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
-                {
-                    isEnemyFoundDuringProbing = true;
-                //    Debug.Log($"WILL SHOOT ON THE BOT RIGHT DIAGONAL TO DAMAGE PIECE {tile.BlockingTilePiece.gameObject}");
-                    ProjectileController projectileCopy = Instantiate(projectilePrefab, transform.position + projectileSpawnOffset, Quaternion.identity);
-                    projectileCopy.SetupProjectile(this, tile.BlockingTilePiece);
-                    break;
-                }
-            }
+            if (isEnemyFoundDuringProbing)
+                break;
         }
     }
 
