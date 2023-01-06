@@ -85,7 +85,6 @@ public sealed class Tank : Piece
     protected override void Attack()
     {
         isEnemyFoundDuringProbing = false;
-        currentAttackPath = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 10, MapController.Directions.Top, true);
 
         //the first 4 elements in the enum are the orthogonal directions in which the tank shoots
         for(int currentEnumIndex = 0; currentEnumIndex < 4; currentEnumIndex++)

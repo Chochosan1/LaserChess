@@ -7,16 +7,12 @@ public sealed class Grunt : Piece
     [SerializeField] private ProjectileController projectilePrefab;
     [SerializeField] private Vector3 projectileSpawnOffset = new Vector3(0f, 1f, 0f);
 
-    //orthogonal paths
-    private List<GridTile> currentTopTileRoute;
-    private List<GridTile> currentBotTileRoute;
-    private List<GridTile> currentRightTileRoute;
-    private List<GridTile> currentLeftTileRoute;
-
     //attack
-    private List<GridTile> currentAttackPath; //reuse the same list to probe for different attack paths (e.g the 4 diagonals until an enemy is found)
+    private List<GridTile> currentAttackPath; //reuse the same list to probe for different attack paths
     private bool isEnemyFoundDuringProbing = false;
 
+    //movement
+    private List<GridTile> allPathsUsedTiles;
     private GridTile currentGridTileToMoveTo;
     private bool isMoving;
     private float step;
@@ -55,53 +51,28 @@ public sealed class Grunt : Piece
 
     public override void OnSelectedPiece()
     {
-        currentTopTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 1, MapController.Directions.Top);
-        currentBotTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 1, MapController.Directions.Bot);
-        currentRightTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 1, MapController.Directions.Right);
-        currentLeftTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 1, MapController.Directions.Left);
+        allPathsUsedTiles = new List<GridTile>();
+        List<GridTile> currentMovePath = new List<GridTile>();
 
-        foreach (GridTile gridTile in currentTopTileRoute)
+        //the first 4 elements in the enum are the orthogonal directions in which the grunt moves
+        for (int currentEnumIndex = 0; currentEnumIndex < 4; currentEnumIndex++)
         {
-            gridTile.ActivateTile();
-        }
+            //get the current attack path (based on the current enum direction)
+            currentMovePath = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 1, (MapController.Directions)currentEnumIndex);
 
-        foreach (GridTile gridTile in currentBotTileRoute)
-        {
-            gridTile.ActivateTile();
-        }
-
-        foreach (GridTile gridTile in currentRightTileRoute)
-        {
-            gridTile.ActivateTile();
-        }
-
-        foreach (GridTile gridTile in currentLeftTileRoute)
-        {
-            gridTile.ActivateTile();
+            //probe the attack path to find if an enemy is there to attack it
+            foreach (GridTile tile in currentMovePath)
+            {
+                tile.ActivateTile();
+                allPathsUsedTiles.Add(tile); //store all tiles from all paths here so they can get deactivated later
+            }
         }
     }
 
     public override void OnDeselectedPiece()
     {
-        foreach (GridTile gridTile in currentTopTileRoute)
-        {
-            gridTile.DeactivateTile();
-        }
-
-        foreach (GridTile gridTile in currentBotTileRoute)
-        {
-            gridTile.DeactivateTile();
-        }
-
-        foreach (GridTile gridTile in currentRightTileRoute)
-        {
-            gridTile.DeactivateTile();
-        }
-
-        foreach (GridTile gridTile in currentLeftTileRoute)
-        {
-            gridTile.DeactivateTile();
-        }
+        foreach (GridTile tile in allPathsUsedTiles)
+            tile.DeactivateTile();
     }
 
     protected override void Die()
@@ -114,75 +85,29 @@ public sealed class Grunt : Piece
     protected override void Attack()
     {
         isEnemyFoundDuringProbing = false;
-        currentAttackPath = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 10, MapController.Directions.TopRight, true);
 
-        if(!isEnemyFoundDuringProbing)
+        //the last 4 elements in the enum are the diagonal directions in which the grunt shoots
+        for (int currentEnumIndex = 4; currentEnumIndex < 8; currentEnumIndex++)
         {
-            foreach (GridTile tile in currentAttackPath)
-            {
-                //find an occupied tile and check if the piece on top of it is in the must-damage layer
-                if (tile.BlockingTilePiece != null && tile.IsBlocked && LaserChess.Utilities.LayerUtilities.IsObjectInLayer(tile.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
-                {
-                    isEnemyFoundDuringProbing = true;
-                    ProjectileController projectileCopy = Instantiate(projectilePrefab, transform.position + projectileSpawnOffset, Quaternion.identity);
-                    projectileCopy.SetupProjectile(this, tile.BlockingTilePiece);
-                    Debug.Log($"WILL SHOOT ON THE TOP RIGHT DIAGONAL TO DAMAGE PIECE {tile.BlockingTilePiece.gameObject}");
-                    break;
-                }
-            }
-        }
+            //get the current attack path (based on the current enum direction)
+            currentAttackPath = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 10, (MapController.Directions)currentEnumIndex, true);
 
-        //don't continue enemy probing if an enemy has already been found
-        if (!isEnemyFoundDuringProbing)
-        {
-            currentAttackPath = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 10, MapController.Directions.TopLeft, true);
-
+            //probe the attack path to find if an enemy is there to attack it
             foreach (GridTile tile in currentAttackPath)
             {
                 if (tile.BlockingTilePiece != null && tile.IsBlocked && LaserChess.Utilities.LayerUtilities.IsObjectInLayer(tile.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
                 {
                     isEnemyFoundDuringProbing = true;
-                    Debug.Log($"WILL SHOOT ON THE TOP LEFT DIAGONAL TO DAMAGE PIECE {tile.BlockingTilePiece.gameObject}");
+
                     ProjectileController projectileCopy = Instantiate(projectilePrefab, transform.position + projectileSpawnOffset, Quaternion.identity);
                     projectileCopy.SetupProjectile(this, tile.BlockingTilePiece);
+
                     break;
                 }
             }
-        }
 
-
-        if (!isEnemyFoundDuringProbing)
-        {
-            currentAttackPath = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 10, MapController.Directions.BotLeft, true);
-
-            foreach (GridTile tile in currentAttackPath)
-            {
-                if (tile.BlockingTilePiece != null && tile.IsBlocked && LaserChess.Utilities.LayerUtilities.IsObjectInLayer(tile.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
-                {
-                    isEnemyFoundDuringProbing = true;
-                    Debug.Log($"WILL SHOOT ON THE BOT LEFT DIAGONAL TO DAMAGE PIECE {tile.BlockingTilePiece.gameObject}");
-                    ProjectileController projectileCopy = Instantiate(projectilePrefab, transform.position + projectileSpawnOffset, Quaternion.identity);
-                    projectileCopy.SetupProjectile(this, tile.BlockingTilePiece);
-                    break;
-                }
-            }
-        }
-
-        if (!isEnemyFoundDuringProbing)
-        {
-            currentAttackPath = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 10, MapController.Directions.BotRight, true);
-
-            foreach (GridTile tile in currentAttackPath)
-            {
-                if (tile.BlockingTilePiece != null && tile.IsBlocked && LaserChess.Utilities.LayerUtilities.IsObjectInLayer(tile.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
-                {
-                    isEnemyFoundDuringProbing = true;
-                    Debug.Log($"WILL SHOOT ON THE BOT RIGHT DIAGONAL TO DAMAGE PIECE {tile.BlockingTilePiece.gameObject}");
-                    ProjectileController projectileCopy = Instantiate(projectilePrefab, transform.position + projectileSpawnOffset, Quaternion.identity);
-                    projectileCopy.SetupProjectile(this, tile.BlockingTilePiece);
-                    break;
-                }
-            }
+            if (isEnemyFoundDuringProbing)
+                break;
         }
     }
 }

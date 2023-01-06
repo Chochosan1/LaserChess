@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MapController : MonoBehaviour
 {
-    public enum Directions { Top, Bot, Right, Left, TopRight, TopLeft, BotRight, BotLeft, KnightTopRight1, KnightTopRight2, KnightTopLeft1, KnightTopLeft2, KnightBotRight1, KnightBotRight2, KnightBotLeft1, KnightBotLeft2 }
+    public enum Directions { Top, Bot, Right, Left, TopRight, TopLeft, BotRight, BotLeft }
     public enum KnightPattern { KnightTopRight1, KnightTopRight2, KnightTopLeft1, KnightTopLeft2, KnightBotRight1, KnightBotRight2, KnightBotLeft1, KnightBotLeft2 }
 
 

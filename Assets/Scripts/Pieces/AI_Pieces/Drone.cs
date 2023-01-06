@@ -7,18 +7,12 @@ public class Drone : Piece, IAutoRunnableAI
     [SerializeField] private ProjectileController projectilePrefab;
     [SerializeField] private Vector3 projectileSpawnOffset = new Vector3(0f, 1f, 0f);
 
-    //orthogonal paths
-    //private List<GridTile> currentTopTileRoute;
-    //private List<GridTile> currentBotTileRoute;
-    //private List<GridTile> currentRightTileRoute;
-    //private List<GridTile> currentLeftTileRoute;
-
     //attack
     private List<GridTile> currentAttackPath; //reuse the same list to probe for different attack paths (e.g the 4 diagonals until an enemy is found)
     private bool isEnemyFoundDuringProbing = false;
 
+    //movement
     private GridTile currentGridTileToMoveTo;
-    private bool isMoving;
     private float step;
     private bool isActivatedAndMustPlay = false; //should the AI behaviour logic execute?
     private bool hasPlayedItsTurn = false; //has the AI behaviour logic executed to the end?
@@ -68,59 +62,12 @@ public class Drone : Piece, IAutoRunnableAI
 
         currentGridTileToMoveTo = selectedGridTileToMoveTo;
         currentGridTileToMoveTo.MarkTileAsBlocked(this); //mark it as blocked immediately so that clicking on another unit won't show that tile as free while another unit is traveling to it
-    //    isMoving = true;
     }
 
-    public override void OnSelectedPiece()
-    {
-        //currentTopTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 1, MapController.Directions.Top);
-        //currentBotTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 1, MapController.Directions.Bot);
-        //currentRightTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 1, MapController.Directions.Right);
-        //currentLeftTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 1, MapController.Directions.Left);
+    public override void OnSelectedPiece() { }
 
-        //foreach (GridTile gridTile in currentTopTileRoute)
-        //{
-        //    gridTile.ActivateTile();
-        //}
+    public override void OnDeselectedPiece() { }
 
-        //foreach (GridTile gridTile in currentBotTileRoute)
-        //{
-        //    gridTile.ActivateTile();
-        //}
-
-        //foreach (GridTile gridTile in currentRightTileRoute)
-        //{
-        //    gridTile.ActivateTile();
-        //}
-
-        //foreach (GridTile gridTile in currentLeftTileRoute)
-        //{
-        //    gridTile.ActivateTile();
-        //}
-    }
-
-    public override void OnDeselectedPiece()
-    {
-        //foreach (GridTile gridTile in currentTopTileRoute)
-        //{
-        //    gridTile.DeactivateTile();
-        //}
-
-        //foreach (GridTile gridTile in currentBotTileRoute)
-        //{
-        //    gridTile.DeactivateTile();
-        //}
-
-        //foreach (GridTile gridTile in currentRightTileRoute)
-        //{
-        //    gridTile.DeactivateTile();
-        //}
-
-        //foreach (GridTile gridTile in currentLeftTileRoute)
-        //{
-        //    gridTile.DeactivateTile();
-        //}
-    }
 
     //grunts attack diagonally in any range; probes all diagonal directions until it finds an enemy in one of them (will actually damage only in one diagonal)
     protected override void Attack()
