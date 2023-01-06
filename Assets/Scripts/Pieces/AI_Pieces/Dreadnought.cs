@@ -57,58 +57,13 @@ public class Dreadnought : Piece, IAutoRunnableAI
         currentGridTileToMoveTo.MarkTileAsBlocked(this); //mark it as blocked immediately so that clicking on another unit won't show that tile as free while another unit is traveling to it
     }
 
-    public override void OnSelectedPiece()
-    {
-        //currentTopTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 1, MapController.Directions.Top);
-        //currentBotTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 1, MapController.Directions.Bot);
-        //currentRightTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 1, MapController.Directions.Right);
-        //currentLeftTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 1, MapController.Directions.Left);
+    public override void OnSelectedPiece() { }
 
-        //foreach (GridTile gridTile in currentTopTileRoute)
-        //{
-        //    gridTile.ActivateTile();
-        //}
 
-        //foreach (GridTile gridTile in currentBotTileRoute)
-        //{
-        //    gridTile.ActivateTile();
-        //}
+    public override void OnDeselectedPiece() { }
 
-        //foreach (GridTile gridTile in currentRightTileRoute)
-        //{
-        //    gridTile.ActivateTile();
-        //}
 
-        //foreach (GridTile gridTile in currentLeftTileRoute)
-        //{
-        //    gridTile.ActivateTile();
-        //}
-    }
-
-    public override void OnDeselectedPiece()
-    {
-        //foreach (GridTile gridTile in currentTopTileRoute)
-        //{
-        //    gridTile.DeactivateTile();
-        //}
-
-        //foreach (GridTile gridTile in currentBotTileRoute)
-        //{
-        //    gridTile.DeactivateTile();
-        //}
-
-        //foreach (GridTile gridTile in currentRightTileRoute)
-        //{
-        //    gridTile.DeactivateTile();
-        //}
-
-        //foreach (GridTile gridTile in currentLeftTileRoute)
-        //{
-        //    gridTile.DeactivateTile();
-        //}
-    }
-
-    //dreadnoughts attack all adjacent enemies (including the diagonally adjacent)
+    //dreadnoughts attack all adjacent enemies simulatenously (including the diagonally adjacent)
     protected override void Attack()
     {
         if (standingOnTile.topNeighbour != null && standingOnTile.topNeighbour.BlockingTilePiece != null && LayerUtilities.IsObjectInLayer(standingOnTile.topNeighbour.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))

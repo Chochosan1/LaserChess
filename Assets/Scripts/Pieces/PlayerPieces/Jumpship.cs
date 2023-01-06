@@ -4,16 +4,8 @@ using UnityEngine;
 using LaserChess.Utilities;
 public sealed class Jumpship : Piece
 {
-    //knight paths
-    private List<GridTile> currentKnightTopRight1Route;
-    private List<GridTile> currentKnightTopRight2Route;
-    private List<GridTile> currentKnightBotRight1Route;
-    private List<GridTile> currentKnightBotRight2Route;
-    private List<GridTile> currentKnightTopLeft1Route;
-    private List<GridTile> currentKnightTopLeft2Route;
-    private List<GridTile> currentKnightBotLeft1Route;
-    private List<GridTile> currentKnightBotLeft2Route;
-
+    //movement
+    private List<GridTile> allPathsUsedTiles;
     private GridTile currentGridTileToMoveTo;
     private bool isMoving;
     private float step;
@@ -36,6 +28,8 @@ public sealed class Jumpship : Piece
         {
             standingOnTile = currentGridTileToMoveTo;
             isMoving = false;
+
+            Attack();
         }
     }
 
@@ -50,98 +44,26 @@ public sealed class Jumpship : Piece
 
     public override void OnSelectedPiece()
     {
-        currentKnightTopRight1Route = MapController.Instance.GetPossibleKnightRouteFromTile(standingOnTile, MapController.KnightPattern.KnightTopRight1);
-        currentKnightTopRight2Route = MapController.Instance.GetPossibleKnightRouteFromTile(standingOnTile, MapController.KnightPattern.KnightTopRight2);
-        currentKnightTopLeft1Route = MapController.Instance.GetPossibleKnightRouteFromTile(standingOnTile, MapController.KnightPattern.KnightTopLeft1);
-        currentKnightTopLeft2Route = MapController.Instance.GetPossibleKnightRouteFromTile(standingOnTile, MapController.KnightPattern.KnightTopLeft2);
-        currentKnightBotLeft1Route = MapController.Instance.GetPossibleKnightRouteFromTile(standingOnTile, MapController.KnightPattern.KnightBotLeft1);
-        currentKnightBotLeft2Route = MapController.Instance.GetPossibleKnightRouteFromTile(standingOnTile, MapController.KnightPattern.KnightBotLeft2);
-        currentKnightBotRight1Route = MapController.Instance.GetPossibleKnightRouteFromTile(standingOnTile, MapController.KnightPattern.KnightBotRight1);
-        currentKnightBotRight2Route = MapController.Instance.GetPossibleKnightRouteFromTile(standingOnTile, MapController.KnightPattern.KnightBotRight2);
+        allPathsUsedTiles = new List<GridTile>();
+        List<GridTile> currentMovePath = new List<GridTile>();
 
-
-        foreach (GridTile gridTile in currentKnightTopRight1Route)
+        //finds the end point for each knight pattern and activates the tile (ready to be selected by the player); 
+        foreach (int currKnightPattern in System.Enum.GetValues(typeof(MapController.KnightPattern)))
         {
-            gridTile.ActivateTile();
-        }
+            currentMovePath = MapController.Instance.GetPossibleKnightRouteFromTile(standingOnTile, (MapController.KnightPattern)currKnightPattern);
 
-        foreach (GridTile gridTile in currentKnightTopRight2Route)
-        {
-            gridTile.ActivateTile();
-        }
-
-        foreach (GridTile gridTile in currentKnightTopLeft1Route)
-        {
-            gridTile.ActivateTile();
-        }
-
-        foreach (GridTile gridTile in currentKnightTopLeft2Route)
-        {
-            gridTile.ActivateTile();
-        }
-
-        foreach (GridTile gridTile in currentKnightBotLeft1Route)
-        {
-            gridTile.ActivateTile();
-        }
-
-        foreach (GridTile gridTile in currentKnightBotLeft2Route)
-        {
-            gridTile.ActivateTile();
-        }
-
-        foreach (GridTile gridTile in currentKnightBotRight1Route)
-        {
-            gridTile.ActivateTile();
-        }
-
-        foreach (GridTile gridTile in currentKnightBotRight2Route)
-        {
-            gridTile.ActivateTile();
+            foreach (GridTile tile in currentMovePath)
+            {
+                tile.ActivateTile();
+                allPathsUsedTiles.Add(tile); //store all tiles from all paths here so they can get deactivated later
+            }
         }
     }
 
     public override void OnDeselectedPiece()
     {
-        foreach (GridTile gridTile in currentKnightTopRight1Route)
-        {
-            gridTile.DeactivateTile();
-        }
-
-        foreach (GridTile gridTile in currentKnightTopRight2Route)
-        {
-            gridTile.DeactivateTile();
-        }
-
-        foreach (GridTile gridTile in currentKnightTopLeft1Route)
-        {
-            gridTile.DeactivateTile();
-        }
-
-        foreach (GridTile gridTile in currentKnightTopLeft2Route)
-        {
-            gridTile.DeactivateTile();
-        }
-
-        foreach (GridTile gridTile in currentKnightBotLeft1Route)
-        {
-            gridTile.DeactivateTile();
-        }
-
-        foreach (GridTile gridTile in currentKnightBotLeft2Route)
-        {
-            gridTile.DeactivateTile();
-        }
-
-        foreach (GridTile gridTile in currentKnightBotRight1Route)
-        {
-            gridTile.DeactivateTile();
-        }
-
-        foreach (GridTile gridTile in currentKnightBotRight2Route)
-        {
-            gridTile.DeactivateTile();
-        }
+        foreach (GridTile tile in allPathsUsedTiles)
+            tile.DeactivateTile();
     }
 
     protected override void Die()
@@ -153,7 +75,7 @@ public sealed class Jumpship : Piece
     //jumpships should damage all enemy pieces in the 4 orthogonally adjacent spaces simultaneously
     protected override void Attack()
     {
-        if (standingOnTile.topNeighbour != null && standingOnTile.topNeighbour.BlockingTilePiece != null && LayerUtilities.IsObjectInLayer(standingOnTile.topNeighbour.BlockingTilePiece.gameObject, damagePiecesOnThisLayer)) ;
+        if (standingOnTile.topNeighbour != null && standingOnTile.topNeighbour.BlockingTilePiece != null && LayerUtilities.IsObjectInLayer(standingOnTile.topNeighbour.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
         {
             standingOnTile.topNeighbour.BlockingTilePiece.TakeDamage(stats.AttackPower);
         }
