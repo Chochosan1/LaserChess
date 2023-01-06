@@ -59,99 +59,119 @@ public sealed class Tank : Piece
         isMoving = true;
     }
 
+    private List<GridTile> allPathsUsedTiles;
     public override void OnSelectedPiece()
     {
-        currentTopTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 3, MapController.Directions.Top);
-        currentBotTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 3, MapController.Directions.Bot);
-        currentRightTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 3, MapController.Directions.Right);
-        currentLeftTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 3, MapController.Directions.Left);
-        currentTopRightTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 3, MapController.Directions.TopRight);
-        currentTopLeftTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 3, MapController.Directions.TopLeft);
-        currentBotLeftTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 3, MapController.Directions.BotLeft);
-        currentBotRightTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 3, MapController.Directions.BotRight);
+        allPathsUsedTiles = new List<GridTile>();
+        List<GridTile> currentMovePath = new List<GridTile>();
 
-        foreach (GridTile gridTile in currentTopTileRoute)
+        //tanks should be able to move in all directions, up to 3 tiles in direction; finds the path for each direction and activates the tile (ready to be selected by the player)
+        foreach (int currDir in System.Enum.GetValues(typeof(MapController.Directions)))
         {
-            gridTile.ActivateTile();
+            currentMovePath = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 3, (MapController.Directions)currDir);
+
+            foreach (GridTile tile in currentMovePath)
+            {
+                tile.ActivateTile();
+                allPathsUsedTiles.Add(tile); //store all tiles from all paths here so they can get deactivated later
+            }
         }
 
-        foreach (GridTile gridTile in currentBotTileRoute)
-        {
-            gridTile.ActivateTile();
-        }
 
-        foreach (GridTile gridTile in currentRightTileRoute)
-        {
-            gridTile.ActivateTile();
-        }
+        //currentTopTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 3, MapController.Directions.Top);
+        //currentBotTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 3, MapController.Directions.Bot);
+        //currentRightTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 3, MapController.Directions.Right);
+        //currentLeftTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 3, MapController.Directions.Left);
+        //currentTopRightTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 3, MapController.Directions.TopRight);
+        //currentTopLeftTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 3, MapController.Directions.TopLeft);
+        //currentBotLeftTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 3, MapController.Directions.BotLeft);
+        //currentBotRightTileRoute = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 3, MapController.Directions.BotRight);
 
-        foreach (GridTile gridTile in currentLeftTileRoute)
-        {
-            gridTile.ActivateTile();
-        }
+        //foreach (GridTile gridTile in currentTopTileRoute)
+        //{
+        //    gridTile.ActivateTile();
+        //}
 
-        foreach (GridTile gridTile in currentTopRightTileRoute)
-        {
-            gridTile.ActivateTile();
-        }
+        //foreach (GridTile gridTile in currentBotTileRoute)
+        //{
+        //    gridTile.ActivateTile();
+        //}
 
-        foreach (GridTile gridTile in currentTopLeftTileRoute)
-        {
-            gridTile.ActivateTile();
-        }
+        //foreach (GridTile gridTile in currentRightTileRoute)
+        //{
+        //    gridTile.ActivateTile();
+        //}
 
-        foreach (GridTile gridTile in currentBotRightTileRoute)
-        {
-            gridTile.ActivateTile();
-        }
+        //foreach (GridTile gridTile in currentLeftTileRoute)
+        //{
+        //    gridTile.ActivateTile();
+        //}
 
-        foreach (GridTile gridTile in currentBotLeftTileRoute)
-        {
-            gridTile.ActivateTile();
-        }
+        //foreach (GridTile gridTile in currentTopRightTileRoute)
+        //{
+        //    gridTile.ActivateTile();
+        //}
+
+        //foreach (GridTile gridTile in currentTopLeftTileRoute)
+        //{
+        //    gridTile.ActivateTile();
+        //}
+
+        //foreach (GridTile gridTile in currentBotRightTileRoute)
+        //{
+        //    gridTile.ActivateTile();
+        //}
+
+        //foreach (GridTile gridTile in currentBotLeftTileRoute)
+        //{
+        //    gridTile.ActivateTile();
+        //}
     }
 
     public override void OnDeselectedPiece()
     {
-        foreach (GridTile gridTile in currentTopTileRoute)
-        {
-            gridTile.DeactivateTile();
-        }
+        foreach (GridTile tile in allPathsUsedTiles)
+            tile.DeactivateTile();
 
-        foreach (GridTile gridTile in currentBotTileRoute)
-        {
-            gridTile.DeactivateTile();
-        }
+        //foreach (GridTile gridTile in currentTopTileRoute)
+        //{
+        //    gridTile.DeactivateTile();
+        //}
 
-        foreach (GridTile gridTile in currentRightTileRoute)
-        {
-            gridTile.DeactivateTile();
-        }
+        //foreach (GridTile gridTile in currentBotTileRoute)
+        //{
+        //    gridTile.DeactivateTile();
+        //}
 
-        foreach (GridTile gridTile in currentLeftTileRoute)
-        {
-            gridTile.DeactivateTile();
-        }
+        //foreach (GridTile gridTile in currentRightTileRoute)
+        //{
+        //    gridTile.DeactivateTile();
+        //}
 
-        foreach (GridTile gridTile in currentTopRightTileRoute)
-        {
-            gridTile.DeactivateTile();
-        }
+        //foreach (GridTile gridTile in currentLeftTileRoute)
+        //{
+        //    gridTile.DeactivateTile();
+        //}
 
-        foreach (GridTile gridTile in currentTopLeftTileRoute)
-        {
-            gridTile.DeactivateTile();
-        }
+        //foreach (GridTile gridTile in currentTopRightTileRoute)
+        //{
+        //    gridTile.DeactivateTile();
+        //}
 
-        foreach (GridTile gridTile in currentBotRightTileRoute)
-        {
-            gridTile.DeactivateTile();
-        }
+        //foreach (GridTile gridTile in currentTopLeftTileRoute)
+        //{
+        //    gridTile.DeactivateTile();
+        //}
 
-        foreach (GridTile gridTile in currentBotLeftTileRoute)
-        {
-            gridTile.DeactivateTile();
-        }
+        //foreach (GridTile gridTile in currentBotRightTileRoute)
+        //{
+        //    gridTile.DeactivateTile();
+        //}
+
+        //foreach (GridTile gridTile in currentBotLeftTileRoute)
+        //{
+        //    gridTile.DeactivateTile();
+        //}
     }
 
     protected override void Die()
@@ -166,73 +186,96 @@ public sealed class Tank : Piece
         isEnemyFoundDuringProbing = false;
         currentAttackPath = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 10, MapController.Directions.Top, true);
 
-        if (!isEnemyFoundDuringProbing)
+        //the first 4 elements in the enum are the orthogonal directions in which the tank shoots
+        for(int currentEnumIndex = 0; currentEnumIndex < 4; currentEnumIndex++)
         {
-            foreach (GridTile tile in currentAttackPath)
-            {
-                //find an occupied tile and check if the piece on top of it is in the must-damage layer
-                if (tile.BlockingTilePiece != null && tile.IsBlocked && LaserChess.Utilities.LayerUtilities.IsObjectInLayer(tile.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
-                {
-                    isEnemyFoundDuringProbing = true;
-                    ProjectileController projectileCopy = Instantiate(projectilePrefab, transform.position + projectileSpawnOffset, Quaternion.identity);
-                    projectileCopy.SetupProjectile(this, tile.BlockingTilePiece);
-                    Debug.Log($"WILL SHOOT ON THE TOP TO DAMAGE PIECE {tile.BlockingTilePiece.gameObject}");
-                    break;
-                }
-            }
-        }
+            //get the current attack path (based on the current enum direction)
+            currentAttackPath = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 10, (MapController.Directions)currentEnumIndex, true);
 
-        //don't continue enemy probing if an enemy has already been found
-        if (!isEnemyFoundDuringProbing)
-        {
-            currentAttackPath = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 10, MapController.Directions.Right, true);
-
+            //probe the attack path to find if an enemy is there to attack it
             foreach (GridTile tile in currentAttackPath)
             {
                 if (tile.BlockingTilePiece != null && tile.IsBlocked && LaserChess.Utilities.LayerUtilities.IsObjectInLayer(tile.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
                 {
                     isEnemyFoundDuringProbing = true;
-                    Debug.Log($"WILL SHOOT ON THE RIGHT TO DAMAGE PIECE {tile.BlockingTilePiece.gameObject}");
+                    Debug.Log($"WILL SHOOT ON THE {(MapController.Directions)currentEnumIndex} TO DAMAGE PIECE {tile.BlockingTilePiece.gameObject}");
                     ProjectileController projectileCopy = Instantiate(projectilePrefab, transform.position + projectileSpawnOffset, Quaternion.identity);
                     projectileCopy.SetupProjectile(this, tile.BlockingTilePiece);
                     break;
                 }
             }
+
+            if (isEnemyFoundDuringProbing)
+                break;
         }
 
+        //if (!isEnemyFoundDuringProbing)
+        //{
+        //    foreach (GridTile tile in currentAttackPath)
+        //    {
+        //        //find an occupied tile and check if the piece on top of it is in the must-damage layer
+        //        if (tile.BlockingTilePiece != null && tile.IsBlocked && LaserChess.Utilities.LayerUtilities.IsObjectInLayer(tile.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
+        //        {
+        //            isEnemyFoundDuringProbing = true;
+        //            ProjectileController projectileCopy = Instantiate(projectilePrefab, transform.position + projectileSpawnOffset, Quaternion.identity);
+        //            projectileCopy.SetupProjectile(this, tile.BlockingTilePiece);
+        //            Debug.Log($"WILL SHOOT ON THE TOP TO DAMAGE PIECE {tile.BlockingTilePiece.gameObject}");
+        //            break;
+        //        }
+        //    }
+        //}
 
-        if (!isEnemyFoundDuringProbing)
-        {
-            currentAttackPath = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 10, MapController.Directions.Left, true);
+        ////don't continue enemy probing if an enemy has already been found
+        //if (!isEnemyFoundDuringProbing)
+        //{
+        //    currentAttackPath = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 10, MapController.Directions.Right, true);
 
-            foreach (GridTile tile in currentAttackPath)
-            {
-                if (tile.BlockingTilePiece != null && tile.IsBlocked && LaserChess.Utilities.LayerUtilities.IsObjectInLayer(tile.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
-                {
-                    isEnemyFoundDuringProbing = true;
-                    Debug.Log($"WILL SHOOT ON THE LEFT TO DAMAGE PIECE {tile.BlockingTilePiece.gameObject}");
-                    ProjectileController projectileCopy = Instantiate(projectilePrefab, transform.position + projectileSpawnOffset, Quaternion.identity);
-                    projectileCopy.SetupProjectile(this, tile.BlockingTilePiece);
-                    break;
-                }
-            }
-        }
+        //    foreach (GridTile tile in currentAttackPath)
+        //    {
+        //        if (tile.BlockingTilePiece != null && tile.IsBlocked && LaserChess.Utilities.LayerUtilities.IsObjectInLayer(tile.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
+        //        {
+        //            isEnemyFoundDuringProbing = true;
+        //            Debug.Log($"WILL SHOOT ON THE RIGHT TO DAMAGE PIECE {tile.BlockingTilePiece.gameObject}");
+        //            ProjectileController projectileCopy = Instantiate(projectilePrefab, transform.position + projectileSpawnOffset, Quaternion.identity);
+        //            projectileCopy.SetupProjectile(this, tile.BlockingTilePiece);
+        //            break;
+        //        }
+        //    }
+        //}
 
-        if (!isEnemyFoundDuringProbing)
-        {
-            currentAttackPath = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 10, MapController.Directions.Bot, true);
 
-            foreach (GridTile tile in currentAttackPath)
-            {
-                if (tile.BlockingTilePiece != null && tile.IsBlocked && LaserChess.Utilities.LayerUtilities.IsObjectInLayer(tile.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
-                {
-                    isEnemyFoundDuringProbing = true;
-                    Debug.Log($"WILL SHOOT ON THE BOT TO DAMAGE PIECE {tile.BlockingTilePiece.gameObject}");
-                    ProjectileController projectileCopy = Instantiate(projectilePrefab, transform.position + projectileSpawnOffset, Quaternion.identity);
-                    projectileCopy.SetupProjectile(this, tile.BlockingTilePiece);
-                    break;
-                }
-            }
-        }
+        //if (!isEnemyFoundDuringProbing)
+        //{
+        //    currentAttackPath = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 10, MapController.Directions.Left, true);
+
+        //    foreach (GridTile tile in currentAttackPath)
+        //    {
+        //        if (tile.BlockingTilePiece != null && tile.IsBlocked && LaserChess.Utilities.LayerUtilities.IsObjectInLayer(tile.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
+        //        {
+        //            isEnemyFoundDuringProbing = true;
+        //            Debug.Log($"WILL SHOOT ON THE LEFT TO DAMAGE PIECE {tile.BlockingTilePiece.gameObject}");
+        //            ProjectileController projectileCopy = Instantiate(projectilePrefab, transform.position + projectileSpawnOffset, Quaternion.identity);
+        //            projectileCopy.SetupProjectile(this, tile.BlockingTilePiece);
+        //            break;
+        //        }
+        //    }
+        //}
+
+        //if (!isEnemyFoundDuringProbing)
+        //{
+        //    currentAttackPath = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 10, MapController.Directions.Bot, true);
+
+        //    foreach (GridTile tile in currentAttackPath)
+        //    {
+        //        if (tile.BlockingTilePiece != null && tile.IsBlocked && LaserChess.Utilities.LayerUtilities.IsObjectInLayer(tile.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
+        //        {
+        //            isEnemyFoundDuringProbing = true;
+        //            Debug.Log($"WILL SHOOT ON THE BOT TO DAMAGE PIECE {tile.BlockingTilePiece.gameObject}");
+        //            ProjectileController projectileCopy = Instantiate(projectilePrefab, transform.position + projectileSpawnOffset, Quaternion.identity);
+        //            projectileCopy.SetupProjectile(this, tile.BlockingTilePiece);
+        //            break;
+        //        }
+        //    }
+        //}
     }
 }

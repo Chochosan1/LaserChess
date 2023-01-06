@@ -152,6 +152,7 @@ public class Dreadnought : Piece, IAutoRunnableAI
         }
     }
 
+    //returns the closest enemy based on its absolute distance from the dreadnought
     private Piece GetClosestEnemy(List<Piece> enemies)
     {
         Piece closestPiece = null;
@@ -187,6 +188,10 @@ public class Dreadnought : Piece, IAutoRunnableAI
             return;
         }
          
+        //PATHFINDING NOTE!! Conditions below take into consideration which quadrant relative to the dreadnought the enemy is in. Then the dreadnought will try going closer
+        //by using the tiles closest to that quadrant (e.g topRight will use topRight tile, top tile & right tile, giving priority to topRight as its a shorter path).
+        //In extremely rare cases, if all three tiles are taken the dreadnought will not try to pathfind around all obstacles, it will instead wait until one of them gets free.
+        //This could be avoided (if needed) by adding more than 3 tile options or implementing the AStar algorithm (which I find unnecessary in the current use-case).
 
 
         //enemy is to the right (try right, botright & topright)
