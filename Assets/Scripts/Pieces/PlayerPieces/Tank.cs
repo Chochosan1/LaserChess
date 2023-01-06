@@ -154,6 +154,12 @@ public sealed class Tank : Piece
         }
     }
 
+    protected override void Die()
+    {
+        GameStateManager.Instance.RemoveDestroyedPlayerUnit(this);
+        base.Die();
+    }
+
     //tanks attack orthogonally in any range; probes all orthogonal directions until it finds an enemy in one of them (will actually damage only in one orthogonal direction)
     protected override void Attack()
     {

@@ -49,9 +49,13 @@ public abstract class Piece : MonoBehaviour
 
         if (currentHitPoints <= 0)
         {
-            standingOnTile.MarkTileAsFree();
-            Destroy(this.gameObject);
-        }
-           
+            Die();
+        }       
+    }
+
+    protected virtual void Die()
+    {
+        standingOnTile.MarkTileAsFree();
+        Destroy(this.gameObject);
     }
 }

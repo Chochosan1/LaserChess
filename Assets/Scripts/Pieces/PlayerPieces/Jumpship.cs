@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using LaserChess.Utilities;
 public sealed class Jumpship : Piece
 {
     //knight paths
@@ -144,25 +144,31 @@ public sealed class Jumpship : Piece
         }
     }
 
+    protected override void Die()
+    {
+        GameStateManager.Instance.RemoveDestroyedPlayerUnit(this);
+        base.Die();
+    }
+
     //jumpships should damage all enemy pieces in the 4 orthogonally adjacent spaces simultaneously
     protected override void Attack()
     {
-        if(standingOnTile.topNeighbour != null && standingOnTile.topNeighbour.BlockingTilePiece != null)
+        if (standingOnTile.topNeighbour != null && standingOnTile.topNeighbour.BlockingTilePiece != null && LayerUtilities.IsObjectInLayer(standingOnTile.topNeighbour.BlockingTilePiece.gameObject, damagePiecesOnThisLayer)) ;
         {
             standingOnTile.topNeighbour.BlockingTilePiece.TakeDamage(stats.AttackPower);
         }
 
-        if (standingOnTile.rightNeighbour != null && standingOnTile.rightNeighbour.BlockingTilePiece != null)
+        if (standingOnTile.rightNeighbour != null && standingOnTile.rightNeighbour.BlockingTilePiece != null && LayerUtilities.IsObjectInLayer(standingOnTile.rightNeighbour.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
         {
             standingOnTile.rightNeighbour.BlockingTilePiece.TakeDamage(stats.AttackPower);
         }
 
-        if (standingOnTile.leftNeighbour != null && standingOnTile.leftNeighbour.BlockingTilePiece != null)
+        if (standingOnTile.leftNeighbour != null && standingOnTile.leftNeighbour.BlockingTilePiece != null && LayerUtilities.IsObjectInLayer(standingOnTile.leftNeighbour.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
         {
             standingOnTile.leftNeighbour.BlockingTilePiece.TakeDamage(stats.AttackPower);
         }
 
-        if (standingOnTile.botNeighbour != null && standingOnTile.botNeighbour.BlockingTilePiece != null)
+        if (standingOnTile.botNeighbour != null && standingOnTile.botNeighbour.BlockingTilePiece != null && LayerUtilities.IsObjectInLayer(standingOnTile.botNeighbour.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
         {
             standingOnTile.botNeighbour.BlockingTilePiece.TakeDamage(stats.AttackPower);
         }

@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class GameStateManager : MonoBehaviour
 {
+    private static GameStateManager instance;
+    public static GameStateManager Instance => instance;
+
     public enum States { PlayerTurn, AITurn }
     private States currentState;
 
@@ -19,20 +22,31 @@ public class GameStateManager : MonoBehaviour
     [SerializeField] private List<Piece> commandUnits;
     private List<IAutoRunnableAI> priorityThreeAIList = new List<IAutoRunnableAI>();
 
+    [Header("Player Units")]
+    [SerializeField] private List<Piece> playerPieces;
+
     private bool isStateCoroutineRunning = false;
+
+    public List<Piece> PlayerPieces => playerPieces;
+
+    private void Awake()
+    {
+        if (instance != null && instance != this)
+        {
+            Destroy(this.gameObject);
+            return;
+        }
+        else
+        {
+            instance = this;
+        }
+    }
 
     void Start()
     {
         SetCurrentState(States.PlayerTurn);
 
-        foreach (Piece drone in drones)
-            priorityOneAIList.Add(drone.GetComponent<IAutoRunnableAI>());
-
-        foreach (Piece dreadnought in dreadnoughts)
-            priorityTwoAIList.Add(dreadnought.GetComponent<IAutoRunnableAI>());
-
-        foreach (Piece commandUnit in commandUnits)
-            priorityThreeAIList.Add(commandUnit.GetComponent<IAutoRunnableAI>());
+        RecheckExistingAI();
     }
 
 
@@ -43,9 +57,17 @@ public class GameStateManager : MonoBehaviour
 
         if (currentState == States.AITurn)
         {
+            RecheckExistingAI();
             foreach (IAutoRunnableAI pieceAI in priorityOneAIList)
             {
                 Debug.Log($"Drone executed behaviour!");
+                pieceAI.AutoRunBehaviour();
+                yield return new WaitUntil(() => pieceAI.IsAutoRunDone());
+            }
+
+            foreach (IAutoRunnableAI pieceAI in priorityTwoAIList)
+            {
+                Debug.Log($"Dreadnought executed behaviour!");
                 pieceAI.AutoRunBehaviour();
                 yield return new WaitUntil(() => pieceAI.IsAutoRunDone());
             }
@@ -66,6 +88,7 @@ public class GameStateManager : MonoBehaviour
         Debug.Log($"Set current state {currentState}");
         currentState = stateToChangeTo;
 
+
         if (stateToChangeTo == States.PlayerTurn)
         {
             GetComponent<UIManager>().SetActiveEndPlayerTurnButton(true);
@@ -81,5 +104,49 @@ public class GameStateManager : MonoBehaviour
     public void EndPlayerState()
     {
         SetCurrentState(States.AITurn);
+    }
+
+    public void RemoveDestroyedPlayerUnit(Piece playerPieceToRemove)
+    {
+        playerPieces.Remove(playerPieceToRemove);
+    }
+
+    private void RecheckExistingAI()
+    {
+        priorityOneAIList.Clear();
+        priorityTwoAIList.Clear();
+        priorityThreeAIList.Clear();
+
+        foreach (Piece drone in drones)
+        {
+            if(drone != null)
+            {
+                priorityOneAIList.Add(drone.GetComponent<IAutoRunnableAI>());
+           //     allPiecesAI.Add(drone);
+            }
+                
+        }
+           
+
+        foreach (Piece dreadnought in dreadnoughts)
+        {
+            if(dreadnought != null)
+            {
+                priorityTwoAIList.Add(dreadnought.GetComponent<IAutoRunnableAI>());
+           //     allPiecesAI.Add(dreadnought);
+            }
+               
+        }
+           
+
+        foreach (Piece commandUnit in commandUnits)
+        {
+            if(commandUnit != null)
+            {
+                priorityThreeAIList.Add(commandUnit.GetComponent<IAutoRunnableAI>());
+            //    allPiecesAI.Add(commandUnit);
+            }
+               
+        }         
     }
 }

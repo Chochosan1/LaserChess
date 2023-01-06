@@ -104,6 +104,12 @@ public sealed class Grunt : Piece
         }
     }
 
+    protected override void Die()
+    {
+        GameStateManager.Instance.RemoveDestroyedPlayerUnit(this);
+        base.Die();
+    }
+
     //grunts attack diagonally in any range; probes all diagonal directions until it finds an enemy in one of them (will actually damage only in one diagonal)
     protected override void Attack()
     {
