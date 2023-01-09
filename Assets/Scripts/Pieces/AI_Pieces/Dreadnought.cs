@@ -148,8 +148,8 @@ public class Dreadnought : Piece, IAutoRunnableAI
         //enemy is to the bot side (try bot, botleft & botright)
         if (closestPlayerPiecePosition.x == thisPiecePosition.x && closestPlayerPiecePosition.z < thisPiecePosition.z)
         {
-            if (StandingOnTile.botNeighbour != null && !StandingOnTile.botNeighbour.IsBlocked)
-                OnMoveCommand(StandingOnTile.botNeighbour);
+            if (StandingOnTile.BotNeighbour != null && !StandingOnTile.BotNeighbour.IsBlocked)
+                OnMoveCommand(StandingOnTile.BotNeighbour);
             else if (StandingOnTile.BotRightNeighbour != null && !StandingOnTile.BotRightNeighbour.IsBlocked)
                 OnMoveCommand(StandingOnTile.BotRightNeighbour);
             else if (StandingOnTile.BotLeftNeighbour != null && !StandingOnTile.BotLeftNeighbour.IsBlocked)
@@ -207,8 +207,8 @@ public class Dreadnought : Piece, IAutoRunnableAI
                 OnMoveCommand(StandingOnTile.BotRightNeighbour);
             else if (StandingOnTile.RightNeighbour != null && !StandingOnTile.RightNeighbour.IsBlocked)
                 OnMoveCommand(StandingOnTile.RightNeighbour);
-            else if (StandingOnTile.botNeighbour != null && !StandingOnTile.botNeighbour.IsBlocked)
-                OnMoveCommand(StandingOnTile.botNeighbour);
+            else if (StandingOnTile.BotNeighbour != null && !StandingOnTile.BotNeighbour.IsBlocked)
+                OnMoveCommand(StandingOnTile.BotNeighbour);
         }
 
         //enemy is to the bot left
@@ -218,8 +218,8 @@ public class Dreadnought : Piece, IAutoRunnableAI
                 OnMoveCommand(StandingOnTile.BotLeftNeighbour);
             else if (StandingOnTile.LeftNeighbour != null && !StandingOnTile.LeftNeighbour.IsBlocked)
                 OnMoveCommand(StandingOnTile.LeftNeighbour);
-            else if (StandingOnTile.botNeighbour != null && !StandingOnTile.botNeighbour.IsBlocked)
-                OnMoveCommand(StandingOnTile.botNeighbour);
+            else if (StandingOnTile.BotNeighbour != null && !StandingOnTile.BotNeighbour.IsBlocked)
+                OnMoveCommand(StandingOnTile.BotNeighbour);
         }
     }
 

@@ -121,8 +121,8 @@ public class Drone : Piece, IAutoRunnableAI
         isActivatedAndMustPlay = true;
         hasPlayedItsTurn = false;
 
-        if (StandingOnTile.botNeighbour != null && !StandingOnTile.botNeighbour.IsBlocked)
-            OnMoveCommand(StandingOnTile.botNeighbour);
+        if (StandingOnTile.BotNeighbour != null && !StandingOnTile.BotNeighbour.IsBlocked)
+            OnMoveCommand(StandingOnTile.BotNeighbour);
         else
             currentGridTileToMoveTo = null;
     }

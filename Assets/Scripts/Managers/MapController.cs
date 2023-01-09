@@ -28,10 +28,10 @@ public class MapController : MonoBehaviour
             instance = this;
         }
 
+        //map all grid tiles by using their position as the key
         foreach (GridTile gridTile in allGridTiles)
         {
             map.Add(gridTile.grid2DLocation, gridTile);
-            //     Debug.Log($"ADDED TILE: {gridTile.name} with coords: {gridTile.grid2DLocation}");
         }
     }
 
@@ -66,16 +66,16 @@ public class MapController : MonoBehaviour
                     }
                     break;
                 case Directions.Bot:
-                    if (currentTile.botNeighbour != null)
+                    if (currentTile.BotNeighbour != null)
                     {
-                        if (currentTile.botNeighbour.IsBlocked && !ignoreBlockedTiles)
+                        if (currentTile.BotNeighbour.IsBlocked && !ignoreBlockedTiles)
                         {
                             routeBlocked = true;
                             break;
                         }
 
-                        currentPossibleRoute.Add(currentTile.botNeighbour);
-                        currentTile = currentTile.botNeighbour;
+                        currentPossibleRoute.Add(currentTile.BotNeighbour);
+                        currentTile = currentTile.BotNeighbour;
                     }
                     break;
                 case Directions.Right:

@@ -15,7 +15,7 @@ public class GridTile : MonoBehaviour
 
     //neighbours orthogonal
     public GridTile TopNeighbour { get; set; }
-    public GridTile botNeighbour { get; set; }
+    public GridTile BotNeighbour { get; set; }
     public GridTile LeftNeighbour { get; set; }
     public GridTile RightNeighbour { get; set; }
 
@@ -79,7 +79,7 @@ public class GridTile : MonoBehaviour
         TileToCheck = new Vector2Int(grid2DLocation.x, grid2DLocation.y - 1);
         if (MapController.Instance.map.ContainsKey(TileToCheck))
         {
-            botNeighbour = MapController.Instance.map[TileToCheck];
+            BotNeighbour = MapController.Instance.map[TileToCheck];
         }
 
         TileToCheck = new Vector2Int(grid2DLocation.x + 1, grid2DLocation.y + 1);

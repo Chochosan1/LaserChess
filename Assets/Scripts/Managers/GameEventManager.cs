@@ -17,8 +17,10 @@ public class GameEventManager
     public static OnGameTurnStateChangedDelegate OnGameTurnStateChanged;
 
     public delegate void OnPieceSelectedByPlayerDelegate(string selectionInfo);
+    /// <summary>Invoked when the player selects a piece.</summary>
     public static OnPieceSelectedByPlayerDelegate OnPieceSelectedByPlayer;
 
     public delegate void OnPieceDeselectedDelegate();
+    /// <summary>Invoked when a piece gets deselected.</summary>
     public static OnPieceDeselectedDelegate OnPieceDeselected;
 }
