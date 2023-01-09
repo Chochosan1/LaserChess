@@ -110,7 +110,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d76ff02bab25da4eba8a895086800c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stats: {fileID: 11400000, guid: a950ae85373375845a212dc1a19300fe, type: 2}
+  stats: {fileID: 11400000, guid: 4d27e84d3db7e354aba910c8bc8d753c, type: 2}
   standingOnTile: {fileID: 0}
   movementSpeed: 1
   damagePiecesOnThisLayer:

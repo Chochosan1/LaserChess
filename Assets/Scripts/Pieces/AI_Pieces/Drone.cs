@@ -7,6 +7,7 @@ public class Drone : Piece, IAutoRunnableAI
     [Header("AI Priority Group")]
     [SerializeField] private GameStateManager.AI_TurnPriority turnPriorityGroup = GameStateManager.AI_TurnPriority.One;
 
+    [Header("Shooting")]
     [SerializeField] private ProjectileController projectilePrefab;
     [SerializeField] private Vector3 projectileSpawnOffset = new Vector3(0f, 1f, 0f);
 

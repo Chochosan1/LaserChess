@@ -85,7 +85,7 @@ public class GameStateManager : MonoBehaviour
     private void SetCurrentState(States stateToChangeTo)
     {
         //don't allow a new state to start if the previous hasn't finished
-        if (isStateCoroutineRunning)
+        if (isStateCoroutineRunning || gameEnded)
             return;
 
         Debug.Log($"Set current state {currentState}");
@@ -118,7 +118,10 @@ public class GameStateManager : MonoBehaviour
         playerPieces.Remove(playerPieceToRemove);
 
         if (playerPieces.Count <= 0)
+        {
+            GameEventManager.OnAIWon?.Invoke();
             gameEnded = true;
+        }       
     }
 
     /// <summary>Removes the passed AI Piece from the list and checks if the player has won.</summary> 
@@ -134,7 +137,11 @@ public class GameStateManager : MonoBehaviour
             priorityThreeAIList.Remove(aiPiece);
 
         if (aiPieces.Count <= 0)
+        {
+            GameEventManager.OnPlayerWon?.Invoke();
             gameEnded = true;
+        }
+           
     }
 
     //determines which AI piece belongs to which AI priority group list

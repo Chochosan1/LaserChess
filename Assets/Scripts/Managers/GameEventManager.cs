@@ -2,17 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameEventManager : MonoBehaviour
+public class GameEventManager
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public delegate void OnGameEndedDelegated();
+    public static OnGameEndedDelegated OnPlayerWon;
+    public static OnGameEndedDelegated OnAIWon;
 }
