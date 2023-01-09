@@ -75,18 +75,18 @@ public class CommandUnit : Piece, IAutoRunnableAI
         if (direction == 0)
         {
             //prioritize left move; if not available go right
-            if (StandingOnTile.leftNeighbour != null && !StandingOnTile.leftNeighbour.IsBlocked)
-                OnMoveCommand(StandingOnTile.leftNeighbour);
-            else if (StandingOnTile.rightNeighbour != null && !StandingOnTile.rightNeighbour.IsBlocked)
-                OnMoveCommand(StandingOnTile.rightNeighbour);
+            if (StandingOnTile.LeftNeighbour != null && !StandingOnTile.LeftNeighbour.IsBlocked)
+                OnMoveCommand(StandingOnTile.LeftNeighbour);
+            else if (StandingOnTile.RightNeighbour != null && !StandingOnTile.RightNeighbour.IsBlocked)
+                OnMoveCommand(StandingOnTile.RightNeighbour);
 
         }
         else if (direction == 1)
         {
-            if (StandingOnTile.rightNeighbour != null && !StandingOnTile.rightNeighbour.IsBlocked)
-                OnMoveCommand(StandingOnTile.rightNeighbour);
-            else if (StandingOnTile.leftNeighbour != null && !StandingOnTile.leftNeighbour.IsBlocked)
-                OnMoveCommand(StandingOnTile.leftNeighbour);
+            if (StandingOnTile.RightNeighbour != null && !StandingOnTile.RightNeighbour.IsBlocked)
+                OnMoveCommand(StandingOnTile.RightNeighbour);
+            else if (StandingOnTile.LeftNeighbour != null && !StandingOnTile.LeftNeighbour.IsBlocked)
+                OnMoveCommand(StandingOnTile.LeftNeighbour);
         }
     }
 

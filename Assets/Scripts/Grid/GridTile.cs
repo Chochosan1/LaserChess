@@ -1,34 +1,36 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/// <summary>
+/// Controls the state and data for each tile. Each tile can be activated/deactivated and automatically finds all of its adjacent neighbours (includes orthogonal & diagonal)
+/// </summary>
 public class GridTile : MonoBehaviour
 {
     [Header("AI Win Condition")]
+    [Tooltip("Set to true if this tile should count towards the win condition of the AI")]
     [SerializeField] private bool countAsWinConditionOnReachedByAI = false;
 
     [Header("Materials")]
-    [SerializeField] private Material normalMaterial;
     [SerializeField] private Material possibleRouteMaterial;
 
     //neighbours orthogonal
-    public GridTile topNeighbour;
-    public GridTile botNeighbour;
-    public GridTile leftNeighbour;
-    public GridTile rightNeighbour;
+    public GridTile TopNeighbour { get; set; }
+    public GridTile botNeighbour { get; set; }
+    public GridTile LeftNeighbour { get; set; }
+    public GridTile RightNeighbour { get; set; }
 
     //neighbours diagonal
-    public GridTile topRightNeighbour;
-    public GridTile botRightNeighbour;
-    public GridTile topLeftNeighbour;
-    public GridTile botLeftNeighbour;
+    public GridTile TopRightNeighbour { get; set; }
+    public GridTile BotRightNeighbour { get; set; }
+    public GridTile TopLeftNeighbour { get; set; }
+    public GridTile BotLeftNeighbour { get; set; }
 
-    public GridTile Previous;
     public Vector3Int gridLocation => new Vector3Int((int)transform.position.x, (int)transform.position.y, (int)transform.position.z);
     public Vector2Int grid2DLocation => new Vector2Int((int)transform.position.x, (int)transform.position.z);
 
     private Piece blockingTilePiece;
     private MeshRenderer meshRend;
+    private Material normalMaterial;
     private bool isTileActive = false;
     private bool isBlocked = false;
 
@@ -47,6 +49,7 @@ public class GridTile : MonoBehaviour
     private void Start()
     {
         meshRend = GetComponent<MeshRenderer>();
+        normalMaterial = GetComponent<MeshRenderer>().material; //cache the original mat
 
         FillNeighbourTiles();
         DeactivateTile();
@@ -58,19 +61,19 @@ public class GridTile : MonoBehaviour
         Vector2Int TileToCheck = new Vector2Int(grid2DLocation.x + 1, grid2DLocation.y);
         if (MapController.Instance.map.ContainsKey(TileToCheck))
         {
-            rightNeighbour = MapController.Instance.map[TileToCheck];
+            RightNeighbour = MapController.Instance.map[TileToCheck];
         }
 
         TileToCheck = new Vector2Int(grid2DLocation.x - 1, grid2DLocation.y);
         if (MapController.Instance.map.ContainsKey(TileToCheck))
         {
-            leftNeighbour = MapController.Instance.map[TileToCheck];
+            LeftNeighbour = MapController.Instance.map[TileToCheck];
         }
 
         TileToCheck = new Vector2Int(grid2DLocation.x, grid2DLocation.y + 1);
         if (MapController.Instance.map.ContainsKey(TileToCheck))
         {
-            topNeighbour = MapController.Instance.map[TileToCheck];
+            TopNeighbour = MapController.Instance.map[TileToCheck];
         }
 
         TileToCheck = new Vector2Int(grid2DLocation.x, grid2DLocation.y - 1);
@@ -82,25 +85,25 @@ public class GridTile : MonoBehaviour
         TileToCheck = new Vector2Int(grid2DLocation.x + 1, grid2DLocation.y + 1);
         if (MapController.Instance.map.ContainsKey(TileToCheck))
         {
-            topRightNeighbour = MapController.Instance.map[TileToCheck];
+            TopRightNeighbour = MapController.Instance.map[TileToCheck];
         }
 
         TileToCheck = new Vector2Int(grid2DLocation.x - 1, grid2DLocation.y - 1);
         if (MapController.Instance.map.ContainsKey(TileToCheck))
         {
-            botLeftNeighbour = MapController.Instance.map[TileToCheck];
+            BotLeftNeighbour = MapController.Instance.map[TileToCheck];
         }
 
         TileToCheck = new Vector2Int(grid2DLocation.x + 1, grid2DLocation.y - 1);
         if (MapController.Instance.map.ContainsKey(TileToCheck))
         {
-            botRightNeighbour = MapController.Instance.map[TileToCheck];
+            BotRightNeighbour = MapController.Instance.map[TileToCheck];
         }
 
         TileToCheck = new Vector2Int(grid2DLocation.x - 1, grid2DLocation.y + 1);
         if (MapController.Instance.map.ContainsKey(TileToCheck))
         {
-            topLeftNeighbour = MapController.Instance.map[TileToCheck];
+            TopLeftNeighbour = MapController.Instance.map[TileToCheck];
         }
     }
 

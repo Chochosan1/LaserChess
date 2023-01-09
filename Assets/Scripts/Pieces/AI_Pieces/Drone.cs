@@ -11,6 +11,8 @@ public class Drone : Piece, IAutoRunnableAI
     [Header("Shooting")]
     [SerializeField] private ProjectileController projectilePrefab;
     [SerializeField] private Vector3 projectileSpawnOffset = new Vector3(0f, 1f, 0f);
+    [Tooltip("Set to true if this piece should be able to shoot through friendly units")]
+    [SerializeField] private bool canShootThroughFriendlyPieces = false;
 
     //attack
     private List<GridTile> currentAttackPath; //reuse the same list to probe for different attack paths (e.g the 4 diagonals until an enemy is found)
@@ -87,6 +89,11 @@ public class Drone : Piece, IAutoRunnableAI
             //probe the attack path to find if an enemy is there to attack it
             foreach (GridTile tile in currentAttackPath)
             {
+                //this direction is blocked by an allied/friendly piece - remove it to allow pieces firing through friendly units
+                if (!canShootThroughFriendlyPieces && tile.BlockingTilePiece != null && tile.BlockingTilePiece.gameObject.layer == this.gameObject.layer)
+                    break;
+
+                //found an enemy
                 if (tile.BlockingTilePiece != null && LaserChess.Utilities.LayerUtilities.IsObjectInLayer(tile.BlockingTilePiece.gameObject, DamagePiecesOnThisLayer))
                 {
                     isEnemyFoundDuringProbing = true;

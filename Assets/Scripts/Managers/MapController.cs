@@ -53,16 +53,16 @@ public class MapController : MonoBehaviour
             {
                 case Directions.Top:
                     //add the first top neighbour tile to the path, then traverse its top neighbour and so on and on depending on path/route length (they act as separate nodes)
-                    if (currentTile.topNeighbour != null)
+                    if (currentTile.TopNeighbour != null)
                     {
-                        if (currentTile.topNeighbour.IsBlocked && !ignoreBlockedTiles) //ignoreBlockedTiles = false will exclude all blocked tiles from the path (useful for movement paths). Attack paths on the other hand should return even blocked ones as enemies stand on blocked tiles 
+                        if (currentTile.TopNeighbour.IsBlocked && !ignoreBlockedTiles) //ignoreBlockedTiles = false will exclude all blocked tiles from the path (useful for movement paths). Attack paths on the other hand should return even blocked ones as enemies stand on blocked tiles 
                         {
                             routeBlocked = true;
                             break;
                         }
 
-                        currentPossibleRoute.Add(currentTile.topNeighbour); //add the current tile (node)
-                        currentTile = currentTile.topNeighbour; //reassign the tile (node) to traverse from
+                        currentPossibleRoute.Add(currentTile.TopNeighbour); //add the current tile (node)
+                        currentTile = currentTile.TopNeighbour; //reassign the tile (node) to traverse from
                     }
                     break;
                 case Directions.Bot:
@@ -79,81 +79,81 @@ public class MapController : MonoBehaviour
                     }
                     break;
                 case Directions.Right:
-                    if (currentTile.rightNeighbour != null)
+                    if (currentTile.RightNeighbour != null)
                     {
-                        if (currentTile.rightNeighbour.IsBlocked && !ignoreBlockedTiles)
+                        if (currentTile.RightNeighbour.IsBlocked && !ignoreBlockedTiles)
                         {
                             routeBlocked = true;
                             break;
                         }
 
-                        currentPossibleRoute.Add(currentTile.rightNeighbour);
-                        currentTile = currentTile.rightNeighbour;
+                        currentPossibleRoute.Add(currentTile.RightNeighbour);
+                        currentTile = currentTile.RightNeighbour;
                     }
                     break;
                 case Directions.Left:
-                    if (currentTile.leftNeighbour != null)
+                    if (currentTile.LeftNeighbour != null)
                     {
-                        if (currentTile.leftNeighbour.IsBlocked && !ignoreBlockedTiles)
+                        if (currentTile.LeftNeighbour.IsBlocked && !ignoreBlockedTiles)
                         {
                             routeBlocked = true;
                             break;
                         }
 
-                        currentPossibleRoute.Add(currentTile.leftNeighbour);
-                        currentTile = currentTile.leftNeighbour;
+                        currentPossibleRoute.Add(currentTile.LeftNeighbour);
+                        currentTile = currentTile.LeftNeighbour;
                     }
                     break;
                 case Directions.TopRight:
-                    if (currentTile.topRightNeighbour != null)
+                    if (currentTile.TopRightNeighbour != null)
                     {
-                        if (currentTile.topRightNeighbour.IsBlocked && !ignoreBlockedTiles)
+                        if (currentTile.TopRightNeighbour.IsBlocked && !ignoreBlockedTiles)
                         {
                             routeBlocked = true;
                             break;
                         }
 
-                        currentPossibleRoute.Add(currentTile.topRightNeighbour);
-                        currentTile = currentTile.topRightNeighbour;
+                        currentPossibleRoute.Add(currentTile.TopRightNeighbour);
+                        currentTile = currentTile.TopRightNeighbour;
                     }
                     break;
                 case Directions.TopLeft:
-                    if (currentTile.topLeftNeighbour != null)
+                    if (currentTile.TopLeftNeighbour != null)
                     {
-                        if (currentTile.topLeftNeighbour.IsBlocked && !ignoreBlockedTiles)
+                        if (currentTile.TopLeftNeighbour.IsBlocked && !ignoreBlockedTiles)
                         {
                             routeBlocked = true;
                             break;
                         }
 
-                        currentPossibleRoute.Add(currentTile.topLeftNeighbour);
-                        currentTile = currentTile.topLeftNeighbour;
+                        currentPossibleRoute.Add(currentTile.TopLeftNeighbour);
+                        currentTile = currentTile.TopLeftNeighbour;
                     }
                     break;
                 case Directions.BotRight:
-                    if (currentTile.botRightNeighbour != null)
+                    if (currentTile.BotRightNeighbour != null)
                     {
-                        if (currentTile.botRightNeighbour.IsBlocked && !ignoreBlockedTiles)
+                        if (currentTile.BotRightNeighbour.IsBlocked && !ignoreBlockedTiles)
                         {
                             routeBlocked = true;
                             break;
                         }
 
-                        currentPossibleRoute.Add(currentTile.botRightNeighbour);
-                        currentTile = currentTile.botRightNeighbour;
+                        currentPossibleRoute.Add(currentTile.BotRightNeighbour);
+                        currentTile = currentTile.BotRightNeighbour;
                     }
                     break;
                 case Directions.BotLeft:
-                    if (currentTile.botLeftNeighbour != null)
+                    if (currentTile.BotLeftNeighbour != null)
                     {
-                        if (currentTile.botLeftNeighbour.IsBlocked && !ignoreBlockedTiles)
+                        if (currentTile.BotLeftNeighbour.IsBlocked && !ignoreBlockedTiles)
                         {
                             routeBlocked = true;
                             break;
                         }
 
-                        currentPossibleRoute.Add(currentTile.botLeftNeighbour);
-                        currentTile = currentTile.botLeftNeighbour;
+                        currentPossibleRoute.Add(currentTile.BotLeftNeighbour);
+                        currentTile = currentTile.BotLeftNeighbour;
                     }
                     break;
             }

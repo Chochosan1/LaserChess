@@ -7,6 +7,7 @@ public sealed class Tank : Piece
     [Header("Shooting")]
     [SerializeField] private ProjectileController projectilePrefab;
     [SerializeField] private Vector3 projectileSpawnOffset = new Vector3(0f, 75f, 0f);
+    [SerializeField] private bool canShootThroughFriendlyPieces = false;
 
     //attack
     private List<GridTile> currentAttackPath; //reuse the same list to probe for different attack paths
@@ -95,7 +96,7 @@ public sealed class Tank : Piece
         isEnemyFoundDuringProbing = false;
 
         //the first 4 elements in the enum are the orthogonal directions in which the tank shoots
-        for(int currentEnumIndex = 0; currentEnumIndex < 4; currentEnumIndex++)
+        for (int currentEnumIndex = 0; currentEnumIndex < 4; currentEnumIndex++)
         {
             //get the current attack path (based on the current enum direction)
             currentAttackPath = MapController.Instance.GetPossibleRouteFromTile(StandingOnTile, 10, (MapController.Directions)currentEnumIndex, true);
@@ -103,6 +104,11 @@ public sealed class Tank : Piece
             //probe the attack path to find if an enemy is there to attack it
             foreach (GridTile tile in currentAttackPath)
             {
+                //this direction is blocked by an allied/friendly piece - remove it to allow pieces firing through friendly units
+                if (!canShootThroughFriendlyPieces && tile.BlockingTilePiece != null && tile.BlockingTilePiece.gameObject.layer == this.gameObject.layer)
+                    break;
+
+                //found an enemy
                 if (tile.BlockingTilePiece != null && LaserChess.Utilities.LayerUtilities.IsObjectInLayer(tile.BlockingTilePiece.gameObject, DamagePiecesOnThisLayer))
                 {
                     isEnemyFoundDuringProbing = true;
