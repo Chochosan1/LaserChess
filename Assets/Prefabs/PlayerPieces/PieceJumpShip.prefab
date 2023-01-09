@@ -144,13 +144,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stats: {fileID: 11400000, guid: 4d27e84d3db7e354aba910c8bc8d753c, type: 2}
-  hitVFX: {fileID: 8855677708711671951}
-  destroyedVFX: {fileID: 2679196638273217849}
-  standingOnTile: {fileID: 0}
   movementSpeed: 3
   damagePiecesOnThisLayer:
     serializedVersion: 2
     m_Bits: 256
+  pieceName: Jumpship
+  hitVFX: {fileID: 8855677708711671951}
+  destroyedVFX: {fileID: 2679196638273217849}
 --- !u!54 &7222341430525145480
 Rigidbody:
   m_ObjectHideFlags: 0

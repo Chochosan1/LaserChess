@@ -64,11 +64,6 @@ public class Dreadnought : Piece, IAutoRunnableAI
         currentGridTileToMoveTo.MarkTileAsBlocked(this); //mark it as blocked immediately so that clicking on another unit won't show that tile as free while another unit is traveling to it
     }
 
-    public override void OnSelectedPiece() { }
-
-
-    public override void OnDeselectedPiece() { }
-
     protected override void Die()
     {
         GameStateManager.Instance.RemoveDestroyedAIUnit(this);

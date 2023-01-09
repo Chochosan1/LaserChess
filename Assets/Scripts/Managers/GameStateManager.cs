@@ -58,6 +58,8 @@ public class GameStateManager : MonoBehaviour
     {
         isStateCoroutineRunning = true;
 
+        Debug.Log($"Enter {currentState}");
+
         //run the different priority lists of AI
         foreach (IAutoRunnableAI pieceAI in priorityOneAIList)
         {
@@ -92,7 +94,6 @@ public class GameStateManager : MonoBehaviour
         if (isStateCoroutineRunning || gameEnded)
             return;
 
-        Debug.Log($"Set current state {currentState}");
         currentState = stateToChangeTo;
 
         //on player's turn allow all player pieces to be played with again

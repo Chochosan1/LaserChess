@@ -160,13 +160,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stats: {fileID: 11400000, guid: 9099f5c7bfacf9d439e4d07f7e4fe482, type: 2}
-  hitVFX: {fileID: 2947230118396680435}
-  destroyedVFX: {fileID: 20628904351292387}
-  standingOnTile: {fileID: 0}
   movementSpeed: 2
   damagePiecesOnThisLayer:
     serializedVersion: 2
     m_Bits: 0
+  pieceName: 
+  hitVFX: {fileID: 2947230118396680435}
+  destroyedVFX: {fileID: 20628904351292387}
   turnPriorityGroup: 2
 --- !u!1001 &1146656506413180467
 PrefabInstance:

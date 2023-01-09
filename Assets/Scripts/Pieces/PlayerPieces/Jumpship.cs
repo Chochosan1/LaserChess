@@ -65,10 +65,14 @@ public sealed class Jumpship : Piece
                 allPathsUsedTiles.Add(tile); //store all tiles from all paths here so they can get deactivated later
             }
         }
+
+        base.OnSelectedPiece();
     }
 
     public override void OnDeselectedPiece()
     {
+        base.OnDeselectedPiece();
+
         foreach (GridTile tile in allPathsUsedTiles)
             tile.DeactivateTile();
     }

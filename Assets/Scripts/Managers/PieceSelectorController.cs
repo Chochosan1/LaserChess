@@ -61,8 +61,6 @@ public class PieceSelectorController : MonoBehaviour
             DeselectCurrentPiece(); //deselect the already selected piece if there's one
             currentlySelectedPiece = hit.collider.gameObject.GetComponent<Piece>();
             currentlySelectedPiece.OnSelectedPiece();
-
-            GameEventManager.OnPieceSelectedByPlayer?.Invoke(currentlySelectedPiece.name);
         }
     }
 
@@ -74,7 +72,5 @@ public class PieceSelectorController : MonoBehaviour
 
         currentlySelectedPiece.OnDeselectedPiece();
         currentlySelectedPiece = null;
-
-        GameEventManager.OnPieceDeselected?.Invoke();
     }
 }

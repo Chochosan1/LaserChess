@@ -72,10 +72,6 @@ public class Drone : Piece, IAutoRunnableAI
         currentGridTileToMoveTo.MarkTileAsBlocked(this); //mark it as blocked immediately so that clicking on another unit won't show that tile as free while another unit is traveling to it
     }
 
-    public override void OnSelectedPiece() { }
-
-    public override void OnDeselectedPiece() { }
-
 
     //drones attack diagonally in any range; probes all diagonal directions until it finds an enemy in one of them (will actually damage only in one diagonal)
     protected override void Attack()

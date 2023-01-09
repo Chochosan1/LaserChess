@@ -144,13 +144,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stats: {fileID: 11400000, guid: a950ae85373375845a212dc1a19300fe, type: 2}
-  hitVFX: {fileID: 874001482799715655}
-  destroyedVFX: {fileID: 8503870970082156606}
-  standingOnTile: {fileID: 0}
   movementSpeed: 3
   damagePiecesOnThisLayer:
     serializedVersion: 2
     m_Bits: 256
+  pieceName: Grunt
+  hitVFX: {fileID: 874001482799715655}
+  destroyedVFX: {fileID: 8503870970082156606}
   projectilePrefab: {fileID: 639640645305608040, guid: 8f84bf7720bde52469c8509b63c93941, type: 3}
   projectileSpawnOffset: {x: 0, y: 1, z: 0}
 --- !u!54 &1243001351742673606

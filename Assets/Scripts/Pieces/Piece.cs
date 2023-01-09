@@ -12,7 +12,7 @@ public abstract class Piece : MonoBehaviour
     [SerializeField] private LayerMask damagePiecesOnThisLayer;
 
     [Header("Displayable")]
-    [SerializeField] protected string pieceName;
+    [SerializeField] private string pieceName = "";
 
     [Header("VFX")]
     [SerializeField] protected GameObject hitVFX;
@@ -37,11 +37,9 @@ public abstract class Piece : MonoBehaviour
         maxHitPoints = currentHitPoints = stats.HitPoints;
     }
 
-    public abstract void OnSelectedPiece();
+    public virtual void OnSelectedPiece() => GameEventManager.OnPieceSelectedByPlayer?.Invoke(pieceName);
 
-
-    public abstract void OnDeselectedPiece();
-
+    public virtual void OnDeselectedPiece() => GameEventManager.OnPieceDeselected?.Invoke();
 
     public abstract void OnMoveCommand(GridTile selectedGridTileToMoveTo);
 

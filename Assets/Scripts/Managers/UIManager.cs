@@ -21,6 +21,9 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         endGamePanel.SetActive(false);
+
+        endPlayerTurnBtn.onClick.RemoveAllListeners();
+        endPlayerTurnBtn.onClick.AddListener(() => EndPlayerState());
     }
 
     //subscribe to the events
@@ -44,11 +47,10 @@ public class UIManager : MonoBehaviour
     }
 
     //for the UI button that ends the player's turn
-    public void EndPlayerState()
+    private void EndPlayerState()
     {
         GameStateManager.Instance.SetCurrentState(GameStateManager.States.AITurn);
     }
-
 
     //for the UI buttons that load levels (e.g restart, next level)
     public void LoadLevel(int levelIndex)
