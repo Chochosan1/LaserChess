@@ -7,6 +7,10 @@ public abstract class Piece : MonoBehaviour
     [Header("Stats")]
     [SerializeField] protected PieceStats stats;
 
+    [Header("VFX")]
+    [SerializeField] protected GameObject hitVFX;
+    [SerializeField] protected GameObject destroyedVFX;
+
     protected int maxHitPoints, currentHitPoints;
     protected bool hasPlayedItsTurn = false; //has the piece logic already been executed this turn?
 
@@ -46,7 +50,10 @@ public abstract class Piece : MonoBehaviour
     public virtual void TakeDamage(int damageToTake)
     {
         currentHitPoints -= damageToTake;
-   //     Debug.Log($"I just received {damageToTake} damage.");
+
+        //reset the hit VFX
+        hitVFX.SetActive(false);
+        hitVFX.SetActive(true);
 
         if (currentHitPoints <= 0)
         {
@@ -57,6 +64,12 @@ public abstract class Piece : MonoBehaviour
     protected virtual void Die()
     {
         standingOnTile.MarkTileAsFree();
+        
+        //VFX
+        destroyedVFX.SetActive(true);
+        destroyedVFX.transform.parent = null;
+        Destroy(destroyedVFX, 2f);
+
         Destroy(this.gameObject);
     }
 
