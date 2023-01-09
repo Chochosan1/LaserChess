@@ -152,6 +152,7 @@ MonoBehaviour:
   destroyedVFX: {fileID: 5018672214217076894}
   projectilePrefab: {fileID: 639640645305608040, guid: 8f84bf7720bde52469c8509b63c93941, type: 3}
   projectileSpawnOffset: {x: 0, y: 0.75, z: 0}
+  canShootThroughFriendlyPieces: 0
 --- !u!54 &6936138415020039284
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -221,15 +222,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7968260446280495804, guid: 520cfbfcd5f85374ba5974d89b73f7ad, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.8649137
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7968260446280495804, guid: 520cfbfcd5f85374ba5974d89b73f7ad, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.4259996
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7968260446280495804, guid: 520cfbfcd5f85374ba5974d89b73f7ad, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.32721946
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7968260446280495804, guid: 520cfbfcd5f85374ba5974d89b73f7ad, type: 3}
       propertyPath: m_LocalRotation.w
