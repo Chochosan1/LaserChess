@@ -45,15 +45,15 @@ public class GameStateManager : MonoBehaviour
         SplitAIUnitsInPriorityGroups();
     }
 
-
+    //runs all AI behaviours depending on the priorities and then grants control to the player
     private IEnumerator StartAutomaticTurnAI()
     {
         isStateCoroutineRunning = true;
         Debug.Log($"Enter start turn {currentState}");
 
+        //run the different priority lists of AI
         if (currentState == States.AITurn)
         {
-       //     RecheckExistingAI();
             foreach (IAutoRunnableAI pieceAI in priorityOneAIList)
             {
                 Debug.Log($"Drone executed behaviour!");
@@ -95,6 +95,7 @@ public class GameStateManager : MonoBehaviour
         if (stateToChangeTo == States.PlayerTurn)
         {
             GetComponent<UIManager>().SetActiveEndPlayerTurnButton(true);
+
             foreach (Piece playerPiece in playerPieces)
                 playerPiece.ResetTurnStatus();
         }
@@ -111,6 +112,7 @@ public class GameStateManager : MonoBehaviour
         SetCurrentState(States.AITurn);
     }
 
+    /// <summary>Removes the passed player Piece from the list and checks if the player has lost.</summary> 
     public void RemoveDestroyedPlayerUnit(Piece playerPieceToRemove)
     {
         playerPieces.Remove(playerPieceToRemove);
@@ -119,6 +121,7 @@ public class GameStateManager : MonoBehaviour
             gameEnded = true;
     }
 
+    /// <summary>Removes the passed AI Piece from the list and checks if the player has won.</summary> 
     public void RemoveDestroyedAIUnit(IAutoRunnableAI aiPiece)
     {
         aiPieces.Remove(aiPiece.GetGameObject().GetComponent<Piece>());
@@ -129,8 +132,12 @@ public class GameStateManager : MonoBehaviour
             priorityTwoAIList.Remove(aiPiece);
         else if (aiPiece.GetAITurnPriority() == AI_TurnPriority.Three)
             priorityThreeAIList.Remove(aiPiece);
+
+        if (aiPieces.Count <= 0)
+            gameEnded = true;
     }
 
+    //determines which AI piece belongs to which AI priority group list
     private void SplitAIUnitsInPriorityGroups()
     {
         IAutoRunnableAI currentAutoRunnableAI;
@@ -145,25 +152,5 @@ public class GameStateManager : MonoBehaviour
             else if (currentAutoRunnableAI.GetAITurnPriority() == AI_TurnPriority.Three)
                 priorityThreeAIList.Add(currentAutoRunnableAI);
         }
-
-        //foreach (Piece drone in drones)
-        //{
-        //    if (drone != null)
-        //        priorityOneAIList.Add(drone.GetComponent<IAutoRunnableAI>());
-        //}
-
-
-        //foreach (Piece dreadnought in dreadnoughts)
-        //{
-        //    if (dreadnought != null)
-        //        priorityTwoAIList.Add(dreadnought.GetComponent<IAutoRunnableAI>());
-        //}
-
-
-        //foreach (Piece commandUnit in commandUnits)
-        //{
-        //    if (commandUnit != null)
-        //        priorityThreeAIList.Add(commandUnit.GetComponent<IAutoRunnableAI>());
-        //}
     }
 }
