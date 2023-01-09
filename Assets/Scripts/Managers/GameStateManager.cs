@@ -118,6 +118,7 @@ public class GameStateManager : MonoBehaviour
     {
         playerPieces.Remove(playerPieceToRemove);
 
+        //player lose condition
         if (playerPieces.Count <= 0)
         {
             GameEventManager.OnAIWon?.Invoke("All player units lost :(");
@@ -137,16 +138,24 @@ public class GameStateManager : MonoBehaviour
         else if (aiPieceAutoRunnable.GetAITurnPriority() == AI_TurnPriority.Three)
             priorityThreeAIList.Remove(aiPieceAutoRunnable);
 
+        //win condition 1: check if all command units have been destroyed
         if (aiPieceAutoRunnable.GetGameObject().GetComponent<CommandUnit>() != null)
         {
             commandUnitsLeftToDestroy--;
-            Debug.Log($"Command units to destroy: {commandUnitsLeftToDestroy}");
+
+            if(commandUnitsLeftToDestroy <= 0)
+            {
+                GameEventManager.OnPlayerWon?.Invoke("All AI units destroyed!");
+                return;
+            }     
         }
 
+        //win condition 2: check if all AI pieces have been destroyed
         if (aiPieces.Count <= 0)
         {
             GameEventManager.OnPlayerWon?.Invoke("All AI units destroyed!");
             gameEnded = true;
+            return;
         }
     }
 

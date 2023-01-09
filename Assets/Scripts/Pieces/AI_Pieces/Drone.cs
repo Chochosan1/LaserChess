@@ -45,6 +45,7 @@ public class Drone : Piece, IAutoRunnableAI
                 isActivatedAndMustPlay = false;
                 hasPlayedItsTurn = true;
 
+                //player lose condition
                 if (standingOnTile.CountAsWinConditionOnReachedByAI)
                     GameEventManager.OnAIWon?.Invoke("A drone reached the final row.");
 
