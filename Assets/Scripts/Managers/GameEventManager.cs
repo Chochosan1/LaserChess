@@ -6,9 +6,13 @@ public class GameEventManager
 {
     public delegate void OnGameEndedDelegated(string description);
 
-    /// <summary>Invoked when the player wins the game.</summary>
+    /// <summary>Invoked when the player wins the game. Carries a description of the win condition</summary>
     public static OnGameEndedDelegated OnPlayerWon;
 
-    /// <summary>Invoked when the AI wins the game.</summary>
+    /// <summary>Invoked when the AI wins the game.Carries a description of the win condition</summary>
     public static OnGameEndedDelegated OnAIWon;
+
+    public delegate void OnGameTurnStateChangedDelegate(GameStateManager.States currentState);
+    /// <summary>Invoked when the current turn state changes.</summary>
+    public static OnGameTurnStateChangedDelegate OnGameTurnStateChanged;
 }

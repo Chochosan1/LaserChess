@@ -119,12 +119,14 @@ public class GridTile : MonoBehaviour
         isTileActive = true;
     }
 
+    /// <summary>Marks the tile blocked/occupied by a piece.</summary> 
     public void MarkTileAsBlocked(Piece pieceThatIsOnTheTile)
     {
         blockingTilePiece = pieceThatIsOnTheTile;
         isBlocked = true;
     }
 
+    /// <summary>Marks the tile as free (not blocked/occupied by any piece).</summary> 
     public void MarkTileAsFree()
     {
         blockingTilePiece = null;

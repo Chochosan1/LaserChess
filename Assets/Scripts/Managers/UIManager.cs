@@ -6,8 +6,12 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    [Header("Turn States UI")]
     [SerializeField] private Button endPlayerTurnBtn;
+
+    [Header("End Game UI")]
     [SerializeField] private GameObject endGamePanel;
+    [SerializeField] private Button restartGameBtn;
     [SerializeField] private TextMeshProUGUI gameStatusText;
 
     private void Start()
@@ -15,19 +19,43 @@ public class UIManager : MonoBehaviour
         endGamePanel.SetActive(false);
     }
 
+    //subscribe to the events
     private void OnEnable()
     {
         GameEventManager.OnPlayerWon += DisplayPlayerWonUI;
         GameEventManager.OnAIWon += DisplayPlayerLostUI;
+        GameEventManager.OnGameTurnStateChanged += ChangeUIBasedOnTurnState;
     }
 
+    //unsubscribe from the events
     private void OnDisable()
     {
         GameEventManager.OnPlayerWon -= DisplayPlayerWonUI;
         GameEventManager.OnAIWon -= DisplayPlayerLostUI;
+        GameEventManager.OnGameTurnStateChanged -= ChangeUIBasedOnTurnState;
     }
 
-    public void SetActiveEndPlayerTurnButton(bool isActive) => endPlayerTurnBtn.gameObject.SetActive(isActive);
+    //for the UI button that ends the player's turn
+    public void EndPlayerState()
+    {
+        GameStateManager.Instance.SetCurrentState(GameStateManager.States.AITurn);
+    }
+
+    //for the UI button that restarts the game
+    public void RestartGame()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+    }
+
+    private void SetActiveEndPlayerTurnButton(bool isActive) => endPlayerTurnBtn.gameObject.SetActive(isActive);
+
+    private void ChangeUIBasedOnTurnState(GameStateManager.States currentState)
+    {
+        if (currentState == GameStateManager.States.PlayerTurn)
+            SetActiveEndPlayerTurnButton(true);
+        else
+            SetActiveEndPlayerTurnButton(false);
+    }
 
     private void EnableEndGameUI()
     {

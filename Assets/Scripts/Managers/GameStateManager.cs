@@ -83,7 +83,8 @@ public class GameStateManager : MonoBehaviour
         SetCurrentState(States.PlayerTurn);
     }
 
-    private void SetCurrentState(States stateToChangeTo)
+    /// <summary>Sets the current turn state.</summary>
+    public void SetCurrentState(States stateToChangeTo)
     {
         //don't allow a new state to start if the previous hasn't finished
         if (isStateCoroutineRunning || gameEnded)
@@ -92,19 +93,18 @@ public class GameStateManager : MonoBehaviour
         Debug.Log($"Set current state {currentState}");
         currentState = stateToChangeTo;
 
-
+        //on player's turn allow all player pieces to be played with again
         if (stateToChangeTo == States.PlayerTurn)
         {
-            GetComponent<UIManager>().SetActiveEndPlayerTurnButton(true);
-
             foreach (Piece playerPiece in playerPieces)
                 playerPiece.ResetTurnStatus();
         }
-        else
+        else //on AI's turn start running the automatic AI behaviours
         {
-            GetComponent<UIManager>().SetActiveEndPlayerTurnButton(false);
             StartCoroutine(StartAutomaticTurnAI());
         }
+
+        GameEventManager.OnGameTurnStateChanged?.Invoke(stateToChangeTo); //currently handled only by the UI manager to switch the UI
     }
 
     //for the UI button that ends the player's turn
