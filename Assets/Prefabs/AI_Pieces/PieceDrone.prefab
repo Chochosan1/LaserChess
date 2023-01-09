@@ -43,9 +43,9 @@ GameObject:
   - component: {fileID: 8462539827051627907}
   - component: {fileID: 8462539827051627904}
   - component: {fileID: 8462539827051627905}
-  - component: {fileID: 8462539827051627910}
   - component: {fileID: 8462539827051627908}
   - component: {fileID: 8462539827051627911}
+  - component: {fileID: 8491721053123798015}
   m_Layer: 8
   m_Name: PieceDrone
   m_TagString: Drone
@@ -62,7 +62,7 @@ Transform:
   m_GameObject: {fileID: 8462539827051627909}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 2, y: 1.3, z: 2}
-  m_LocalScale: {x: 0.5, y: 0.227005, z: 0.5}
+  m_LocalScale: {x: 0.5, y: 0.41487435, z: 0.5}
   m_Children:
   - {fileID: 8422802867730139136}
   m_Father: {fileID: 0}
@@ -117,20 +117,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &8462539827051627910
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8462539827051627909}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 4.9655914
-  m_Direction: 1
-  m_Center: {x: 0, y: -1.3815095, z: 0}
 --- !u!54 &8462539827051627908
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -160,16 +146,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stats: {fileID: 11400000, guid: d28758e94c731a2419ef08da4409f381, type: 2}
-  hitVFX: {fileID: 2077951796086643201}
-  destroyedVFX: {fileID: 1126172470525535584}
-  standingOnTile: {fileID: 0}
   movementSpeed: 1
   damagePiecesOnThisLayer:
     serializedVersion: 2
     m_Bits: 64
+  pieceName: 
+  hitVFX: {fileID: 2077951796086643201}
+  destroyedVFX: {fileID: 1126172470525535584}
   turnPriorityGroup: 0
   projectilePrefab: {fileID: 639640645305608040, guid: 8f84bf7720bde52469c8509b63c93941, type: 3}
   projectileSpawnOffset: {x: 0, y: 1, z: 0}
+--- !u!136 &8491721053123798015
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8462539827051627909}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 1.9999999
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &1319934128
 PrefabInstance:
   m_ObjectHideFlags: 0
