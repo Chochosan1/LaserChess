@@ -35,15 +35,15 @@ public class UIManager : MonoBehaviour
         endGamePanel.SetActive(true);
     }
 
-    private void DisplayPlayerWonUI()
+    private void DisplayPlayerWonUI(string description)
     {
-        gameStatusText.text = "You won! Congratulations!";
+        gameStatusText.text = $"You won! {description} Congratulations!";
         EnableEndGameUI();
     }
 
-    private void DisplayPlayerLostUI()
+    private void DisplayPlayerLostUI(string description)
     {
-        gameStatusText.text = "You lost... But keep trying!";
+        gameStatusText.text = $"You lost... {description} Don't give up, though!";
         EnableEndGameUI();
     }
 }

@@ -2161,6 +2161,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 187466}
     m_Modifications:
+    - target: {fileID: 2607677621350773457, guid: bf91e5010566ce647af402953a40cebe, type: 3}
+      propertyPath: countAsWinConditionOnReachedByAI
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4077006473061268716, guid: bf91e5010566ce647af402953a40cebe, type: 3}
       propertyPath: m_Name
       value: GridTile (5)
@@ -2234,6 +2238,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 187466}
     m_Modifications:
+    - target: {fileID: 2607677621350773457, guid: bf91e5010566ce647af402953a40cebe, type: 3}
+      propertyPath: countAsWinConditionOnReachedByAI
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4077006473061268716, guid: bf91e5010566ce647af402953a40cebe, type: 3}
       propertyPath: m_Name
       value: GridTile (6)
@@ -3740,6 +3748,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 187466}
     m_Modifications:
+    - target: {fileID: 2607677621350773457, guid: bf91e5010566ce647af402953a40cebe, type: 3}
+      propertyPath: countAsWinConditionOnReachedByAI
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4077006473061268716, guid: bf91e5010566ce647af402953a40cebe, type: 3}
       propertyPath: m_Name
       value: GridTile (3)
@@ -4116,6 +4128,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 187466}
     m_Modifications:
+    - target: {fileID: 2607677621350773457, guid: bf91e5010566ce647af402953a40cebe, type: 3}
+      propertyPath: countAsWinConditionOnReachedByAI
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4077006473061268716, guid: bf91e5010566ce647af402953a40cebe, type: 3}
       propertyPath: m_Name
       value: GridTile (4)
@@ -5012,6 +5028,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 187466}
     m_Modifications:
+    - target: {fileID: 2607677621350773457, guid: bf91e5010566ce647af402953a40cebe, type: 3}
+      propertyPath: countAsWinConditionOnReachedByAI
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4077006473061268716, guid: bf91e5010566ce647af402953a40cebe, type: 3}
       propertyPath: m_Name
       value: GridTile (2)
@@ -5510,6 +5530,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 187466}
     m_Modifications:
+    - target: {fileID: 2607677621350773457, guid: bf91e5010566ce647af402953a40cebe, type: 3}
+      propertyPath: countAsWinConditionOnReachedByAI
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4077006473061268716, guid: bf91e5010566ce647af402953a40cebe, type: 3}
       propertyPath: m_Name
       value: GridTile (1)
@@ -5806,6 +5830,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 187466}
     m_Modifications:
+    - target: {fileID: 2607677621350773457, guid: bf91e5010566ce647af402953a40cebe, type: 3}
+      propertyPath: countAsWinConditionOnReachedByAI
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4077006473061268716, guid: bf91e5010566ce647af402953a40cebe, type: 3}
       propertyPath: m_Name
       value: GridTile (7)
@@ -6352,6 +6380,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 187466}
     m_Modifications:
+    - target: {fileID: 2607677621350773457, guid: bf91e5010566ce647af402953a40cebe, type: 3}
+      propertyPath: countAsWinConditionOnReachedByAI
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4077006473061268716, guid: bf91e5010566ce647af402953a40cebe, type: 3}
       propertyPath: m_Name
       value: GridTile

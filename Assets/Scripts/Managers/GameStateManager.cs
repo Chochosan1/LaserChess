@@ -120,7 +120,7 @@ public class GameStateManager : MonoBehaviour
 
         if (playerPieces.Count <= 0)
         {
-            GameEventManager.OnAIWon?.Invoke();
+            GameEventManager.OnAIWon?.Invoke("All player units lost :(");
             gameEnded = true;
         }
     }
@@ -145,7 +145,7 @@ public class GameStateManager : MonoBehaviour
 
         if (aiPieces.Count <= 0)
         {
-            GameEventManager.OnPlayerWon?.Invoke();
+            GameEventManager.OnPlayerWon?.Invoke("All AI units destroyed!");
             gameEnded = true;
         }
     }

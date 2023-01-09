@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class GridTile : MonoBehaviour
 {
+    [Header("AI Win Condition")]
+    [SerializeField] private bool countAsWinConditionOnReachedByAI = false;
+
     [Header("Materials")]
     [SerializeField] private Material normalMaterial;
     [SerializeField] private Material possibleRouteMaterial;
@@ -28,9 +31,18 @@ public class GridTile : MonoBehaviour
     private MeshRenderer meshRend;
     private bool isTileActive = false;
     private bool isBlocked = false;
+
+    /// <summary>Has the tile been activated (e.g available for selection)?</summary>
     public bool IsTileActive => isTileActive;
+
+    /// <summary>Is there anything standing on top of the tile?</summary>
     public bool IsBlocked => isBlocked;
+
+    /// <summary>The piece that is blocking/occupying the tile.</summary>
     public Piece BlockingTilePiece => blockingTilePiece;
+
+    /// <summary>Should this tile count as a win condition for the AI?</summary>
+    public bool CountAsWinConditionOnReachedByAI => countAsWinConditionOnReachedByAI;
 
     private void Start()
     {

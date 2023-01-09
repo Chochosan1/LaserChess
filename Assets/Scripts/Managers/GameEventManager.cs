@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameEventManager
 {
-    public delegate void OnGameEndedDelegated();
+    public delegate void OnGameEndedDelegated(string description);
 
     /// <summary>Invoked when the player wins the game.</summary>
     public static OnGameEndedDelegated OnPlayerWon;

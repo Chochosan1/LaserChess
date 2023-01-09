@@ -45,6 +45,9 @@ public class Drone : Piece, IAutoRunnableAI
                 isActivatedAndMustPlay = false;
                 hasPlayedItsTurn = true;
 
+                if (standingOnTile.CountAsWinConditionOnReachedByAI)
+                    GameEventManager.OnAIWon?.Invoke("A drone reached the final row.");
+
                 Debug.Log("DRONE move and attacked");
             }
         }
