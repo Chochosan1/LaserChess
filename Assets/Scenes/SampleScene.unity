@@ -2541,10 +2541,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   aiPieces:
+  - {fileID: 290472571}
   - {fileID: 428943394}
   - {fileID: 1655735891}
   - {fileID: 782168752597576665}
-  - {fileID: 290472571}
   - {fileID: 1494212671}
   playerPieces:
   - {fileID: 1586692235}

@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class GameStateManager : MonoBehaviour
 {
-    public enum AI_TurnPriority { One, Two, Three }
     private static GameStateManager instance;
     public static GameStateManager Instance => instance;
 
+    public enum AI_TurnPriority { One, Two, Three }
     public enum States { PlayerTurn, AITurn }
     private States currentState;
 
@@ -24,6 +24,7 @@ public class GameStateManager : MonoBehaviour
     private bool gameEnded = false;
 
     public List<Piece> PlayerPieces => playerPieces;
+    private int commandUnitsLeftToDestroy = 0;
 
     private void Awake()
     {
@@ -121,34 +122,39 @@ public class GameStateManager : MonoBehaviour
         {
             GameEventManager.OnAIWon?.Invoke();
             gameEnded = true;
-        }       
+        }
     }
 
     /// <summary>Removes the passed AI Piece from the list and checks if the player has won.</summary> 
-    public void RemoveDestroyedAIUnit(IAutoRunnableAI aiPiece)
+    public void RemoveDestroyedAIUnit(IAutoRunnableAI aiPieceAutoRunnable)
     {
-        aiPieces.Remove(aiPiece.GetGameObject().GetComponent<Piece>());
+        aiPieces.Remove(aiPieceAutoRunnable.GetGameObject().GetComponent<Piece>());
 
-        if (aiPiece.GetAITurnPriority() == AI_TurnPriority.One)
-            priorityOneAIList.Remove(aiPiece);
-        else if (aiPiece.GetAITurnPriority() == AI_TurnPriority.Two)
-            priorityTwoAIList.Remove(aiPiece);
-        else if (aiPiece.GetAITurnPriority() == AI_TurnPriority.Three)
-            priorityThreeAIList.Remove(aiPiece);
+        if (aiPieceAutoRunnable.GetAITurnPriority() == AI_TurnPriority.One)
+            priorityOneAIList.Remove(aiPieceAutoRunnable);
+        else if (aiPieceAutoRunnable.GetAITurnPriority() == AI_TurnPriority.Two)
+            priorityTwoAIList.Remove(aiPieceAutoRunnable);
+        else if (aiPieceAutoRunnable.GetAITurnPriority() == AI_TurnPriority.Three)
+            priorityThreeAIList.Remove(aiPieceAutoRunnable);
+
+        if (aiPieceAutoRunnable.GetGameObject().GetComponent<CommandUnit>() != null)
+        {
+            commandUnitsLeftToDestroy--;
+            Debug.Log($"Command units to destroy: {commandUnitsLeftToDestroy}");
+        }
 
         if (aiPieces.Count <= 0)
         {
             GameEventManager.OnPlayerWon?.Invoke();
             gameEnded = true;
         }
-           
     }
 
     //determines which AI piece belongs to which AI priority group list
     private void SplitAIUnitsInPriorityGroups()
     {
         IAutoRunnableAI currentAutoRunnableAI;
-        foreach(Piece aiPiece in aiPieces)
+        foreach (Piece aiPiece in aiPieces)
         {
             currentAutoRunnableAI = aiPiece.GetComponent<IAutoRunnableAI>();
 
@@ -158,6 +164,14 @@ public class GameStateManager : MonoBehaviour
                 priorityTwoAIList.Add(currentAutoRunnableAI);
             else if (currentAutoRunnableAI.GetAITurnPriority() == AI_TurnPriority.Three)
                 priorityThreeAIList.Add(currentAutoRunnableAI);
+
+            if (aiPiece.GetComponent<CommandUnit>() != null)
+            {
+                commandUnitsLeftToDestroy++;
+              
+            }
         }
+
+        Debug.Log($"Command units to destroy: {commandUnitsLeftToDestroy}");
     }
 }

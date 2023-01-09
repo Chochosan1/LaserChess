@@ -5,6 +5,10 @@ using UnityEngine;
 public class GameEventManager
 {
     public delegate void OnGameEndedDelegated();
+
+    /// <summary>Invoked when the player wins the game.</summary>
     public static OnGameEndedDelegated OnPlayerWon;
+
+    /// <summary>Invoked when the AI wins the game.</summary>
     public static OnGameEndedDelegated OnAIWon;
 }
