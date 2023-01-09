@@ -5,6 +5,7 @@ using UnityEngine;
 public class Drone : Piece, IAutoRunnableAI
 {
     [Header("AI Priority Group")]
+    [Tooltip("The priority group this Drone should be part of. Order of execution is: One -> Two -> Three.")]
     [SerializeField] private GameStateManager.AI_TurnPriority turnPriorityGroup = GameStateManager.AI_TurnPriority.One;
 
     [Header("Shooting")]
@@ -38,7 +39,7 @@ public class Drone : Piece, IAutoRunnableAI
             //when the targeted tile has been reached
             if (Vector3.Distance(transform.position, new Vector3(currentGridTileToMoveTo.transform.position.x, transform.position.y, currentGridTileToMoveTo.transform.position.z)) < 0.01f)
             {
-                standingOnTile = currentGridTileToMoveTo;
+                StandingOnTile = currentGridTileToMoveTo;
 
                 Attack();
 
@@ -46,7 +47,7 @@ public class Drone : Piece, IAutoRunnableAI
                 hasPlayedItsTurn = true;
 
                 //player lose condition
-                if (standingOnTile.CountAsWinConditionOnReachedByAI)
+                if (StandingOnTile.CountAsWinConditionOnReachedByAI)
                     GameEventManager.OnAIWon?.Invoke("A drone reached the final row.");
 
                 Debug.Log("DRONE move and attacked");
@@ -65,7 +66,7 @@ public class Drone : Piece, IAutoRunnableAI
 
     public override void OnMoveCommand(GridTile selectedGridTileToMoveTo)
     {
-        standingOnTile.MarkTileAsFree();
+        StandingOnTile.MarkTileAsFree();
 
         currentGridTileToMoveTo = selectedGridTileToMoveTo;
         currentGridTileToMoveTo.MarkTileAsBlocked(this); //mark it as blocked immediately so that clicking on another unit won't show that tile as free while another unit is traveling to it
@@ -85,12 +86,12 @@ public class Drone : Piece, IAutoRunnableAI
         for (int currentEnumIndex = 4; currentEnumIndex < 8; currentEnumIndex++)
         {
             //get the current attack path (based on the current enum direction)
-            currentAttackPath = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 10, (MapController.Directions)currentEnumIndex, true);
+            currentAttackPath = MapController.Instance.GetPossibleRouteFromTile(StandingOnTile, 10, (MapController.Directions)currentEnumIndex, true);
 
             //probe the attack path to find if an enemy is there to attack it
             foreach (GridTile tile in currentAttackPath)
             {
-                if (tile.BlockingTilePiece != null && LaserChess.Utilities.LayerUtilities.IsObjectInLayer(tile.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
+                if (tile.BlockingTilePiece != null && LaserChess.Utilities.LayerUtilities.IsObjectInLayer(tile.BlockingTilePiece.gameObject, DamagePiecesOnThisLayer))
                 {
                     isEnemyFoundDuringProbing = true;
 
@@ -117,8 +118,8 @@ public class Drone : Piece, IAutoRunnableAI
         isActivatedAndMustPlay = true;
         hasPlayedItsTurn = false;
 
-        if (standingOnTile.botNeighbour != null && !standingOnTile.botNeighbour.IsBlocked)
-            OnMoveCommand(standingOnTile.botNeighbour);
+        if (StandingOnTile.botNeighbour != null && !StandingOnTile.botNeighbour.IsBlocked)
+            OnMoveCommand(StandingOnTile.botNeighbour);
         else
             currentGridTileToMoveTo = null;
     }

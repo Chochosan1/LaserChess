@@ -5,6 +5,7 @@ using UnityEngine;
 public class CommandUnit : Piece, IAutoRunnableAI
 {
     [Header("AI Priority Group")]
+    [Tooltip("The priority group this Command Unit should be part of. Order of execution is: One -> Two -> Three.")]
     [SerializeField] private GameStateManager.AI_TurnPriority turnPriorityGroup = GameStateManager.AI_TurnPriority.Three;
 
     //movement
@@ -30,7 +31,7 @@ public class CommandUnit : Piece, IAutoRunnableAI
             //when the targeted tile has been reached
             if (Vector3.Distance(transform.position, new Vector3(currentGridTileToMoveTo.transform.position.x, transform.position.y, currentGridTileToMoveTo.transform.position.z)) < 0.01f)
             {
-                standingOnTile = currentGridTileToMoveTo;
+                StandingOnTile = currentGridTileToMoveTo;
 
                 isActivatedAndMustPlay = false;
                 hasPlayedItsTurn = true;
@@ -49,7 +50,7 @@ public class CommandUnit : Piece, IAutoRunnableAI
 
     public override void OnMoveCommand(GridTile selectedGridTileToMoveTo)
     {
-        standingOnTile.MarkTileAsFree();
+        StandingOnTile.MarkTileAsFree();
 
         currentGridTileToMoveTo = selectedGridTileToMoveTo;
         currentGridTileToMoveTo.MarkTileAsBlocked(this); //mark it as blocked immediately so that clicking on another unit won't show that tile as free while another unit is traveling to it
@@ -78,18 +79,18 @@ public class CommandUnit : Piece, IAutoRunnableAI
         if (direction == 0)
         {
             //prioritize left move; if not available go right
-            if (standingOnTile.leftNeighbour != null && !standingOnTile.leftNeighbour.IsBlocked)
-                OnMoveCommand(standingOnTile.leftNeighbour);
-            else if (standingOnTile.rightNeighbour != null && !standingOnTile.rightNeighbour.IsBlocked)
-                OnMoveCommand(standingOnTile.rightNeighbour);
+            if (StandingOnTile.leftNeighbour != null && !StandingOnTile.leftNeighbour.IsBlocked)
+                OnMoveCommand(StandingOnTile.leftNeighbour);
+            else if (StandingOnTile.rightNeighbour != null && !StandingOnTile.rightNeighbour.IsBlocked)
+                OnMoveCommand(StandingOnTile.rightNeighbour);
 
         }
         else if (direction == 1)
         {
-            if (standingOnTile.rightNeighbour != null && !standingOnTile.rightNeighbour.IsBlocked)
-                OnMoveCommand(standingOnTile.rightNeighbour);
-            else if (standingOnTile.leftNeighbour != null && !standingOnTile.leftNeighbour.IsBlocked)
-                OnMoveCommand(standingOnTile.leftNeighbour);
+            if (StandingOnTile.rightNeighbour != null && !StandingOnTile.rightNeighbour.IsBlocked)
+                OnMoveCommand(StandingOnTile.rightNeighbour);
+            else if (StandingOnTile.leftNeighbour != null && !StandingOnTile.leftNeighbour.IsBlocked)
+                OnMoveCommand(StandingOnTile.leftNeighbour);
         }
     }
 

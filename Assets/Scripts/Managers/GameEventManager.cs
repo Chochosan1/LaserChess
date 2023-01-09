@@ -15,4 +15,10 @@ public class GameEventManager
     public delegate void OnGameTurnStateChangedDelegate(GameStateManager.States currentState);
     /// <summary>Invoked when the current turn state changes.</summary>
     public static OnGameTurnStateChangedDelegate OnGameTurnStateChanged;
+
+    public delegate void OnPieceSelectedByPlayerDelegate(string selectionInfo);
+    public static OnPieceSelectedByPlayerDelegate OnPieceSelectedByPlayer;
+
+    public delegate void OnPieceDeselectedDelegate();
+    public static OnPieceDeselectedDelegate OnPieceDeselected;
 }

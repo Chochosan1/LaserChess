@@ -333,6 +333,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PieceDreadnought
       objectReference: {fileID: 0}
+    - target: {fileID: 8198706244718584677, guid: 721fb1f0c7dca9d4cab8c634362bb9f7, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 721fb1f0c7dca9d4cab8c634362bb9f7, type: 3}
 --- !u!1001 &75425766
@@ -2827,6 +2831,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PieceDreadnought (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 8198706244718584677, guid: 721fb1f0c7dca9d4cab8c634362bb9f7, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 721fb1f0c7dca9d4cab8c634362bb9f7, type: 3}
 --- !u!1 &977559654
@@ -3880,6 +3888,10 @@ PrefabInstance:
     - target: {fileID: 8198706244718584677, guid: 721fb1f0c7dca9d4cab8c634362bb9f7, type: 3}
       propertyPath: m_Name
       value: PieceDreadnought (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8198706244718584677, guid: 721fb1f0c7dca9d4cab8c634362bb9f7, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 721fb1f0c7dca9d4cab8c634362bb9f7, type: 3}

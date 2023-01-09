@@ -6,6 +6,7 @@ using UnityEngine;
 public class Dreadnought : Piece, IAutoRunnableAI
 {
     [Header("AI Priority Group")]
+    [Tooltip("The priority group this Dreadnought should be part of. Order of execution is: One -> Two -> Three.")]
     [SerializeField] private GameStateManager.AI_TurnPriority turnPriorityGroup = GameStateManager.AI_TurnPriority.Two;
 
     //attack
@@ -34,7 +35,7 @@ public class Dreadnought : Piece, IAutoRunnableAI
             //when the targeted tile has been reached
             if (Vector3.Distance(transform.position, new Vector3(currentGridTileToMoveTo.transform.position.x, transform.position.y, currentGridTileToMoveTo.transform.position.z)) < 0.01f)
             {
-                standingOnTile = currentGridTileToMoveTo;
+                StandingOnTile = currentGridTileToMoveTo;
 
                 Attack();
 
@@ -57,7 +58,7 @@ public class Dreadnought : Piece, IAutoRunnableAI
 
     public override void OnMoveCommand(GridTile selectedGridTileToMoveTo)
     {
-        standingOnTile.MarkTileAsFree();
+        StandingOnTile.MarkTileAsFree();
 
         currentGridTileToMoveTo = selectedGridTileToMoveTo;
         currentGridTileToMoveTo.MarkTileAsBlocked(this); //mark it as blocked immediately so that clicking on another unit won't show that tile as free while another unit is traveling to it
@@ -82,12 +83,12 @@ public class Dreadnought : Piece, IAutoRunnableAI
         for (int currentEnumIndex = 0; currentEnumIndex < 9; currentEnumIndex++)
         {
             //get the current attack path (based on the current enum direction)
-            currentAttackPath = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 1, (MapController.Directions)currentEnumIndex, true);
+            currentAttackPath = MapController.Instance.GetPossibleRouteFromTile(StandingOnTile, 1, (MapController.Directions)currentEnumIndex, true);
 
             //probe the attack path to find if an enemy is there to attack it
             foreach (GridTile tile in currentAttackPath)
             {
-                if (tile.BlockingTilePiece != null && LayerUtilities.IsObjectInLayer(tile.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
+                if (tile.BlockingTilePiece != null && LayerUtilities.IsObjectInLayer(tile.BlockingTilePiece.gameObject, DamagePiecesOnThisLayer))
                 {
                     Debug.Log($"I damaged {tile.BlockingTilePiece.name}");
                     tile.BlockingTilePiece.TakeDamage(stats.AttackPower);
@@ -122,8 +123,8 @@ public class Dreadnought : Piece, IAutoRunnableAI
         hasPlayedItsTurn = false;
         currentGridTileToMoveTo = null;
 
-        Vector3Int closestPlayerPiecePosition = GetClosestEnemy(GameStateManager.Instance.PlayerPieces).standingOnTile.gridLocation;
-        Vector3Int thisPiecePosition = standingOnTile.gridLocation;
+        Vector3Int closestPlayerPiecePosition = GetClosestEnemy(GameStateManager.Instance.PlayerPieces).StandingOnTile.gridLocation;
+        Vector3Int thisPiecePosition = StandingOnTile.gridLocation;
 
         //if the enemy is on an adjacent tile (both orthogonally & diagonally) then don't try to move
         if((Mathf.Abs(closestPlayerPiecePosition.x - thisPiecePosition.x) <= 1) && Mathf.Abs(closestPlayerPiecePosition.z - thisPiecePosition.z) <= 1)
@@ -141,89 +142,89 @@ public class Dreadnought : Piece, IAutoRunnableAI
         //enemy is to the right (try right, botright & topright)
         if (closestPlayerPiecePosition.x > thisPiecePosition.x && closestPlayerPiecePosition.z == thisPiecePosition.z)
         {
-            if (standingOnTile.rightNeighbour != null && !standingOnTile.rightNeighbour.IsBlocked)
-                OnMoveCommand(standingOnTile.rightNeighbour);
-            else if (standingOnTile.botRightNeighbour != null && !standingOnTile.botRightNeighbour.IsBlocked)
-                OnMoveCommand(standingOnTile.botRightNeighbour);
-            else if (standingOnTile.topRightNeighbour != null && !standingOnTile.topRightNeighbour.IsBlocked)
-                OnMoveCommand(standingOnTile.topRightNeighbour);
+            if (StandingOnTile.rightNeighbour != null && !StandingOnTile.rightNeighbour.IsBlocked)
+                OnMoveCommand(StandingOnTile.rightNeighbour);
+            else if (StandingOnTile.botRightNeighbour != null && !StandingOnTile.botRightNeighbour.IsBlocked)
+                OnMoveCommand(StandingOnTile.botRightNeighbour);
+            else if (StandingOnTile.topRightNeighbour != null && !StandingOnTile.topRightNeighbour.IsBlocked)
+                OnMoveCommand(StandingOnTile.topRightNeighbour);
         }
 
         //enemy is to the bot side (try bot, botleft & botright)
         if (closestPlayerPiecePosition.x == thisPiecePosition.x && closestPlayerPiecePosition.z < thisPiecePosition.z)
         {
-            if (standingOnTile.botNeighbour != null && !standingOnTile.botNeighbour.IsBlocked)
-                OnMoveCommand(standingOnTile.botNeighbour);
-            else if (standingOnTile.botRightNeighbour != null && !standingOnTile.botRightNeighbour.IsBlocked)
-                OnMoveCommand(standingOnTile.botRightNeighbour);
-            else if (standingOnTile.botLeftNeighbour != null && !standingOnTile.botLeftNeighbour.IsBlocked)
-                OnMoveCommand(standingOnTile.botLeftNeighbour);
+            if (StandingOnTile.botNeighbour != null && !StandingOnTile.botNeighbour.IsBlocked)
+                OnMoveCommand(StandingOnTile.botNeighbour);
+            else if (StandingOnTile.botRightNeighbour != null && !StandingOnTile.botRightNeighbour.IsBlocked)
+                OnMoveCommand(StandingOnTile.botRightNeighbour);
+            else if (StandingOnTile.botLeftNeighbour != null && !StandingOnTile.botLeftNeighbour.IsBlocked)
+                OnMoveCommand(StandingOnTile.botLeftNeighbour);
         }
 
         //enemy is to the top side (try top, topright & topleft)
         if (closestPlayerPiecePosition.x == thisPiecePosition.x && closestPlayerPiecePosition.z > thisPiecePosition.z)
         {
-            if (standingOnTile.topNeighbour != null && !standingOnTile.topNeighbour.IsBlocked)
-                OnMoveCommand(standingOnTile.topNeighbour);
-            else if (standingOnTile.topRightNeighbour != null && !standingOnTile.topRightNeighbour.IsBlocked)
-                OnMoveCommand(standingOnTile.topRightNeighbour);
-            else if (standingOnTile.topLeftNeighbour != null && !standingOnTile.topLeftNeighbour.IsBlocked)
-                OnMoveCommand(standingOnTile.topLeftNeighbour);
+            if (StandingOnTile.topNeighbour != null && !StandingOnTile.topNeighbour.IsBlocked)
+                OnMoveCommand(StandingOnTile.topNeighbour);
+            else if (StandingOnTile.topRightNeighbour != null && !StandingOnTile.topRightNeighbour.IsBlocked)
+                OnMoveCommand(StandingOnTile.topRightNeighbour);
+            else if (StandingOnTile.topLeftNeighbour != null && !StandingOnTile.topLeftNeighbour.IsBlocked)
+                OnMoveCommand(StandingOnTile.topLeftNeighbour);
         }
 
         //enemy is to the left (try left, botleft & topleft)
         if (closestPlayerPiecePosition.x < thisPiecePosition.x && closestPlayerPiecePosition.z == thisPiecePosition.z)
         {
-            if (standingOnTile.leftNeighbour != null && !standingOnTile.leftNeighbour.IsBlocked)
-                OnMoveCommand(standingOnTile.leftNeighbour);
-            else if (standingOnTile.topLeftNeighbour != null && !standingOnTile.topLeftNeighbour.IsBlocked)
-                OnMoveCommand(standingOnTile.topLeftNeighbour);
-            else if (standingOnTile.botLeftNeighbour != null && !standingOnTile.botLeftNeighbour.IsBlocked)
-                OnMoveCommand(standingOnTile.botLeftNeighbour);
+            if (StandingOnTile.leftNeighbour != null && !StandingOnTile.leftNeighbour.IsBlocked)
+                OnMoveCommand(StandingOnTile.leftNeighbour);
+            else if (StandingOnTile.topLeftNeighbour != null && !StandingOnTile.topLeftNeighbour.IsBlocked)
+                OnMoveCommand(StandingOnTile.topLeftNeighbour);
+            else if (StandingOnTile.botLeftNeighbour != null && !StandingOnTile.botLeftNeighbour.IsBlocked)
+                OnMoveCommand(StandingOnTile.botLeftNeighbour);
         }
 
         //enemy is to the top right (try topright, right & top)
         if (closestPlayerPiecePosition.x > thisPiecePosition.x && closestPlayerPiecePosition.z > thisPiecePosition.z)
         {
-            if (standingOnTile.topRightNeighbour != null && !standingOnTile.topRightNeighbour.IsBlocked)
-                OnMoveCommand(standingOnTile.topRightNeighbour);
-            else if (standingOnTile.rightNeighbour != null && !standingOnTile.rightNeighbour.IsBlocked)
-                OnMoveCommand(standingOnTile.rightNeighbour);
-            else if (standingOnTile.topNeighbour != null && !standingOnTile.topNeighbour.IsBlocked)
-                OnMoveCommand(standingOnTile.topNeighbour);
+            if (StandingOnTile.topRightNeighbour != null && !StandingOnTile.topRightNeighbour.IsBlocked)
+                OnMoveCommand(StandingOnTile.topRightNeighbour);
+            else if (StandingOnTile.rightNeighbour != null && !StandingOnTile.rightNeighbour.IsBlocked)
+                OnMoveCommand(StandingOnTile.rightNeighbour);
+            else if (StandingOnTile.topNeighbour != null && !StandingOnTile.topNeighbour.IsBlocked)
+                OnMoveCommand(StandingOnTile.topNeighbour);
         }
 
         //enemy is to the top left
         if (closestPlayerPiecePosition.x < thisPiecePosition.x && closestPlayerPiecePosition.z > thisPiecePosition.z)
         {
-            if (standingOnTile.topLeftNeighbour != null && !standingOnTile.topLeftNeighbour.IsBlocked)
-                OnMoveCommand(standingOnTile.topLeftNeighbour);
-            else if (standingOnTile.leftNeighbour != null && !standingOnTile.leftNeighbour.IsBlocked)
-                OnMoveCommand(standingOnTile.leftNeighbour);
-            else if (standingOnTile.topNeighbour != null && !standingOnTile.topNeighbour.IsBlocked)
-                OnMoveCommand(standingOnTile.topNeighbour);
+            if (StandingOnTile.topLeftNeighbour != null && !StandingOnTile.topLeftNeighbour.IsBlocked)
+                OnMoveCommand(StandingOnTile.topLeftNeighbour);
+            else if (StandingOnTile.leftNeighbour != null && !StandingOnTile.leftNeighbour.IsBlocked)
+                OnMoveCommand(StandingOnTile.leftNeighbour);
+            else if (StandingOnTile.topNeighbour != null && !StandingOnTile.topNeighbour.IsBlocked)
+                OnMoveCommand(StandingOnTile.topNeighbour);
         }
 
         //enemy is to the bottom right somewhere (try to move botRight first, if not possible try right & then try bot)
         if (closestPlayerPiecePosition.x > thisPiecePosition.x && closestPlayerPiecePosition.z < thisPiecePosition.z)
         {
-            if (standingOnTile.botRightNeighbour != null && !standingOnTile.botRightNeighbour.IsBlocked)
-                OnMoveCommand(standingOnTile.botRightNeighbour);
-            else if (standingOnTile.rightNeighbour != null && !standingOnTile.rightNeighbour.IsBlocked)
-                OnMoveCommand(standingOnTile.rightNeighbour);
-            else if (standingOnTile.botNeighbour != null && !standingOnTile.botNeighbour.IsBlocked)
-                OnMoveCommand(standingOnTile.botNeighbour);
+            if (StandingOnTile.botRightNeighbour != null && !StandingOnTile.botRightNeighbour.IsBlocked)
+                OnMoveCommand(StandingOnTile.botRightNeighbour);
+            else if (StandingOnTile.rightNeighbour != null && !StandingOnTile.rightNeighbour.IsBlocked)
+                OnMoveCommand(StandingOnTile.rightNeighbour);
+            else if (StandingOnTile.botNeighbour != null && !StandingOnTile.botNeighbour.IsBlocked)
+                OnMoveCommand(StandingOnTile.botNeighbour);
         }
 
         //enemy is to the bot left
         if (closestPlayerPiecePosition.x < thisPiecePosition.x && closestPlayerPiecePosition.z < thisPiecePosition.z)
         {
-            if (standingOnTile.botLeftNeighbour != null && !standingOnTile.botLeftNeighbour.IsBlocked)
-                OnMoveCommand(standingOnTile.botLeftNeighbour);
-            else if (standingOnTile.leftNeighbour != null && !standingOnTile.leftNeighbour.IsBlocked)
-                OnMoveCommand(standingOnTile.leftNeighbour);
-            else if (standingOnTile.botNeighbour != null && !standingOnTile.botNeighbour.IsBlocked)
-                OnMoveCommand(standingOnTile.botNeighbour);
+            if (StandingOnTile.botLeftNeighbour != null && !StandingOnTile.botLeftNeighbour.IsBlocked)
+                OnMoveCommand(StandingOnTile.botLeftNeighbour);
+            else if (StandingOnTile.leftNeighbour != null && !StandingOnTile.leftNeighbour.IsBlocked)
+                OnMoveCommand(StandingOnTile.leftNeighbour);
+            else if (StandingOnTile.botNeighbour != null && !StandingOnTile.botNeighbour.IsBlocked)
+                OnMoveCommand(StandingOnTile.botNeighbour);
         }
     }
 

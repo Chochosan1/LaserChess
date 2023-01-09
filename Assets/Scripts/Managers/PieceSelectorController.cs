@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/// <summary>
+/// Takes care of the player's actions. Piece selection, player turn end, etc.
+/// </summary>
 public class PieceSelectorController : MonoBehaviour
 {
     [Header("Masks")]
@@ -59,6 +61,8 @@ public class PieceSelectorController : MonoBehaviour
             DeselectCurrentPiece(); //deselect the already selected piece if there's one
             currentlySelectedPiece = hit.collider.gameObject.GetComponent<Piece>();
             currentlySelectedPiece.OnSelectedPiece();
+
+            GameEventManager.OnPieceSelectedByPlayer?.Invoke(currentlySelectedPiece.name);
         }
     }
 
@@ -70,5 +74,7 @@ public class PieceSelectorController : MonoBehaviour
 
         currentlySelectedPiece.OnDeselectedPiece();
         currentlySelectedPiece = null;
+
+        GameEventManager.OnPieceDeselected?.Invoke();
     }
 }

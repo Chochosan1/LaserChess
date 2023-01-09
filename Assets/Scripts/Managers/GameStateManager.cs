@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/// <summary>
+/// This class controls the game state/flow. Provides a singleton for ease-of-use.
+/// </summary>
 public class GameStateManager : MonoBehaviour
 {
     private static GameStateManager instance;
@@ -9,21 +11,23 @@ public class GameStateManager : MonoBehaviour
 
     public enum AI_TurnPriority { One, Two, Three }
     public enum States { PlayerTurn, AITurn }
-    private States currentState;
 
     [Header("AI Units (automatically split in priority groups)")]
     [SerializeField] private List<Piece> aiPieces;
-    private List<IAutoRunnableAI> priorityOneAIList = new List<IAutoRunnableAI>();
-    private List<IAutoRunnableAI> priorityTwoAIList = new List<IAutoRunnableAI>();
-    private List<IAutoRunnableAI> priorityThreeAIList = new List<IAutoRunnableAI>();
 
     [Header("Player Units")]
     [SerializeField] private List<Piece> playerPieces;
 
-    private int commandUnitsLeftToDestroy = 0;
-
+    //flow controlling vars
+    private States currentState;
     private bool isStateCoroutineRunning = false;
     private bool gameEnded = false;
+    private int commandUnitsLeftToDestroy = 0;
+
+    //priority group lists
+    private List<IAutoRunnableAI> priorityOneAIList = new List<IAutoRunnableAI>();
+    private List<IAutoRunnableAI> priorityTwoAIList = new List<IAutoRunnableAI>();
+    private List<IAutoRunnableAI> priorityThreeAIList = new List<IAutoRunnableAI>();
 
     public List<Piece> PlayerPieces => playerPieces;
     public States CurrentState => currentState;
@@ -53,34 +57,29 @@ public class GameStateManager : MonoBehaviour
     private IEnumerator StartAutomaticTurnAI()
     {
         isStateCoroutineRunning = true;
-        Debug.Log($"Enter start turn {currentState}");
 
         //run the different priority lists of AI
-        if (currentState == States.AITurn)
+        foreach (IAutoRunnableAI pieceAI in priorityOneAIList)
         {
-            foreach (IAutoRunnableAI pieceAI in priorityOneAIList)
-            {
-                Debug.Log($"Drone executed behaviour!");
-                pieceAI.AutoRunBehaviour();
-                yield return new WaitUntil(() => pieceAI.IsAutoRunDone());
-            }
-
-            foreach (IAutoRunnableAI pieceAI in priorityTwoAIList)
-            {
-                Debug.Log($"Dreadnought executed behaviour!");
-                pieceAI.AutoRunBehaviour();
-                yield return new WaitUntil(() => pieceAI.IsAutoRunDone());
-            }
-
-            foreach (IAutoRunnableAI pieceAI in priorityThreeAIList)
-            {
-                Debug.Log($"Command Unit executed behaviour!");
-                pieceAI.AutoRunBehaviour();
-                yield return new WaitUntil(() => pieceAI.IsAutoRunDone());
-            }
+            Debug.Log($"Drone executed behaviour!");
+            pieceAI.AutoRunBehaviour();
+            yield return new WaitUntil(() => pieceAI.IsAutoRunDone());
         }
 
-        Debug.Log($"Exit start turn {currentState}");
+        foreach (IAutoRunnableAI pieceAI in priorityTwoAIList)
+        {
+            Debug.Log($"Dreadnought executed behaviour!");
+            pieceAI.AutoRunBehaviour();
+            yield return new WaitUntil(() => pieceAI.IsAutoRunDone());
+        }
+
+        foreach (IAutoRunnableAI pieceAI in priorityThreeAIList)
+        {
+            Debug.Log($"Command Unit executed behaviour!");
+            pieceAI.AutoRunBehaviour();
+            yield return new WaitUntil(() => pieceAI.IsAutoRunDone());
+        }
+
         isStateCoroutineRunning = false;
 
         SetCurrentState(States.PlayerTurn);
@@ -157,11 +156,11 @@ public class GameStateManager : MonoBehaviour
         {
             commandUnitsLeftToDestroy--;
 
-            if(commandUnitsLeftToDestroy <= 0)
+            if (commandUnitsLeftToDestroy <= 0)
             {
                 GameEventManager.OnPlayerWon?.Invoke("All command units destroyed!");
                 return;
-            }     
+            }
         }
     }
 
@@ -183,7 +182,7 @@ public class GameStateManager : MonoBehaviour
             if (aiPiece.GetComponent<CommandUnit>() != null)
             {
                 commandUnitsLeftToDestroy++;
-              
+
             }
         }
 

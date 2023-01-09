@@ -29,7 +29,7 @@ public sealed class Jumpship : Piece
         //when the targeted tile has been reached
         if (Vector3.Distance(transform.position, new Vector3(currentGridTileToMoveTo.transform.position.x, transform.position.y, currentGridTileToMoveTo.transform.position.z)) < 0.01f)
         {
-            standingOnTile = currentGridTileToMoveTo;
+            StandingOnTile = currentGridTileToMoveTo;
             isMoving = false;
 
             Attack();
@@ -38,7 +38,7 @@ public sealed class Jumpship : Piece
 
     public override void OnMoveCommand(GridTile selectedGridTileToMoveTo)
     {
-        standingOnTile.MarkTileAsFree();
+        StandingOnTile.MarkTileAsFree();
 
         currentGridTileToMoveTo = selectedGridTileToMoveTo;
         currentGridTileToMoveTo.MarkTileAsBlocked(this); //mark it as blocked immediately so that clicking on another unit won't show that tile as free while another unit is traveling to it
@@ -57,7 +57,7 @@ public sealed class Jumpship : Piece
         //finds the end point for each knight pattern and activates the tile (ready to be selected by the player); 
         foreach (int currKnightPattern in System.Enum.GetValues(typeof(MapController.KnightPattern)))
         {
-            currentMovePath = MapController.Instance.GetPossibleKnightRouteFromTile(standingOnTile, (MapController.KnightPattern)currKnightPattern);
+            currentMovePath = MapController.Instance.GetPossibleKnightRouteFromTile(StandingOnTile, (MapController.KnightPattern)currKnightPattern);
 
             foreach (GridTile tile in currentMovePath)
             {
@@ -86,12 +86,12 @@ public sealed class Jumpship : Piece
         for (int currentEnumIndex = 0; currentEnumIndex < 4; currentEnumIndex++)
         {
             //get the current attack path (based on the current enum direction)
-            currentAttackPath = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 1, (MapController.Directions)currentEnumIndex, true);
+            currentAttackPath = MapController.Instance.GetPossibleRouteFromTile(StandingOnTile, 1, (MapController.Directions)currentEnumIndex, true);
 
             //probe the attack path to find if an enemy is there to attack it
             foreach (GridTile tile in currentAttackPath)
             {
-                if (tile.BlockingTilePiece != null && LayerUtilities.IsObjectInLayer(tile.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
+                if (tile.BlockingTilePiece != null && LayerUtilities.IsObjectInLayer(tile.BlockingTilePiece.gameObject, DamagePiecesOnThisLayer))
                 {
                     Debug.Log($"I damaged {tile.BlockingTilePiece.name}");
                     tile.BlockingTilePiece.TakeDamage(stats.AttackPower);

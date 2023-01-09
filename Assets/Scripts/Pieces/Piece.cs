@@ -1,11 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/// <summary>
+/// Provides the necessary functionality/templates/fields for the final pieces that will be used on the grid/map. 
+/// </summary>
 public abstract class Piece : MonoBehaviour
 {
     [Header("Stats")]
     [SerializeField] protected PieceStats stats;
+    [SerializeField] protected float movementSpeed = 1f;
+    [SerializeField] private LayerMask damagePiecesOnThisLayer;
+
+    [Header("Displayable")]
+    [SerializeField] protected string pieceName;
 
     [Header("VFX")]
     [SerializeField] protected GameObject hitVFX;
@@ -14,25 +21,18 @@ public abstract class Piece : MonoBehaviour
     protected int maxHitPoints, currentHitPoints;
     protected bool hasPlayedItsTurn = false; //has the piece logic already been executed this turn?
 
-    public GridTile standingOnTile;
-    public float movementSpeed = 1f;
-    public LayerMask damagePiecesOnThisLayer;
-
+    /// <summary>The tile on which this piece is standing on.</summary>
+    public GridTile StandingOnTile { get; set; }
     public int AttackPower => stats.AttackPower;
+
+    /// <summary>This piece can damage only other pieces that are in this layer.</summary>
+    public LayerMask DamagePiecesOnThisLayer => damagePiecesOnThisLayer;
 
     protected virtual void Start()
     {
-        //autofind the initial tile the piece is standing on (avoids manually finding and assigning it for all units)
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, -Vector3.up, out hit))
-        {
-            if (hit.collider.TryGetComponent(out GridTile gridTileHitBelow))
-            {
-                standingOnTile = gridTileHitBelow;
-            }
-        }
+        FindInitialStandingOnTile();
 
-        standingOnTile.MarkTileAsBlocked(this);
+        StandingOnTile.MarkTileAsBlocked(this);
 
         maxHitPoints = currentHitPoints = stats.HitPoints;
     }
@@ -63,7 +63,7 @@ public abstract class Piece : MonoBehaviour
 
     protected virtual void Die()
     {
-        standingOnTile.MarkTileAsFree();
+        StandingOnTile.MarkTileAsFree();
         
         //VFX
         destroyedVFX.SetActive(true);
@@ -73,8 +73,22 @@ public abstract class Piece : MonoBehaviour
         Destroy(this.gameObject);
     }
 
+    /// <summary>Marks this piece as not having played this turn/round yet.</summary>
     public void ResetTurnStatus()
     {
         hasPlayedItsTurn = false;
+    }
+
+    //autofind the initial tile the piece is standing on (avoids manually finding and assigning it for all units)
+    private void FindInitialStandingOnTile()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, -Vector3.up, out hit))
+        {
+            if (hit.collider.TryGetComponent(out GridTile gridTileHitBelow))
+            {
+                StandingOnTile = gridTileHitBelow;
+            }
+        }
     }
 }

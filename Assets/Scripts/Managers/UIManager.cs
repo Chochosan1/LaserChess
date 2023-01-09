@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
-
+/// <summary>
+/// This class takes care of everything UI related. Logic, references, etc. Responds to events.
+/// </summary>
 public class UIManager : MonoBehaviour
 {
     [Header("Turn States UI")]
     [SerializeField] private Button endPlayerTurnBtn;
+    [SerializeField] private GameObject selectionTooltip;
+    [SerializeField] private TextMeshProUGUI selectionTooltipText;
 
     [Header("End Game UI")]
     [SerializeField] private GameObject endGamePanel;
@@ -25,6 +29,8 @@ public class UIManager : MonoBehaviour
         GameEventManager.OnPlayerWon += DisplayPlayerWonUI;
         GameEventManager.OnAIWon += DisplayPlayerLostUI;
         GameEventManager.OnGameTurnStateChanged += ChangeUIBasedOnTurnState;
+        GameEventManager.OnPieceSelectedByPlayer += ShowSelectionTooltip;
+        GameEventManager.OnPieceDeselected += HideSelectionTooltip;
     }
 
     //unsubscribe from the events
@@ -33,6 +39,8 @@ public class UIManager : MonoBehaviour
         GameEventManager.OnPlayerWon -= DisplayPlayerWonUI;
         GameEventManager.OnAIWon -= DisplayPlayerLostUI;
         GameEventManager.OnGameTurnStateChanged -= ChangeUIBasedOnTurnState;
+        GameEventManager.OnPieceSelectedByPlayer -= ShowSelectionTooltip;
+        GameEventManager.OnPieceDeselected -= HideSelectionTooltip;
     }
 
     //for the UI button that ends the player's turn
@@ -75,4 +83,12 @@ public class UIManager : MonoBehaviour
         gameStatusText.text = $"You lost... {description} Don't give up, though!";
         EnableEndGameUI();
     }
+
+    private void ShowSelectionTooltip(string selectionInfo)
+    {
+        selectionTooltip.SetActive(true);
+        selectionTooltipText.text = selectionInfo;
+    }
+
+    private void HideSelectionTooltip() => selectionTooltip.SetActive(false);
 }

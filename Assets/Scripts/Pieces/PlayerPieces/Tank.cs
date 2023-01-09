@@ -34,7 +34,7 @@ public sealed class Tank : Piece
         //when the targeted tile has been reached
         if (Vector3.Distance(transform.position, new Vector3(currentGridTileToMoveTo.transform.position.x, transform.position.y, currentGridTileToMoveTo.transform.position.z)) < 0.01f)
         {
-            standingOnTile = currentGridTileToMoveTo;
+            StandingOnTile = currentGridTileToMoveTo;
             isMoving = false;
 
             Attack();
@@ -43,7 +43,7 @@ public sealed class Tank : Piece
 
     public override void OnMoveCommand(GridTile selectedGridTileToMoveTo)
     {
-        standingOnTile.MarkTileAsFree();
+        StandingOnTile.MarkTileAsFree();
 
         currentGridTileToMoveTo = selectedGridTileToMoveTo;
         currentGridTileToMoveTo.MarkTileAsBlocked(this); //mark it as blocked immediately so that clicking on another unit won't show that tile as free while another unit is traveling to it
@@ -63,7 +63,7 @@ public sealed class Tank : Piece
         //finds the path for each direction and activates the tile (ready to be selected by the player); tanks should be able to move in all directions, up to 3 tiles in direction; 
         foreach (int currDir in System.Enum.GetValues(typeof(MapController.Directions)))
         {
-            currentMovePath = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 3, (MapController.Directions)currDir);
+            currentMovePath = MapController.Instance.GetPossibleRouteFromTile(StandingOnTile, 3, (MapController.Directions)currDir);
 
             foreach (GridTile tile in currentMovePath)
             {
@@ -94,12 +94,12 @@ public sealed class Tank : Piece
         for(int currentEnumIndex = 0; currentEnumIndex < 4; currentEnumIndex++)
         {
             //get the current attack path (based on the current enum direction)
-            currentAttackPath = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 10, (MapController.Directions)currentEnumIndex, true);
+            currentAttackPath = MapController.Instance.GetPossibleRouteFromTile(StandingOnTile, 10, (MapController.Directions)currentEnumIndex, true);
 
             //probe the attack path to find if an enemy is there to attack it
             foreach (GridTile tile in currentAttackPath)
             {
-                if (tile.BlockingTilePiece != null && LaserChess.Utilities.LayerUtilities.IsObjectInLayer(tile.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
+                if (tile.BlockingTilePiece != null && LaserChess.Utilities.LayerUtilities.IsObjectInLayer(tile.BlockingTilePiece.gameObject, DamagePiecesOnThisLayer))
                 {
                     isEnemyFoundDuringProbing = true;
 
