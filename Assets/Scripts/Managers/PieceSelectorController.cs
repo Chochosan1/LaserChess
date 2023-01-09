@@ -16,6 +16,10 @@ public class PieceSelectorController : MonoBehaviour
 
     private void Update()
     {
+        //disable player control while in AI turn
+        if (GameStateManager.Instance.CurrentState == GameStateManager.States.AITurn)
+            return;
+
         //on click select a piece or a tile
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {

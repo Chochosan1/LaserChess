@@ -20,11 +20,14 @@ public class GameStateManager : MonoBehaviour
     [Header("Player Units")]
     [SerializeField] private List<Piece> playerPieces;
 
+    private int commandUnitsLeftToDestroy = 0;
+
     private bool isStateCoroutineRunning = false;
     private bool gameEnded = false;
 
     public List<Piece> PlayerPieces => playerPieces;
-    private int commandUnitsLeftToDestroy = 0;
+    public States CurrentState => currentState;
+
 
     private void Awake()
     {
@@ -99,8 +102,11 @@ public class GameStateManager : MonoBehaviour
             foreach (Piece playerPiece in playerPieces)
                 playerPiece.ResetTurnStatus();
         }
-        else //on AI's turn start running the automatic AI behaviours
+        else //on AI's turn start running the automatic AI behaviours & deselect all currently selected player units if any
         {
+            foreach (Piece playerPiece in playerPieces)
+                playerPiece.OnDeselectedPiece();
+
             StartCoroutine(StartAutomaticTurnAI());
         }
 

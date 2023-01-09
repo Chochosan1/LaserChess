@@ -13,7 +13,7 @@ public sealed class Tank : Piece
     private bool isEnemyFoundDuringProbing = false;
 
     //movement
-    private List<GridTile> allPathsUsedTiles;
+    private List<GridTile> allPathsUsedTiles = new List<GridTile>();
     private GridTile currentGridTileToMoveTo;
     private bool isMoving;
     private float step;

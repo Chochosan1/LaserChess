@@ -8,7 +8,7 @@ public sealed class Jumpship : Piece
     private List<GridTile> currentAttackPath; //reuse the same list to probe for different attack paths
 
     //movement
-    private List<GridTile> allPathsUsedTiles;
+    private List<GridTile> allPathsUsedTiles = new List<GridTile>();
     private GridTile currentGridTileToMoveTo;
     private bool isMoving;
     private float step;
