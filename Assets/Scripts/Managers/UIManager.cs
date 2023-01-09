@@ -41,10 +41,11 @@ public class UIManager : MonoBehaviour
         GameStateManager.Instance.SetCurrentState(GameStateManager.States.AITurn);
     }
 
-    //for the UI button that restarts the game
-    public void RestartGame()
+
+    //for the UI buttons that load levels (e.g restart, next level)
+    public void LoadLevel(int levelIndex)
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+        UnityEngine.SceneManagement.SceneManager.LoadScene(levelIndex);
     }
 
     private void SetActiveEndPlayerTurnButton(bool isActive) => endPlayerTurnBtn.gameObject.SetActive(isActive);
