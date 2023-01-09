@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Drone : Piece, IAutoRunnableAI
 {
+    [Header("AI Priority Group")]
+    [SerializeField] private GameStateManager.AI_TurnPriority turnPriorityGroup = GameStateManager.AI_TurnPriority.One;
+
     [SerializeField] private ProjectileController projectilePrefab;
     [SerializeField] private Vector3 projectileSpawnOffset = new Vector3(0f, 1f, 0f);
 
@@ -15,7 +18,6 @@ public class Drone : Piece, IAutoRunnableAI
     private GridTile currentGridTileToMoveTo;
     private float step;
     private bool isActivatedAndMustPlay = false; //should the AI behaviour logic execute?
-    private bool hasPlayedItsTurn = false; //has the AI behaviour logic executed to the end?
 
     protected override void Start()
     {
@@ -83,7 +85,7 @@ public class Drone : Piece, IAutoRunnableAI
             //probe the attack path to find if an enemy is there to attack it
             foreach (GridTile tile in currentAttackPath)
             {
-                if (tile.BlockingTilePiece != null && tile.IsBlocked && LaserChess.Utilities.LayerUtilities.IsObjectInLayer(tile.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
+                if (tile.BlockingTilePiece != null && LaserChess.Utilities.LayerUtilities.IsObjectInLayer(tile.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
                 {
                     isEnemyFoundDuringProbing = true;
 
@@ -99,6 +101,12 @@ public class Drone : Piece, IAutoRunnableAI
         }
     }
 
+    protected override void Die()
+    {
+        GameStateManager.Instance.RemoveDestroyedAIUnit(this);
+        base.Die();
+    }
+
     public void AutoRunBehaviour()
     {
         isActivatedAndMustPlay = true;
@@ -111,4 +119,8 @@ public class Drone : Piece, IAutoRunnableAI
     }
 
     public bool IsAutoRunDone() => hasPlayedItsTurn;
+
+    public GameObject GetGameObject() => this.gameObject;
+
+    public GameStateManager.AI_TurnPriority GetAITurnPriority() => turnPriorityGroup;
 }

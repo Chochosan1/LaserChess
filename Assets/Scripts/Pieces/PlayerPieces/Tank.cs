@@ -48,11 +48,15 @@ public sealed class Tank : Piece
         currentGridTileToMoveTo = selectedGridTileToMoveTo;
         currentGridTileToMoveTo.MarkTileAsBlocked(this); //mark it as blocked immediately so that clicking on another unit won't show that tile as free while another unit is traveling to it
         isMoving = true;
+        hasPlayedItsTurn = true;
     }
 
 
     public override void OnSelectedPiece()
     {
+        if (hasPlayedItsTurn)
+            return;
+
         allPathsUsedTiles = new List<GridTile>();
         List<GridTile> currentMovePath = new List<GridTile>();
 
@@ -95,7 +99,7 @@ public sealed class Tank : Piece
             //probe the attack path to find if an enemy is there to attack it
             foreach (GridTile tile in currentAttackPath)
             {
-                if (tile.BlockingTilePiece != null && tile.IsBlocked && LaserChess.Utilities.LayerUtilities.IsObjectInLayer(tile.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
+                if (tile.BlockingTilePiece != null && LaserChess.Utilities.LayerUtilities.IsObjectInLayer(tile.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
                 {
                     isEnemyFoundDuringProbing = true;
 

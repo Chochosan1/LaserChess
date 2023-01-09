@@ -4,6 +4,9 @@ using UnityEngine;
 using LaserChess.Utilities;
 public sealed class Jumpship : Piece
 {
+    //attack
+    private List<GridTile> currentAttackPath; //reuse the same list to probe for different attack paths
+
     //movement
     private List<GridTile> allPathsUsedTiles;
     private GridTile currentGridTileToMoveTo;
@@ -40,10 +43,14 @@ public sealed class Jumpship : Piece
         currentGridTileToMoveTo = selectedGridTileToMoveTo;
         currentGridTileToMoveTo.MarkTileAsBlocked(this); //mark it as blocked immediately so that clicking on another unit won't show that tile as free while another unit is traveling to it
         isMoving = true;
+        hasPlayedItsTurn = true;
     }
 
     public override void OnSelectedPiece()
     {
+        if (hasPlayedItsTurn)
+            return;
+
         allPathsUsedTiles = new List<GridTile>();
         List<GridTile> currentMovePath = new List<GridTile>();
 
@@ -75,24 +82,21 @@ public sealed class Jumpship : Piece
     //jumpships should damage all enemy pieces in the 4 orthogonally adjacent spaces simultaneously
     protected override void Attack()
     {
-        if (standingOnTile.topNeighbour != null && standingOnTile.topNeighbour.BlockingTilePiece != null && LayerUtilities.IsObjectInLayer(standingOnTile.topNeighbour.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
+        //the first 4 elements in the enum are the orthogonal directions in which the jumpship attacks simulatenously
+        for (int currentEnumIndex = 0; currentEnumIndex < 4; currentEnumIndex++)
         {
-            standingOnTile.topNeighbour.BlockingTilePiece.TakeDamage(stats.AttackPower);
-        }
+            //get the current attack path (based on the current enum direction)
+            currentAttackPath = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 1, (MapController.Directions)currentEnumIndex, true);
 
-        if (standingOnTile.rightNeighbour != null && standingOnTile.rightNeighbour.BlockingTilePiece != null && LayerUtilities.IsObjectInLayer(standingOnTile.rightNeighbour.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
-        {
-            standingOnTile.rightNeighbour.BlockingTilePiece.TakeDamage(stats.AttackPower);
-        }
-
-        if (standingOnTile.leftNeighbour != null && standingOnTile.leftNeighbour.BlockingTilePiece != null && LayerUtilities.IsObjectInLayer(standingOnTile.leftNeighbour.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
-        {
-            standingOnTile.leftNeighbour.BlockingTilePiece.TakeDamage(stats.AttackPower);
-        }
-
-        if (standingOnTile.botNeighbour != null && standingOnTile.botNeighbour.BlockingTilePiece != null && LayerUtilities.IsObjectInLayer(standingOnTile.botNeighbour.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
-        {
-            standingOnTile.botNeighbour.BlockingTilePiece.TakeDamage(stats.AttackPower);
+            //probe the attack path to find if an enemy is there to attack it
+            foreach (GridTile tile in currentAttackPath)
+            {
+                if (tile.BlockingTilePiece != null && LayerUtilities.IsObjectInLayer(tile.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
+                {
+                    Debug.Log($"I damaged {tile.BlockingTilePiece.name}");
+                    tile.BlockingTilePiece.TakeDamage(stats.AttackPower);
+                }
+            }
         }
     }
 }

@@ -19,10 +19,8 @@ public class PieceSelectorController : MonoBehaviour
         //on click select a piece or a tile
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            if (currentlySelectedPiece == null)
-                SelectPiece();
-            else
-                SelectTileAndMovePiece();
+            SelectPiece();
+            SelectTileAndMovePiece();
         }
 
         //deselect the selected piece
@@ -35,6 +33,9 @@ public class PieceSelectorController : MonoBehaviour
     //select an active tile and command the piece to move there
     private void SelectTileAndMovePiece()
     {
+        if (currentlySelectedPiece == null)
+            return;
+
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, gridTileMask) && hit.collider.gameObject.GetComponent<GridTile>().IsTileActive)
@@ -45,7 +46,7 @@ public class PieceSelectorController : MonoBehaviour
     }
 
     //select a piece
-    public void SelectPiece()
+    private void SelectPiece()
     {
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 

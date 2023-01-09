@@ -8,6 +8,7 @@ public abstract class Piece : MonoBehaviour
     [SerializeField] protected PieceStats stats;
 
     protected int maxHitPoints, currentHitPoints;
+    protected bool hasPlayedItsTurn = false; //has the piece logic already been executed this turn?
 
     public GridTile standingOnTile;
     public float movementSpeed = 1f;
@@ -57,5 +58,10 @@ public abstract class Piece : MonoBehaviour
     {
         standingOnTile.MarkTileAsFree();
         Destroy(this.gameObject);
+    }
+
+    public void ResetTurnStatus()
+    {
+        hasPlayedItsTurn = false;
     }
 }

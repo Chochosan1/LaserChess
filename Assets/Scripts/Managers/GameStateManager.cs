@@ -4,28 +4,24 @@ using UnityEngine;
 
 public class GameStateManager : MonoBehaviour
 {
+    public enum AI_TurnPriority { One, Two, Three }
     private static GameStateManager instance;
     public static GameStateManager Instance => instance;
 
     public enum States { PlayerTurn, AITurn }
     private States currentState;
 
-    [Header("AI Drones")]
-    [SerializeField] private List<Piece> drones;
+    [Header("AI Units (automatically split in priority groups)")]
+    [SerializeField] private List<Piece> aiPieces;
     private List<IAutoRunnableAI> priorityOneAIList = new List<IAutoRunnableAI>();
-
-    [Header("AI Dreadnoughts")]
-    [SerializeField] private List<Piece> dreadnoughts;
     private List<IAutoRunnableAI> priorityTwoAIList = new List<IAutoRunnableAI>();
-
-    [Header("AI Command Units")]
-    [SerializeField] private List<Piece> commandUnits;
     private List<IAutoRunnableAI> priorityThreeAIList = new List<IAutoRunnableAI>();
 
     [Header("Player Units")]
     [SerializeField] private List<Piece> playerPieces;
 
     private bool isStateCoroutineRunning = false;
+    private bool gameEnded = false;
 
     public List<Piece> PlayerPieces => playerPieces;
 
@@ -46,7 +42,7 @@ public class GameStateManager : MonoBehaviour
     {
         SetCurrentState(States.PlayerTurn);
 
-        RecheckExistingAI();
+        SplitAIUnitsInPriorityGroups();
     }
 
 
@@ -57,7 +53,7 @@ public class GameStateManager : MonoBehaviour
 
         if (currentState == States.AITurn)
         {
-            RecheckExistingAI();
+       //     RecheckExistingAI();
             foreach (IAutoRunnableAI pieceAI in priorityOneAIList)
             {
                 Debug.Log($"Drone executed behaviour!");
@@ -68,6 +64,13 @@ public class GameStateManager : MonoBehaviour
             foreach (IAutoRunnableAI pieceAI in priorityTwoAIList)
             {
                 Debug.Log($"Dreadnought executed behaviour!");
+                pieceAI.AutoRunBehaviour();
+                yield return new WaitUntil(() => pieceAI.IsAutoRunDone());
+            }
+
+            foreach (IAutoRunnableAI pieceAI in priorityThreeAIList)
+            {
+                Debug.Log($"Command Unit executed behaviour!");
                 pieceAI.AutoRunBehaviour();
                 yield return new WaitUntil(() => pieceAI.IsAutoRunDone());
             }
@@ -92,12 +95,14 @@ public class GameStateManager : MonoBehaviour
         if (stateToChangeTo == States.PlayerTurn)
         {
             GetComponent<UIManager>().SetActiveEndPlayerTurnButton(true);
+            foreach (Piece playerPiece in playerPieces)
+                playerPiece.ResetTurnStatus();
         }
         else
         {
             GetComponent<UIManager>().SetActiveEndPlayerTurnButton(false);
             StartCoroutine(StartAutomaticTurnAI());
-        }   
+        }
     }
 
     //for the UI button that ends the player's turn
@@ -109,44 +114,56 @@ public class GameStateManager : MonoBehaviour
     public void RemoveDestroyedPlayerUnit(Piece playerPieceToRemove)
     {
         playerPieces.Remove(playerPieceToRemove);
+
+        if (playerPieces.Count <= 0)
+            gameEnded = true;
     }
 
-    private void RecheckExistingAI()
+    public void RemoveDestroyedAIUnit(IAutoRunnableAI aiPiece)
     {
-        priorityOneAIList.Clear();
-        priorityTwoAIList.Clear();
-        priorityThreeAIList.Clear();
+        aiPieces.Remove(aiPiece.GetGameObject().GetComponent<Piece>());
 
-        foreach (Piece drone in drones)
+        if (aiPiece.GetAITurnPriority() == AI_TurnPriority.One)
+            priorityOneAIList.Remove(aiPiece);
+        else if (aiPiece.GetAITurnPriority() == AI_TurnPriority.Two)
+            priorityTwoAIList.Remove(aiPiece);
+        else if (aiPiece.GetAITurnPriority() == AI_TurnPriority.Three)
+            priorityThreeAIList.Remove(aiPiece);
+    }
+
+    private void SplitAIUnitsInPriorityGroups()
+    {
+        IAutoRunnableAI currentAutoRunnableAI;
+        foreach(Piece aiPiece in aiPieces)
         {
-            if(drone != null)
-            {
-                priorityOneAIList.Add(drone.GetComponent<IAutoRunnableAI>());
-           //     allPiecesAI.Add(drone);
-            }
-                
+            currentAutoRunnableAI = aiPiece.GetComponent<IAutoRunnableAI>();
+
+            if (currentAutoRunnableAI.GetAITurnPriority() == AI_TurnPriority.One)
+                priorityOneAIList.Add(currentAutoRunnableAI);
+            else if (currentAutoRunnableAI.GetAITurnPriority() == AI_TurnPriority.Two)
+                priorityTwoAIList.Add(currentAutoRunnableAI);
+            else if (currentAutoRunnableAI.GetAITurnPriority() == AI_TurnPriority.Three)
+                priorityThreeAIList.Add(currentAutoRunnableAI);
         }
-           
 
-        foreach (Piece dreadnought in dreadnoughts)
-        {
-            if(dreadnought != null)
-            {
-                priorityTwoAIList.Add(dreadnought.GetComponent<IAutoRunnableAI>());
-           //     allPiecesAI.Add(dreadnought);
-            }
-               
-        }
-           
+        //foreach (Piece drone in drones)
+        //{
+        //    if (drone != null)
+        //        priorityOneAIList.Add(drone.GetComponent<IAutoRunnableAI>());
+        //}
 
-        foreach (Piece commandUnit in commandUnits)
-        {
-            if(commandUnit != null)
-            {
-                priorityThreeAIList.Add(commandUnit.GetComponent<IAutoRunnableAI>());
-            //    allPiecesAI.Add(commandUnit);
-            }
-               
-        }         
+
+        //foreach (Piece dreadnought in dreadnoughts)
+        //{
+        //    if (dreadnought != null)
+        //        priorityTwoAIList.Add(dreadnought.GetComponent<IAutoRunnableAI>());
+        //}
+
+
+        //foreach (Piece commandUnit in commandUnits)
+        //{
+        //    if (commandUnit != null)
+        //        priorityThreeAIList.Add(commandUnit.GetComponent<IAutoRunnableAI>());
+        //}
     }
 }

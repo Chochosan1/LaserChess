@@ -5,10 +5,16 @@ using UnityEngine;
 
 public class Dreadnought : Piece, IAutoRunnableAI
 {
+    [Header("AI Priority Group")]
+    [SerializeField] private GameStateManager.AI_TurnPriority turnPriorityGroup = GameStateManager.AI_TurnPriority.Two;
+
+    //attack
+    private List<GridTile> currentAttackPath; //reuse the same list to probe for different attack paths
+
+    //movement
     private GridTile currentGridTileToMoveTo;
     private float step;
     private bool isActivatedAndMustPlay = false; //should the AI behaviour logic execute?
-    private bool hasPlayedItsTurn = false; //has the AI behaviour logic executed to the end?
 
     protected override void Start()
     {
@@ -62,48 +68,31 @@ public class Dreadnought : Piece, IAutoRunnableAI
 
     public override void OnDeselectedPiece() { }
 
+    protected override void Die()
+    {
+        GameStateManager.Instance.RemoveDestroyedAIUnit(this);
+        base.Die();
+    }
+
 
     //dreadnoughts attack all adjacent enemies simulatenously (including the diagonally adjacent)
     protected override void Attack()
     {
-        if (standingOnTile.topNeighbour != null && standingOnTile.topNeighbour.BlockingTilePiece != null && LayerUtilities.IsObjectInLayer(standingOnTile.topNeighbour.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
+        //jumpship attacks simulatenously in all adjacent tiles (all directions 1 tile away)
+        for (int currentEnumIndex = 0; currentEnumIndex < 9; currentEnumIndex++)
         {
-            standingOnTile.topNeighbour.BlockingTilePiece.TakeDamage(stats.AttackPower);
-        }
+            //get the current attack path (based on the current enum direction)
+            currentAttackPath = MapController.Instance.GetPossibleRouteFromTile(standingOnTile, 1, (MapController.Directions)currentEnumIndex, true);
 
-        if (standingOnTile.rightNeighbour != null && standingOnTile.rightNeighbour.BlockingTilePiece != null && LayerUtilities.IsObjectInLayer(standingOnTile.rightNeighbour.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
-        {
-            standingOnTile.rightNeighbour.BlockingTilePiece.TakeDamage(stats.AttackPower);
-        }
-
-        if (standingOnTile.leftNeighbour != null && standingOnTile.leftNeighbour.BlockingTilePiece != null && LayerUtilities.IsObjectInLayer(standingOnTile.leftNeighbour.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
-        {
-            standingOnTile.leftNeighbour.BlockingTilePiece.TakeDamage(stats.AttackPower);
-        }
-
-        if (standingOnTile.botNeighbour != null && standingOnTile.botNeighbour.BlockingTilePiece != null && LayerUtilities.IsObjectInLayer(standingOnTile.botNeighbour.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
-        {
-            standingOnTile.botNeighbour.BlockingTilePiece.TakeDamage(stats.AttackPower);
-        }
-
-        if (standingOnTile.topRightNeighbour != null && standingOnTile.topRightNeighbour.BlockingTilePiece != null && LayerUtilities.IsObjectInLayer(standingOnTile.topRightNeighbour.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
-        {
-            standingOnTile.topRightNeighbour.BlockingTilePiece.TakeDamage(stats.AttackPower);
-        }
-
-        if (standingOnTile.topLeftNeighbour != null && standingOnTile.topLeftNeighbour.BlockingTilePiece != null && LayerUtilities.IsObjectInLayer(standingOnTile.topLeftNeighbour.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
-        {
-            standingOnTile.topLeftNeighbour.BlockingTilePiece.TakeDamage(stats.AttackPower);
-        }
-
-        if (standingOnTile.botRightNeighbour != null && standingOnTile.botRightNeighbour.BlockingTilePiece != null && LayerUtilities.IsObjectInLayer(standingOnTile.botRightNeighbour.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
-        {
-            standingOnTile.botRightNeighbour.BlockingTilePiece.TakeDamage(stats.AttackPower);
-        }
-
-        if (standingOnTile.botLeftNeighbour != null && standingOnTile.botLeftNeighbour.BlockingTilePiece != null && LayerUtilities.IsObjectInLayer(standingOnTile.botLeftNeighbour.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
-        {
-            standingOnTile.botLeftNeighbour.BlockingTilePiece.TakeDamage(stats.AttackPower);
+            //probe the attack path to find if an enemy is there to attack it
+            foreach (GridTile tile in currentAttackPath)
+            {
+                if (tile.BlockingTilePiece != null && LayerUtilities.IsObjectInLayer(tile.BlockingTilePiece.gameObject, damagePiecesOnThisLayer))
+                {
+                    Debug.Log($"I damaged {tile.BlockingTilePiece.name}");
+                    tile.BlockingTilePiece.TakeDamage(stats.AttackPower);
+                }
+            }
         }
     }
 
@@ -239,4 +228,6 @@ public class Dreadnought : Piece, IAutoRunnableAI
     }
 
     public bool IsAutoRunDone() => hasPlayedItsTurn;
+    public GameObject GetGameObject() => this.gameObject;
+    public GameStateManager.AI_TurnPriority GetAITurnPriority() => turnPriorityGroup;
 }
