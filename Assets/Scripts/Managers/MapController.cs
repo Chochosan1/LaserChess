@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/// <summary>
+/// Keeps track of all grid tiles. Provides functionality to get grid tiles in a certain direction/pattern.
+/// </summary>
 public class MapController : MonoBehaviour
 {
     public enum Directions { Top, Bot, Right, Left, TopRight, TopLeft, BotRight, BotLeft }
