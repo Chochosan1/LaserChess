@@ -25,8 +25,8 @@ public class PieceSelectorController : MonoBehaviour
         //on click select a piece or a tile
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            SelectPiece();
             SelectTileAndMovePiece();
+            SelectPiece();
         }
 
         //deselect the selected piece
