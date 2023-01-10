@@ -113,6 +113,7 @@ public class Drone : Piece, IAutoRunnableAI
     protected override void Die()
     {
         GameStateManager.Instance.RemoveDestroyedAIUnit(this);
+        hasPlayedItsTurn = true;
         base.Die();
     }
 

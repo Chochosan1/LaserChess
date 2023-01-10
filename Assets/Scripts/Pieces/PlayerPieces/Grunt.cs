@@ -116,7 +116,6 @@ public sealed class Grunt : Piece
 
                     ProjectileController projectileCopy = Instantiate(projectilePrefab, transform.position + projectileSpawnOffset, Quaternion.identity);
                     projectileCopy.SetupProjectile(this, tile.BlockingTilePiece);
-                    Debug.Log($"GRUNT ATTACK {tile.BlockingTilePiece.name} (tile: {tile.name}). The grunt is on tile {StandingOnTile.name}.");
                     break;
                 }
             }

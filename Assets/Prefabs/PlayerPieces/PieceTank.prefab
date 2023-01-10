@@ -143,7 +143,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stats: {fileID: 11400000, guid: 49d748aa953cff945bff40900d27a8df, type: 2}
-  movementSpeed: 3
+  movementSpeed: 5
   damagePiecesOnThisLayer:
     serializedVersion: 2
     m_Bits: 256
